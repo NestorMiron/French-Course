@@ -1,0 +1,405 @@
+<!DOCTYPE html>
+<html lang="en"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#e2587e">
+<title>Le voyage de Carolina · Français 0→10</title>
+<style>
+:root{--bg1:#fff6f0;--bg2:#fde7ee;--card:#fffdfb;--ink:#3a2a35;--mut:#8a7482;--pri:#e2587e;--pri2:#f08a5d;--ok:#2e9e6a;--bad:#d6455d;--gold:#d4a24c;--lock:#c9bfc6;--g:0}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+html{background:var(--bg1)}
+body{margin:0;min-height:100vh;font-family:-apple-system,system-ui,"Segoe UI",Roboto,sans-serif;color:var(--ink);background:linear-gradient(160deg,var(--bg1),var(--bg2) 60%,#f6e6ff);background-attachment:fixed;-webkit-text-size-adjust:100%}
+header{position:sticky;top:0;z-index:20;display:flex;align-items:center;gap:8px;padding:calc(10px + env(safe-area-inset-top)) 12px 10px;background:linear-gradient(120deg,var(--pri),var(--pri2));color:#fff;box-shadow:0 4px 18px #e2587e40;border-radius:0 0 18px 18px}
+header h1{font-size:17px;margin:0;flex:1;cursor:pointer;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.stat{font-size:13px;background:#ffffff2e;border-radius:20px;padding:4px 9px;white-space:nowrap}
+.hb{background:#ffffff33;color:#fff;min-height:32px;padding:4px 9px;border-radius:20px;font-size:14px}
+main{max-width:640px;margin:0 auto;padding:14px 14px calc(30px + env(safe-area-inset-bottom))}
+.card{background:var(--card);border-radius:22px;padding:18px;margin-bottom:14px;box-shadow:0 6px 24px #b9577a1c,0 1px 3px #0000000d;animation:rise .45s ease both}
+@keyframes rise{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:none}}
+button{font:inherit;border:0;border-radius:14px;padding:12px 18px;background:linear-gradient(120deg,var(--pri),var(--pri2));color:#fff;cursor:pointer;min-height:46px;font-weight:600;box-shadow:0 4px 12px #e2587e33;transition:transform .15s,box-shadow .15s}
+button:active{transform:scale(.96)}button.sec{background:#f6e9ee;color:var(--ink);box-shadow:none}button:disabled{opacity:.5}
+.row{display:flex;gap:8px;flex-wrap:wrap;align-items:center}.center{text-align:center}.center .row{justify-content:center}
+.mut{color:var(--mut);font-size:14px}.q{font-size:21px;margin:8px 0 14px;line-height:1.35}
+.opt{display:block;width:100%;text-align:left;margin:7px 0;background:#fbeff3;color:var(--ink);box-shadow:none;font-weight:500;transition:background .2s,transform .15s}
+input[type=text]{width:100%;font-size:18px;padding:13px;border:2px solid #f0d5de;border-radius:14px;background:#fff;outline:none;transition:border .2s}input[type=text]:focus{border-color:var(--pri)}
+.fb{margin-top:12px;padding:11px 13px;border-radius:14px;animation:rise .3s both}.fb.ok{background:#e3f6ec;color:#1c6644}.fb.bad{background:#fde8ec;color:#8a2236}
+.tag{display:inline-block;font-size:12px;background:#fbe3ea;color:#a3375a;border-radius:20px;padding:3px 10px;margin-right:6px;font-weight:600}
+label{font-size:14px;display:flex;gap:6px;align-items:center}
+.bar{height:7px;background:#f6e3ea;border-radius:4px;overflow:hidden;margin-top:6px}.bar i{display:block;height:100%;background:linear-gradient(90deg,var(--pri),var(--gold));border-radius:4px}
+h2.title{font-family:Georgia,"Times New Roman",serif;font-size:28px;margin:6px 0;color:#b23a62}
+.script{font-family:"Snell Roundhand","Apple Chancery","Segoe Script","Brush Script MT",cursive}
+/* mascot */
+.mrow{display:flex;align-items:center;gap:10px;margin:4px 0 10px}
+.mascot{width:76px;flex:none}.mascot.sm{width:58px}.mascot.big{width:130px;margin:0 auto}
+.owl{width:100%;height:auto;overflow:visible;display:block}
+.owl .ob,.owl .wl,.owl .wr,.owl .eyes{transform-box:fill-box;transform-origin:center}
+.owl .wl{transform-origin:right top}.owl .wr{transform-origin:left top}
+.owl .eyes{animation:blink 4.5s infinite}
+@keyframes blink{0%,93%,100%{transform:scaleY(1)}96%{transform:scaleY(.1)}}
+.m-idle .ob{animation:bob 2.8s ease-in-out infinite}
+@keyframes bob{50%{transform:translateY(-4%)}}
+.m-happy .ob{animation:hop .45s ease-out 2}.m-happy .wl{animation:flapL .22s 4 alternate}.m-happy .wr{animation:flapR .22s 4 alternate}
+@keyframes hop{40%{transform:translateY(-16%) scale(1.04,.97)}}
+@keyframes flapL{to{transform:rotate(28deg)}}@keyframes flapR{to{transform:rotate(-28deg)}}
+.m-sad .ob{animation:sad 1.4s ease forwards}@keyframes sad{30%,100%{transform:rotate(-9deg) translateY(4%)}}
+.m-dance .ob{animation:dance .7s ease-in-out infinite}.m-dance .wl{animation:flapL .35s infinite alternate}.m-dance .wr{animation:flapR .35s infinite alternate}
+@keyframes dance{0%,100%{transform:rotate(-12deg) translateY(0)}50%{transform:rotate(12deg) translateY(-12%)}}
+.walking .ob{animation:hop .4s infinite}
+.bubble{position:relative;background:#fff;border:2px solid #f6d3de;border-radius:16px;padding:8px 12px;font-size:15px;line-height:1.3;animation:rise .3s both;flex:1}
+.bubble:before{content:"";position:absolute;left:-9px;top:50%;margin-top:-7px;border:7px solid transparent;border-right-color:#f6d3de;border-left:0}
+.bubble small{color:var(--mut)}
+/* combo + glow */
+#glow{position:fixed;inset:0;pointer-events:none;z-index:15;box-shadow:inset 0 0 calc(var(--g)*70px) calc(var(--g)*18px) rgba(255,105,150,calc(var(--g)*.6));transition:box-shadow .5s}
+.combo{font-weight:800;color:#e2587e;font-size:16px;min-width:20px}.combo.pop{animation:cpop .35s}
+@keyframes cpop{50%{transform:scale(1.5)}}
+.shake{animation:shake .45s}@keyframes shake{20%,60%{transform:translateX(-7px)}40%,80%{transform:translateX(7px)}}
+#fx{position:fixed;inset:0;pointer-events:none;z-index:30;width:100%;height:100%}
+#toasts{position:fixed;left:0;right:0;bottom:calc(18px + env(safe-area-inset-bottom));z-index:40;display:flex;flex-direction:column;align-items:center;gap:6px;pointer-events:none}
+.toast{background:#fff;border-radius:16px;padding:10px 14px;box-shadow:0 8px 26px #b9577a40;display:flex;gap:10px;align-items:center;animation:tin .4s both;font-size:14px}.toast.out{animation:tout .4s both}.te{font-size:28px}
+@keyframes tin{from{opacity:0;transform:translateY(20px)}}@keyframes tout{to{opacity:0;transform:translateY(20px)}}
+/* map */
+.map svg{width:100%;height:auto;display:block;border-radius:18px}
+.stop{cursor:pointer}.stop text{font-size:11px;font-weight:700;fill:#5a3a4a;paint-order:stroke;stroke:#fff;stroke-width:3px}
+.stop.locked circle{fill:var(--lock)}.stop.locked text{fill:#a99aa3}.stop.sel circle.ring{stroke:#e2587e;stroke-width:3}
+/* envelope */
+.env{position:relative;width:270px;height:170px;margin:70px auto 26px;cursor:pointer;perspective:800px}
+.env .back{position:absolute;inset:0;background:#e79bb1;border-radius:10px}
+.env .letter{position:absolute;left:14px;right:14px;bottom:8px;height:150px;background:#fffaf2;border-radius:8px;z-index:2;transition:transform .9s .45s ease;padding:16px;font-size:13px;color:#7a5566;text-align:center}
+.env .front{position:absolute;inset:0;z-index:3;border-radius:10px;background:linear-gradient(#f6bccc,#ef9fb6);clip-path:polygon(0 0,50% 52%,100% 0,100% 100%,0 100%)}
+.env .flap{position:absolute;left:0;right:0;top:0;height:58%;z-index:4;background:#f8c9d6;clip-path:polygon(0 0,100% 0,50% 100%);transform-origin:top;transition:transform .55s ease,z-index 0s .3s}
+.env .seal{position:absolute;left:50%;top:44%;transform:translate(-50%,-50%);z-index:5;font-size:30px;transition:opacity .3s}
+.env.open .flap{transform:rotateX(180deg);z-index:1}.env.open .seal{opacity:0}.env.open .letter{transform:translateY(-105px)}
+.env:not(.open){animation:wiggle 2s infinite}@keyframes wiggle{0%,80%,100%{transform:none}85%{transform:rotate(-3deg)}90%{transform:rotate(3deg)}95%{transform:rotate(-2deg)}}
+.note{background:#fffaf2 repeating-linear-gradient(#fffaf2 0 29px,#f3dfe6 29px 30px);border-radius:14px;padding:22px 20px;font-size:19px;line-height:30px;color:#5a3446;box-shadow:inset 0 0 0 1px #f0dbe3}
+.note .script{font-size:26px}
+/* reward ticket */
+.ticket{border:3px dashed #e8a7bb;border-radius:20px;padding:20px;background:linear-gradient(135deg,#fff7ec,#ffe9f0);text-align:center}
+.ticket .big{font-size:52px}.ticket h3{font-family:Georgia,serif;font-size:23px;color:#b23a62;margin:8px 0}
+/* postcards */
+.pcs{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.flip{perspective:900px;cursor:pointer}.flip .in{position:relative;transition:transform .6s;transform-style:preserve-3d;aspect-ratio:3/2}.flip.flipped .in{transform:rotateY(180deg)}
+.pc,.pcb{position:absolute;inset:0;border-radius:12px;border:5px solid #fff;box-shadow:0 4px 14px #0000001f;backface-visibility:hidden;-webkit-backface-visibility:hidden;overflow:hidden}
+.pc{display:flex;flex-direction:column;justify-content:flex-end;padding:8px;color:#fff;text-shadow:0 1px 4px #0006}
+.pc .em{position:absolute;right:8px;top:4px;font-size:40px;text-shadow:none}.pc .sm{font-size:11px;opacity:.95}.pc .nm{font-size:17px;font-weight:700;line-height:1.1}
+.pc .stamp{position:absolute;left:6px;top:6px;border:2px dashed #fff9;border-radius:4px;font-size:10px;padding:1px 4px}
+.pcb{transform:rotateY(180deg);background:#fffaf2;color:#5a3446;font-size:11px;padding:8px;line-height:1.35;overflow:auto}
+.pc.locked{filter:grayscale(1) brightness(.35);opacity:.35}
+.solo{max-width:300px;margin:10px auto}
+.badges{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;text-align:center;font-size:11px}
+.medal{width:56px;height:56px;margin:0 auto 4px;border-radius:50%;display:grid;place-items:center;font-size:27px;border:3px solid var(--gold);box-shadow:0 3px 10px #d4a24c55}
+.medal.locked{border-color:#ddd;background:#eee!important;box-shadow:none}.medal.locked span{filter:brightness(0);opacity:.25}
+/* certificate */
+.cert{position:relative;background:#fffdf7;border-radius:6px;padding:14px;box-shadow:0 10px 30px #b9577a33}
+.cert .b1{border:6px double var(--gold);padding:8px}.cert .b2{border:2px solid #efc3d1;padding:24px 14px;text-align:center;background:radial-gradient(circle at 50% 40%,#fff 0,#fff8f0 70%)}
+.cert .corner{position:absolute;font-size:24px;color:var(--gold)}
+.cert h1{font-family:Georgia,serif;font-size:27px;letter-spacing:2px;color:#9b2f55;margin:6px 0 0}.cert .sub{font-size:12px;letter-spacing:3px;text-transform:uppercase;color:var(--mut)}
+.cert .who{font-size:46px;color:#b23a62;margin:12px 0 4px;line-height:1.1}
+.cert .sig{display:flex;justify-content:space-around;margin-top:22px;font-size:12px;color:var(--mut)}.cert .sig div{border-top:1px solid #d9c2cb;padding-top:4px;min-width:110px}
+.cert .seal{width:70px;height:70px;border-radius:50%;margin:14px auto 0;background:radial-gradient(#f3c86b,#c9902f);display:grid;place-items:center;font-size:30px;box-shadow:0 3px 8px #0003}
+@media print{header,#fx,#glow,#toasts,.noprint{display:none!important}body,html{background:#fff!important}main{max-width:none;padding:0}.cert{box-shadow:none;animation:none}.card{box-shadow:none}}
+@page{size:landscape;margin:12mm}
+@media (prefers-reduced-motion:reduce){*,*:before,*:after{animation-duration:.01ms!important;animation-iteration-count:1!important;transition-duration:.01ms!important}}
+</style></head><body>
+<header><h1 id="home">🦉 <span id="htitle"></span></h1><span class="stat" id="xp"></span><span class="stat" id="streak"></span><button class="hb" id="mute" aria-label="mute"></button><button class="hb" id="lang"></button></header>
+<main id="app"></main>
+<div id="glow"></div><canvas id="fx"></canvas><div id="toasts"></div>
+<script>
+"use strict";
+/* =====================================================================
+   ✏️  EDIT ME — personal settings (everything personal lives here)
+   ===================================================================== */
+const CONFIG={
+  name:"Carolina",          // used in greetings, praise, mascot lines and the certificate
+  from:"Nestor",            // signs the notes and the certificate
+  // ⚠️ PLACEHOLDER NOTES — replace with your own words!
+  // notes[i] is revealed (envelope animation) when she passes level i (0..10).
+  notes:[
+    "Your very first level! I'm so proud of you. Every French word you learn makes me smile. Je t'aime. ❤️",
+    "Numbers and colours… and you're still my favourite colour of all. Keep going, ma belle!",
+    "Être et avoir: tu es incroyable, and I have the luckiest heart in Quebec.",
+    "Now you can order us croissants. I'll be the one staring at you instead of the menu.",
+    "You speak French every day now, like you speak to my heart every day. Bravo, mon amour!",
+    "Halfway to Montréal already! Thank you for learning my world with me.",
+    "Passé composé: the best thing that ever happened to me? Toi.",
+    "Quand j'étais petit, I dreamed of someone like you. Demain, on fera encore plus de rêves ensemble.",
+    "Si j'avais un vœu, je choisirais encore toi. Tu me manques even when you're right next to me.",
+    "Il faut que tu saches: je suis fou de toi. Subjunctive mastered, heart stolen.",
+    "You did it! From Lévis to the Magdalen Islands, tu es ma plus belle aventure. Je t'aime, Carolina."
+  ],
+  // ⚠️ PLACEHOLDER REWARDS — level index → real-life date, shown after that level's note.
+  rewards:{
+    2:{emoji:"🍷",title:"Dinner at a French bistro of your choice",detail:"You order everything en français, I'll just smile."},
+    5:{emoji:"🥞",title:"A cozy crêpes & café morning",detail:"Sunday breakfast at a crêperie, my treat."},
+    8:{emoji:"🎻",title:"A surprise evening in Old Montréal",detail:"Dress up a little. The rest is a secret."},
+    10:{emoji:"🏰",title:"Weekend in Québec City",detail:"Château views, poutine and long walks on the Terrasse Dufferin."}
+  }
+};
+/* ===================================================================== */
+
+const LEVELS=[
+{t:["Greetings & basics","Salutations et bases"],intro:"French greetings depend on time and formality. <b>Bonjour</b> (hello/good day), <b>bonsoir</b> (good evening), <b>salut</b> (hi/bye, informal). In Quebec, <b>bonjour</b> is also used to say goodbye during the day. Use <b>tu</b> with friends, <b>vous</b> with strangers (Quebec uses tu very freely).",
+items:[["bonjour","hello"],["bonsoir","good evening"],["salut","hi"],["merci","thank you"],["merci beaucoup","thank you very much"],["s'il vous plaît","please"],["oui","yes"],["non","no"],["au revoir","goodbye"],["je m'appelle Nestor","my name is Nestor"],["comment ça va","how are you"],["ça va bien","I am doing well"],["de rien","you're welcome"],["excusez-moi","excuse me"],["bonne nuit","good night"],["à bientôt","see you soon"]]},
+{t:["Numbers, days & colours","Nombres, jours et couleurs"],intro:"Numbers 1–10: un, deux, trois, quatre, cinq, six, sept, huit, neuf, dix. Days are not capitalized: lundi, mardi, mercredi, jeudi, vendredi, samedi, dimanche. Colour adjectives usually come <i>after</i> the noun: <b>une voiture rouge</b>.",
+items:[["un","one"],["deux","two"],["trois","three"],["cinq","five"],["dix","ten"],["vingt","twenty"],["lundi","Monday"],["vendredi","Friday"],["dimanche","Sunday"],["rouge","red"],["bleu","blue"],["vert","green"],["noir","black"],["blanc","white"],["une voiture rouge","a red car"],["aujourd'hui c'est lundi","today is Monday"]]},
+{t:["Être & avoir, people","Être et avoir, les gens"],intro:"The two key verbs. <b>être</b> (to be): je suis, tu es, il/elle est, nous sommes, vous êtes, ils sont. <b>avoir</b> (to have): j'ai, tu as, il a, nous avons, vous avez, ils ont. Age uses avoir: <b>j'ai trente ans</b>.",
+items:[["je suis canadien","I am Canadian"],["tu es fatigué","you are tired"],["elle est grande","she is tall"],["nous sommes amis","we are friends"],["vous êtes gentil","you are kind"],["ils sont ici","they are here"],["j'ai un chien","I have a dog"],["tu as faim","you are hungry"],["il a froid","he is cold"],["nous avons une maison","we have a house"],["vous avez raison","you are right"],["elles ont deux enfants","they have two children"],["j'ai trente ans","I am thirty years old"],["mon frère est médecin","my brother is a doctor"],["ma sœur a un chat","my sister has a cat"],["je suis content","I am happy"]]},
+{t:["Food, café & shopping","Nourriture, café et magasinage"],intro:"Ordering: <b>Je voudrais…</b> (I would like…). Partitive articles: <b>du pain</b>, <b>de la soupe</b>, <b>de l'eau</b>, <b>des pommes</b>. In Quebec, shopping is <b>magasiner</b>, and breakfast/lunch/dinner are <b>déjeuner / dîner / souper</b>.",
+items:[["je voudrais un café","I would like a coffee"],["l'addition s'il vous plaît","the bill please"],["du pain","some bread"],["de l'eau","some water"],["des pommes","some apples"],["combien ça coûte","how much does it cost"],["c'est trop cher","it is too expensive"],["j'aime le fromage","I like cheese"],["je n'aime pas le poisson","I don't like fish"],["le déjeuner","breakfast"],["le dîner","lunch"],["le souper","dinner"],["je vais magasiner","I am going shopping"],["une bouteille de vin","a bottle of wine"],["j'ai soif","I am thirsty"],["c'est délicieux","it is delicious"]]},
+{t:["Present tense -er verbs & routine","Présent des verbes en -er"],intro:"Regular -er verbs: parler → je parle, tu parles, il parle, nous parlons, vous parlez, ils parlent. Reflexive verbs for routine: <b>je me lève</b>, <b>je me couche</b>. Negation wraps the verb: <b>je ne parle pas</b>.",
+items:[["je parle français","I speak French"],["tu travailles beaucoup","you work a lot"],["il mange une pomme","he eats an apple"],["nous habitons à Montréal","we live in Montreal"],["vous écoutez la radio","you listen to the radio"],["ils regardent la télé","they watch TV"],["je me lève à sept heures","I get up at seven o'clock"],["je me couche tard","I go to bed late"],["elle se brosse les dents","she brushes her teeth"],["je ne parle pas anglais","I don't speak English"],["nous aimons voyager","we like to travel"],["tu cherches tes clés","you are looking for your keys"],["il pleut aujourd'hui","it is raining today"],["il fait froid","it is cold"],["j'étudie le français","I study French"],["ils jouent au hockey","they play hockey"]]},
+{t:["Irregular verbs & questions","Verbes irréguliers et questions"],intro:"Key irregulars: <b>aller</b> (je vais, nous allons), <b>faire</b> (je fais, vous faites), <b>pouvoir</b> (je peux), <b>vouloir</b> (je veux), <b>prendre</b> (je prends). Questions: <b>Est-ce que tu viens?</b> or inversion <b>Viens-tu?</b>. Question words: où, quand, pourquoi, comment, qui, quoi.",
+items:[["je vais au travail","I am going to work"],["qu'est-ce que tu fais","what are you doing"],["je peux t'aider","I can help you"],["je veux dormir","I want to sleep"],["nous prenons le métro","we take the subway"],["où est la gare","where is the train station"],["quand est-ce que tu arrives","when do you arrive"],["pourquoi es-tu triste","why are you sad"],["qui est-ce","who is it"],["il fait beau","the weather is nice"],["je dois partir","I have to leave"],["elle sait nager","she knows how to swim"],["ils viennent ce soir","they are coming tonight"],["vous voulez du café","do you want some coffee"],["je vais manger","I am going to eat"],["je viens de manger","I just ate"]]},
+{t:["Passé composé","Le passé composé"],intro:"Past events: <b>avoir/être + past participle</b>. Most verbs use avoir: <b>j'ai mangé</b>. Movement verbs (aller, venir, partir, arriver, naître, mourir…) and reflexives use être and agree: <b>elle est allée</b>, <b>nous nous sommes levés</b>.",
+items:[["j'ai mangé une pizza","I ate a pizza"],["tu as fini tes devoirs","you finished your homework"],["il a pris le bus","he took the bus"],["nous avons vu un film","we saw a movie"],["elle est allée à Québec","she went to Quebec City"],["ils sont arrivés hier","they arrived yesterday"],["je suis né en hiver","I was born in winter"],["vous avez fait du ski","you went skiing"],["j'ai perdu mon téléphone","I lost my phone"],["elle s'est levée tôt","she got up early"],["nous sommes partis à midi","we left at noon"],["je n'ai pas compris","I did not understand"],["as-tu bien dormi","did you sleep well"],["il a plu toute la journée","it rained all day"],["j'ai lu ce livre","I read this book"],["on a eu du plaisir","we had fun"]]},
+{t:["Imparfait & future","L'imparfait et le futur"],intro:"<b>Imparfait</b> describes past habits and background: <b>quand j'étais petit, je jouais dehors</b>. Endings: -ais, -ais, -ait, -ions, -iez, -aient. <b>Futur simple</b>: infinitive + -ai, -as, -a, -ons, -ez, -ont: <b>je parlerai</b>; irregular stems: ser-, aur-, ir-, fer-, pourr-.",
+items:[["quand j'étais petit","when I was little"],["je jouais dehors","I used to play outside"],["il faisait froid","it was cold"],["nous habitions à Laval","we used to live in Laval"],["elle lisait quand je suis arrivé","she was reading when I arrived"],["je parlerai avec lui","I will speak with him"],["tu seras content","you will be happy"],["nous irons à la plage","we will go to the beach"],["il fera beau demain","the weather will be nice tomorrow"],["j'aurai le temps","I will have time"],["ils pourront venir","they will be able to come"],["vous ferez attention","you will be careful"],["avant, je fumais","before, I used to smoke"],["il y avait beaucoup de neige","there was a lot of snow"],["je te téléphonerai ce soir","I will call you tonight"],["on verra","we will see"]]},
+{t:["Pronouns & conditional","Pronoms et conditionnel"],intro:"Object pronouns go before the verb: <b>je le vois</b>, <b>je lui parle</b>. <b>y</b> replaces a place (<b>j'y vais</b>), <b>en</b> replaces a quantity (<b>j'en veux</b>). <b>Conditionnel</b> = future stem + imparfait endings: <b>je voudrais, j'aimerais, si j'avais le temps, je voyagerais</b>.",
+items:[["je le vois","I see him"],["je lui parle","I am talking to him"],["je les aime","I love them"],["j'y vais demain","I am going there tomorrow"],["j'en veux deux","I want two of them"],["donne-le-moi","give it to me"],["je ne le connais pas","I don't know him"],["j'aimerais voyager","I would like to travel"],["pourriez-vous m'aider","could you help me"],["si j'avais le temps, je voyagerais","if I had the time, I would travel"],["à ta place, je resterais","in your place, I would stay"],["il devrait se reposer","he should rest"],["nous en parlerons","we will talk about it"],["tu me manques","I miss you"],["elle y pense souvent","she often thinks about it"],["ça me plaît","I like it"]]},
+{t:["Subjunctive & complex sentences","Le subjonctif"],intro:"The <b>subjonctif</b> follows expressions of necessity, wish, emotion and doubt + <b>que</b>: <b>il faut que</b>, <b>je veux que</b>, <b>bien que</b>, <b>avant que</b>. Irregulars: être → que je sois, avoir → que j'aie, faire → que je fasse, aller → que j'aille, pouvoir → que je puisse.",
+items:[["il faut que tu partes","you have to leave"],["je veux que tu viennes","I want you to come"],["bien qu'il soit fatigué","although he is tired"],["avant que nous partions","before we leave"],["je suis content que tu sois là","I am happy that you are here"],["il faut que je fasse mes devoirs","I have to do my homework"],["je doute qu'il puisse venir","I doubt he can come"],["pour que tu comprennes","so that you understand"],["il est important que vous sachiez","it is important that you know"],["j'ai peur qu'il pleuve","I am afraid it will rain"],["à moins qu'elle ait raison","unless she is right"],["je ne pense pas qu'il ait fini","I don't think he has finished"],["si j'avais su, je serais venu","if I had known, I would have come"],["le livre dont je parle","the book I am talking about"],["la ville où je suis né","the city where I was born"],["ce qui compte, c'est la santé","what matters is health"]]},
+{t:["Idioms, Québécois & reading","Expressions, québécois et lecture"],intro:"Quebec French has its own vocabulary: <b>char</b> (car), <b>blonde/chum</b> (girlfriend/boyfriend), <b>dépanneur</b> (corner store), <b>c'est plate</b> (it's boring), <b>avoir de la misère</b> (to have trouble), <b>tiguidou</b> (great/OK). General idioms: <b>poser un lapin</b> (stand someone up), <b>avoir le cafard</b> (feel down).<br><br><i>Lecture :</i> « Samedi matin, Julie est allée au dépanneur acheter du lait. Il faisait frette, mais elle avait hâte de faire du ski avec son chum. Malheureusement, il lui a posé un lapin. Elle a trouvé ça plate, mais elle est allée skier toute seule et elle a eu ben du fun. »",
+items:[["mon char est brisé","my car is broken"],["ma blonde","my girlfriend"],["mon chum","my boyfriend"],["je vais au dépanneur","I am going to the corner store"],["c'est plate","it is boring"],["il fait frette","it is freezing cold"],["j'ai de la misère","I am having trouble"],["avoir hâte","to look forward"],["c'est tiguidou","it is all good"],["il m'a posé un lapin","he stood me up"],["j'ai le cafard","I feel down"],["coûter les yeux de la tête","to cost an arm and a leg"],["avoir du fun","to have fun"],["être dans la lune","to be daydreaming"],["Julie est allée au dépanneur","Julie went to the corner store"],["il lui a posé un lapin","he stood her up"]]}
+];
+// fill-in-the-blank uses the longest word of the French phrase (needs 2+ words)
+const TYPES=["mc","fr2en","fill","listen","en2fr","speak"];
+const UI={en:{start:"Start",practice:"Endless practice",testout:"Test out",locked:"Locked",check:"Check",next:"Next",skip:"Skip",lesson:"Lesson",correct:"Correct!",wrong:"Not quite. Answer:",strict:"Strict accents",typeFr:"Type in French",typeEn:"Type in English",translate:"Translate",choose:"Choose the translation",fill:"Fill in the blank",listen:"Listen and type what you hear",speak:"Say this in French",play:"▶ Play",slow:"🐢 Slow",mic:"🎤 Speak",nosr:"Speech recognition isn't supported in this browser. Say it aloud for practice, then skip (no penalty).",done:"Level complete",score:"Score",unlocked:"Next level unlocked!",need:"You need 80% to unlock the next level.",back:"Back to levels",heard:"Heard",sim:"Similarity",reset:"Reset progress",levels:"Levels",best:"best",listening:"Listening…"},
+fr:{start:"Commencer",practice:"Pratique continue",testout:"Test de classement",locked:"Verrouillé",check:"Vérifier",next:"Suivant",skip:"Passer",lesson:"Leçon",correct:"Bravo !",wrong:"Pas tout à fait. Réponse :",strict:"Accents stricts",typeFr:"Écris en français",typeEn:"Écris en anglais",translate:"Traduis",choose:"Choisis la traduction",fill:"Complète la phrase",listen:"Écoute et écris ce que tu entends",speak:"Dis ceci en français",play:"▶ Écouter",slow:"🐢 Lent",mic:"🎤 Parler",nosr:"La reconnaissance vocale n'est pas prise en charge par ce navigateur. Dis-le à voix haute, puis passe (sans pénalité).",done:"Niveau terminé",score:"Score",unlocked:"Niveau suivant débloqué !",need:"Il faut 80 % pour débloquer le niveau suivant.",back:"Retour aux niveaux",heard:"Entendu",sim:"Similarité",reset:"Réinitialiser",levels:"Niveaux",best:"meilleur",listening:"J'écoute…"}};
+
+const STOPS=[
+ {n:"Lévis",e:"⛴️",c:["#7ec8e3","#3b6fb6"]},{n:"Québec",e:"🏰",c:["#f6a6b2","#8e5bb5"]},{n:"Île d'Orléans",e:"🍓",c:["#ffb07c","#e2587e"]},
+ {n:"Charlevoix",e:"⛰️",c:["#9bd3a8","#3c7d6b"]},{n:"Tadoussac",e:"🐋",c:["#8fd3fe","#2b4c8c"]},{n:"Saguenay",e:"🛶",c:["#a1c4fd","#4a6b8a"]},
+ {n:"Trois-Rivières",e:"🌉",c:["#fbc2eb","#7a6fd6"]},{n:"Montréal",e:"🥯",c:["#f7b267","#c0392b"]},{n:"Mont-Tremblant",e:"🎿",c:["#e0eafc","#6d8fc7"]},
+ {n:"Percé",e:"🪨",c:["#ffcf9f","#d35d6e"]},{n:"Îles-de-la-Madeleine",e:"🏖️",c:["#fddb92","#4fb3bf"]}];
+const MAPP=[[70,560],[190,532],[300,482],[250,412],[120,388],[55,318],[160,266],[292,232],[262,152],[118,118],[214,50]];
+const PRAISE=[["Bravo, {n} !","Well done, {n}!"],["Super !","Great!"],["Tu es géniale !","You're amazing!"],["Excellent !","Excellent!"],["Wow, {n} !","Wow, {n}!"],["Parfait !","Perfect!"],["Je suis fier de toi !","I'm proud of you!"],["Magnifique !","Beautiful!"]];
+const SAD=[["Presque !","Almost!"],["Pas grave, {n} !","No worries, {n}!"],["On continue !","Let's keep going!"],["Courage !","You've got this!"]];
+const IDLE=[["Allez, {n} !","Come on, {n}!"],["Prête ?","Ready?"],["Tu peux le faire !","You can do it!"],["On apprend ensemble !","We learn together!"]];
+const ACH=[
+ {id:"first",e:"🌱",t:["First steps","Premiers pas"],d:["First correct answer","Première bonne réponse"]},
+ {id:"combo5",e:"🔥",t:["On fire","En feu"],d:["5 correct in a row","5 bonnes réponses de suite"]},
+ {id:"combo10",e:"💫",t:["Unstoppable","Inarrêtable"],d:["10 correct in a row","10 de suite"]},
+ {id:"day3",e:"📅",t:["Habit forming","Bonne habitude"],d:["3-day streak","3 jours de suite"]},
+ {id:"day7",e:"🗓️",t:["One whole week","Une semaine entière"],d:["7-day streak","7 jours de suite"]},
+ {id:"lv1",e:"🎉",t:["First stop","Première escale"],d:["Pass a level","Réussir un niveau"]},
+ {id:"perfect",e:"💯",t:["Perfection","Perfection"],d:["Perfect level (100%)","Niveau parfait (100 %)"]},
+ {id:"speak",e:"🎤",t:["Golden voice","Voix d'or"],d:["Correct spoken answer","Bonne réponse à l'oral"]},
+ {id:"c100",e:"💪",t:["Hundred club","Club des 100"],d:["100 correct answers","100 bonnes réponses"]},
+ {id:"c500",e:"🏅",t:["Word lover","Amoureuse des mots"],d:["500 correct answers","500 bonnes réponses"]},
+ {id:"night",e:"🌙",t:["Night owl","Oiseau de nuit"],d:["Practice after 10 pm","Pratiquer après 22 h"]},
+ {id:"half",e:"🧭",t:["Halfway there","À mi-chemin"],d:["6 stops visited","6 escales visitées"]},
+ {id:"all",e:"👑",t:["Grand tour","Le grand tour"],d:["All 11 stops","Les 11 escales"]}];
+const KEY="frcourse_v1";
+const DEF=()=>({xp:0,streak:0,last:null,best:{},unlocked:0,ui:"en",strict:false,srs:{},muted:false,passed:{},correct:0,ach:{},mapPos:0,bestCombo:0,doneDate:null});
+let S=load();function load(){try{return Object.assign(DEF(),JSON.parse(localStorage.getItem(KEY)||"{}"))}catch(e){return DEF()}}
+function save(){try{localStorage.setItem(KEY,JSON.stringify(S))}catch(e){}}
+const RM=window.matchMedia&&matchMedia("(prefers-reduced-motion: reduce)").matches;
+const L=k=>UI[S.ui][k];const $=s=>document.querySelector(s);const app=$("#app");
+const tr=(en,fr)=>S.ui==="fr"?fr:en;const N=s=>String(s).replace(/\{n\}/g,CONFIG.name);
+const esc=s=>String(s).replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
+const pick=a=>a[Math.random()*a.length|0];
+const line=p=>`<b>${esc(N(p[0]))}</b><br><small>${esc(N(p[1]))}</small>`;
+function todayStr(d=new Date()){return d.getFullYear()+"-"+(d.getMonth()+1)+"-"+d.getDate()}
+function touchStreak(){const t=todayStr();if(S.last===t)return;const y=new Date();y.setDate(y.getDate()-1);S.streak=(S.last===todayStr(y))?S.streak+1:1;S.last=t;save();if(S.streak>=3)ach("day3");if(S.streak>=7)ach("day7")}
+function hdr(){$("#htitle").textContent=`${CONFIG.name} · Français`;$("#xp").textContent="⭐ "+S.xp;$("#streak").textContent="🔥 "+S.streak;$("#lang").textContent=S.ui==="en"?"FR":"EN";$("#mute").textContent=S.muted?"🔇":"🔊";document.documentElement.lang=S.ui}
+
+/* ---------- sound (WebAudio, no files) ---------- */
+let AC=null;function ac(){if(S.muted)return null;try{AC=AC||new(window.AudioContext||window.webkitAudioContext)();if(AC.state==="suspended")AC.resume();return AC}catch(e){return null}}
+function tone(f,t0,dur,type="sine",vol=.18){const a=ac();if(!a)return;const o=a.createOscillator(),g=a.createGain();o.type=type;o.frequency.value=f;const s=a.currentTime+t0;g.gain.setValueAtTime(.0001,s);g.gain.exponentialRampToValueAtTime(vol,s+.02);g.gain.exponentialRampToValueAtTime(.0001,s+dur);o.connect(g);g.connect(a.destination);o.start(s);o.stop(s+dur+.05)}
+function chime(c=1){const f=587*Math.pow(2,Math.min(c-1,12)/12);tone(f,0,.35);tone(f*1.5,.07,.45,"sine",.13);tone(f*2,.14,.4,"triangle",.05)}
+function wrongTone(){tone(262,0,.3,"triangle",.1);tone(208,.13,.45,"triangle",.09)}
+function fanfare(){[[523,0,.18],[659,.16,.18],[784,.32,.18],[1047,.48,.5],[784,.8,.16],[1047,.95,.9]].forEach(n=>{tone(n[0],n[1],n[2]+.1,"triangle",.16);tone(n[0]*2,n[1],n[2],"sine",.04)});[523,659,784].forEach(f=>tone(f,.95,1.1,"sine",.08))}
+function softChime(){tone(880,0,.6,"sine",.1);tone(1318,.12,.8,"sine",.07)}
+
+/* ---------- particles (canvas) ---------- */
+const cv=$("#fx"),cx=cv.getContext("2d");let parts=[],raf=0;
+function resize(){const d=window.devicePixelRatio||1;cv.width=innerWidth*d;cv.height=innerHeight*d;cx.setTransform(d,0,0,d,0,0)}addEventListener("resize",resize);resize();
+function add(p){p.rot=p.rot||0;p.max=p.life;parts.push(p);if(!raf)raf=requestAnimationFrame(tick)}
+const PAL=["#e2587e","#f08a5d","#ffd166","#7ec8e3","#b388eb","#ff9ec4","#7bd389"];
+function heartPath(s){cx.beginPath();cx.moveTo(0,s*.3);cx.bezierCurveTo(0,0,-s*.5,0,-s*.5,s*.3);cx.bezierCurveTo(-s*.5,s*.6,0,s*.75,0,s);cx.bezierCurveTo(0,s*.75,s*.5,s*.6,s*.5,s*.3);cx.bezierCurveTo(s*.5,0,0,0,0,s*.3);cx.fill()}
+function tick(){cx.clearRect(0,0,innerWidth,innerHeight);const cur=parts;parts=[];
+ for(const p of cur){p.vy+=p.g||0;if(p.drag){p.vx*=p.drag;p.vy*=p.drag}p.x+=p.vx;p.y+=p.vy;p.rot+=p.vr||0;p.life--;
+  if(p.life<=0){if(p.type==="rocket")explode(p);continue}parts.push(p);
+  cx.save();cx.globalAlpha=Math.min(1,p.life/(p.fade||30));cx.translate(p.x,p.y);cx.rotate(p.rot);cx.fillStyle=p.color;
+  if(p.type==="conf"){cx.scale(1,Math.cos(p.life*.15));cx.fillRect(-p.s/2,-p.s/4,p.s,p.s/2)}
+  else if(p.type==="heart"){heartPath(p.s)}
+  else{cx.globalCompositeOperation="lighter";cx.beginPath();cx.arc(0,0,p.s,0,7);cx.fill();cx.globalAlpha*=.35;cx.beginPath();cx.arc(0,0,p.s*2.4,0,7);cx.fill()}
+  cx.restore()}
+ raf=parts.length?requestAnimationFrame(tick):0;if(!raf)cx.clearRect(0,0,innerWidth,innerHeight)}
+function confetti(n=120){if(RM)n=Math.min(n,25);for(let i=0;i<n;i++)add({type:"conf",x:Math.random()*innerWidth,y:-20-Math.random()*innerHeight*.4,vx:(Math.random()-.5)*3,vy:2+Math.random()*3,g:.04,drag:.995,vr:(Math.random()-.5)*.2,s:7+Math.random()*7,life:220+Math.random()*120,fade:50,color:pick(PAL)})}
+function hearts(n=30){if(RM)n=Math.min(n,8);for(let i=0;i<n;i++)add({type:"heart",x:Math.random()*innerWidth,y:innerHeight+20+Math.random()*120,vx:(Math.random()-.5)*1.2,vy:-(1.6+Math.random()*2.6),g:-.005,vr:(Math.random()-.5)*.03,s:12+Math.random()*18,life:200+Math.random()*80,fade:60,color:pick(["#e2587e","#ff7aa2","#ff9ec4","#f25f7a"])})}
+function fireworks(k=5){if(RM)return;for(let i=0;i<k;i++)setTimeout(()=>{const h=innerHeight*(.45+Math.random()*.3),g=.12,vy=-Math.sqrt(2*g*h);add({type:"rocket",x:innerWidth*(.15+Math.random()*.7),y:innerHeight,vx:(Math.random()-.5)*1,vy,g,s:2.5,life:Math.floor(-vy/g),fade:1,color:"#fff3c4"})},i*380)}
+function explode(p){const c=pick(PAL),n=55;for(let i=0;i<n;i++){const a=i/n*Math.PI*2,v=1.5+Math.random()*2.8;add({type:"spark",x:p.x,y:p.y,vx:Math.cos(a)*v,vy:Math.sin(a)*v,g:.035,drag:.975,s:1.8+Math.random()*1.4,life:60+Math.random()*35,fade:40,color:Math.random()<.2?"#fff":c})}tone(196+Math.random()*80,0,.25,"triangle",.04)}
+function sparkleAt(el){if(RM||!el)return;const r=el.getBoundingClientRect(),x=r.left+r.width/2,y=r.top+r.height/2;for(let i=0;i<16;i++){const a=Math.random()*7,v=1+Math.random()*3;add({type:"spark",x,y,vx:Math.cos(a)*v,vy:Math.sin(a)*v-1,g:.04,drag:.96,s:1.5+Math.random()*2,life:30+Math.random()*20,fade:20,color:pick(["#ffd166","#fff","#ff9ec4","#e2587e"])})}}
+function bigFx(){confetti(150);setTimeout(()=>hearts(40),300);fireworks(6);setTimeout(()=>confetti(80),1800)}
+function setGlow(c){document.documentElement.style.setProperty("--g",String(Math.min(c,12)/12))}
+
+/* ---------- mascot ---------- */
+function owl(attr=""){return `<svg ${attr} viewBox="0 0 100 112" class="owl" aria-hidden="true"><g class="ob">
+<ellipse class="wl" cx="20" cy="72" rx="10" ry="20" fill="#eef1f7" stroke="#d9deea" stroke-width="2"/><ellipse class="wr" cx="80" cy="72" rx="10" ry="20" fill="#eef1f7" stroke="#d9deea" stroke-width="2"/>
+<ellipse cx="50" cy="68" rx="32" ry="36" fill="#fff" stroke="#e1e4ee" stroke-width="2"/>
+<path d="M36 84q3 3 6 0M52 90q3 3 6 0M42 97q3 3 6 0M58 80q3 3 6 0" stroke="#b9c0cf" stroke-width="2" fill="none" stroke-linecap="round"/>
+<circle cx="26" cy="70" r="4.5" fill="#ffb3c6" opacity=".75"/><circle cx="74" cy="70" r="4.5" fill="#ffb3c6" opacity=".75"/>
+<g class="eyes"><circle cx="37" cy="58" r="10" fill="#ffd34d"/><circle cx="63" cy="58" r="10" fill="#ffd34d"/><circle cx="37" cy="59" r="5" fill="#2a2433"/><circle cx="63" cy="59" r="5" fill="#2a2433"/><circle cx="39" cy="56" r="1.8" fill="#fff"/><circle cx="65" cy="56" r="1.8" fill="#fff"/></g>
+<path d="M46 66l4 7 4-7z" fill="#f2a03d"/>
+<path d="M17 44Q50 -4 83 44Z" fill="#d6304f"/><path d="M33 34l3-9M45 28l1-10M57 28l-1-10M68 34l-3-9" stroke="#b01f3d" stroke-width="2.4" stroke-linecap="round"/>
+<rect x="15" y="39" width="70" height="11" rx="5.5" fill="#fff" stroke="#eadfe5" stroke-width="1.5"/><circle cx="50" cy="13" r="7.5" fill="#fff" stroke="#eadfe5" stroke-width="1.5"/>
+<path d="M40 103l-3 6M44 103v7M56 103v7M60 103l3 6" stroke="#f2a03d" stroke-width="3" stroke-linecap="round"/></g></svg>`}
+function mascotBlock(p,mood="idle",size=""){return `<div class="mrow"><div class="mascot ${size} m-${mood}" id="masc">${owl()}</div><div class="bubble" id="bub">${line(p)}</div></div>`}
+let moodT=0;function mood(m,p){const el=$("#masc"),b=$("#bub");if(!el)return;el.className=el.className.replace(/m-\w+/,"m-"+m);void el.offsetWidth;if(b&&p){b.innerHTML=line(p);b.style.animation="none";void b.offsetWidth;b.style.animation=""}clearTimeout(moodT);if(m!=="dance")moodT=setTimeout(()=>{const e=$("#masc");if(e)e.className=e.className.replace(/m-\w+/,"m-idle")},1800)}
+
+/* ---------- toasts & achievements ---------- */
+const TQ=[];let tBusy=false;
+function toast(html){TQ.push(html);if(!tBusy)nextToast()}
+function nextToast(){const html=TQ.shift();if(!html){tBusy=false;return}tBusy=true;const t=document.createElement("div");t.className="toast";t.innerHTML=html;$("#toasts").appendChild(t);tone(988,0,.2,"sine",.1);tone(1480,.1,.35,"sine",.08);setTimeout(()=>t.classList.add("out"),2200);setTimeout(()=>{t.remove();nextToast()},2600)}
+function ach(id){if(S.ach[id])return;const a=ACH.find(x=>x.id===id);if(!a)return;S.ach[id]=Date.now();save();setTimeout(()=>{toast(`<span class="te">${a.e}</span><div><b>${tr("Achievement unlocked!","Succès débloqué !")}</b><br>${esc(a.t[S.ui==="fr"?1:0])}</div>`)},1200)}
+
+/* ---------- checking & speech (unchanged learning logic) ---------- */
+function norm(s,strict){s=s.toLowerCase().replace(/[’`]/g,"'").replace(/œ/g,"oe").replace(/æ/g,"ae");if(!strict)s=s.normalize("NFD").replace(/[\u0300-\u036f]/g,"");return s.replace(/[.,!?;:«»"()\-]/g," ").replace(/\s+/g," ").trim()}
+function lev(a,b){const m=a.length,n=b.length;let p=Array.from({length:n+1},(_,j)=>j);for(let i=1;i<=m;i++){let c=[i];for(let j=1;j<=n;j++)c[j]=Math.min(p[j]+1,c[j-1]+1,p[j-1]+(a[i-1]===b[j-1]?0:1));p=c}return p[n]}
+function sim(a,b){a=norm(a);b=norm(b);if(!a&&!b)return 1;return 1-lev(a,b)/Math.max(a.length,b.length)}
+function typedOk(ans,target,strict){const a=norm(ans,strict),t=norm(target,strict);if(a===t)return true;if(!strict&&t.length>6&&lev(a,t)<=1)return true;
+ const ex=x=>x.replace(/\b(i|you|he|she|it|we|they)'(m|re|s|ll|d)\b/g,(m,p,q)=>p+" "+({m:"am",re:"are",s:"is",ll:"will",d:"would"}[q])).replace(/\b(do|does|did|is|are)n't\b/g,"$1 not").replace(/\bcan't\b/g,"cannot").replace(/\bwon't\b/g,"will not");return ex(a)===ex(t)}
+let voice=null;function pickVoice(){const v=speechSynthesis.getVoices();voice=v.find(x=>/fr[-_]CA/i.test(x.lang))||v.find(x=>/fr[-_]FR/i.test(x.lang))||v.find(x=>/^fr/i.test(x.lang))||null}
+if("speechSynthesis" in window){pickVoice();speechSynthesis.onvoiceschanged=pickVoice}
+function speak(t,rate=.95){if(!("speechSynthesis" in window))return;speechSynthesis.cancel();const u=new SpeechSynthesisUtterance(t);u.lang=voice?voice.lang:"fr-CA";if(voice)u.voice=voice;u.rate=rate;speechSynthesis.speak(u)}
+const SR=window.SpeechRecognition||window.webkitSpeechRecognition;
+function shuffle(a){a=a.slice();for(let i=a.length-1;i>0;i--){const j=Math.random()*(i+1)|0;[a[i],a[j]]=[a[j],a[i]]}return a}
+function mkEx(lv,i,type){const it=LEVELS[lv].items[i];const id=lv+":"+i;
+ if(type==="fill"&&it[0].split(" ").length<2)type="mc";
+ if(type==="mc"){const dis=shuffle(LEVELS[lv].items.filter((x,k)=>k!==i)).slice(0,3).map(x=>x[1]);return{id,type,lv,it,opts:shuffle([it[1],...dis]),ans:it[1]}}
+ if(type==="fill"){const w=it[0].split(" ");let k=0;w.forEach((x,j)=>{if(x.length>w[k].length)k=j});const ans=w[k];const pool=[...new Set(LEVELS[lv].items.flatMap(x=>x[0].split(" ")).filter(x=>x!==ans&&x.length>2))];w[k]="____";return{id,type,lv,it,text:w.join(" "),ans,opts:shuffle([ans,...shuffle(pool).slice(0,3)])}}
+ return{id,type,lv,it,ans:type==="fr2en"?it[1]:it[0]}}
+function levelSet(lv){return LEVELS[lv].items.map((_,i)=>mkEx(lv,i,TYPES[i%TYPES.length]))}
+function srsPick(maxLv){const cands=[];for(let l=0;l<=maxLv;l++)LEVELS[l].items.forEach((_,i)=>{const r=S.srs[l+":"+i]||{w:1,seen:0};cands.push([l,i,r.w*(l===maxLv?2:1)*(r.seen?1:1.5)])});let x=Math.random()*cands.reduce((a,c)=>a+c[2],0);for(const c of cands){x-=c[2];if(x<=0)return c}return cands[0]}
+function srsUpdate(id,ok){const r=S.srs[id]||{w:1,seen:0};r.seen++;r.w=ok?Math.max(.2,r.w*.6):Math.min(8,r.w*2+1);S.srs[id]=r}
+let rec=null,recT=0,srBlocked=false; // srBlocked: remembered for this session after service-not-allowed / not-allowed
+function stopRec(){clearTimeout(recT);try{rec&&rec.abort()}catch(e){}rec=null;const m=$("#mic");if(m){m.textContent=L("mic");m.disabled=false}}
+const MICMSG={
+ "service-not-allowed":["Le micro ne marche pas ici. Ouvre la page dans Safari ou Chrome !","The mic doesn't work in this viewer. Open the page in Safari or Chrome."],
+ "not-allowed":["Le micro est bloqué. Ouvre la page dans Safari ou Chrome et autorise le micro.","The mic is blocked. Open the page in Safari or Chrome and allow the microphone."],
+ "audio-capture":["Je n'entends pas de micro. Vérifie-le, ou écris la réponse !","I can't find a microphone. Check it, or type the answer!"],
+ "network":["Pas de connexion pour la reconnaissance vocale.","Speech recognition needs an internet connection."],
+ "no-speech":["Je n'ai rien entendu. On réessaie ?","I didn't hear anything. Try again?"],
+ "timeout":["Je n'ai rien entendu. On réessaie ?","I didn't hear anything. Try again?"]};
+function startRec(target,done,fail){stopRec();let settled=false;const end=(fn,arg)=>{if(settled)return;settled=true;clearTimeout(recT);const r=rec;rec=null;try{r&&r.abort()}catch(e){}const m=$("#mic");if(m){m.textContent=L("mic");m.disabled=false}fn(arg)};
+ try{rec=new SR()}catch(e){return fail("service-not-allowed")}
+ rec.lang="fr-CA";rec.interimResults=false;rec.maxAlternatives=5;const m=$("#mic");if(m){m.textContent=L("listening");m.disabled=true}
+ rec.onresult=e=>{let best="",bs=0;for(const a of e.results[0]){const s=sim(a.transcript,target);if(s>bs){bs=s;best=a.transcript}}end(()=>done(best,bs))};
+ rec.onerror=e=>end(fail,(e&&e.error)||"unknown");
+ rec.onend=()=>end(fail,"no-speech");
+ recT=setTimeout(()=>end(fail,"timeout"),8000);
+ try{rec.start()}catch(e){end(fail,"service-not-allowed")}}
+/* ---------- home = journey map ---------- */
+function catmull(P,upto){let d=`M${P[0][0]} ${P[0][1]}`;for(let i=0;i<upto;i++){const p0=P[i-1]||P[i],p1=P[i],p2=P[i+1],p3=P[i+2]||p2;d+=` C${p1[0]+(p2[0]-p0[0])/6} ${p1[1]+(p2[1]-p0[1])/6} ${p2[0]-(p3[0]-p1[0])/6} ${p2[1]-(p3[1]-p1[1])/6} ${p2[0]} ${p2[1]}`}return d}
+let selStop=null;
+function home(){stopRec();setGlow(0);hdr();const h=new Date().getHours();const cur=Math.min(S.unlocked,10);
+ const greet=[`${h>=18||h<4?"Bonsoir":"Bonjour"} {n} !`,`${h>=18||h<4?"Good evening":"Hello"} {n}!`];
+ const d=catmull(MAPP,10);
+ let stops="";MAPP.forEach((p,i)=>{const lock=i>S.unlocked,done=S.passed[i],right=p[0]<180;stops+=`<g class="stop ${lock?"locked":""}" data-s="${i}"><circle class="ring" cx="${p[0]}" cy="${p[1]}" r="17" fill="#fff" stroke="${done?"#d4a24c":"#f3c1cf"}" stroke-width="3"/><circle cx="${p[0]}" cy="${p[1]}" r="12" fill="${done?"#e2587e":lock?"":"#f08a5d"}"/><text x="${p[0]}" y="${p[1]+4}" text-anchor="middle" style="fill:#fff;stroke:none;font-size:11px">${done?"★":i}</text><text x="${right?p[0]+22:p[0]-22}" y="${p[1]+4}" text-anchor="${right?"start":"end"}">${lock?"🔒 ":""}${esc(STOPS[i].n)}</text></g>`});
+ const deco=[["🌲",20,470],["🌲",330,560],["❄️",320,380],["🌲",22,220],["⛰️",320,300],["🌲",190,190],["❄️",40,90],["🐟",300,95],["🌊",310,40],["🍁",210,400],["🌲",120,20],["❄️",200,590]].map(e=>`<text x="${e[1]}" y="${e[2]}" font-size="18" opacity=".55">${e[0]}</text>`).join("");
+ app.innerHTML=`<div class="card">${mascotBlock([greet[0]+(S.passed[10]?" 👑":""),greet[1]],"idle")}
+ <div class="row"><button id="pr">∞ ${L("practice")}</button><button class="sec" id="al">📮 ${tr("Album","Album")}</button>${S.passed[10]?`<button class="sec" id="ce">🎓 ${tr("Certificate","Certificat")}</button>`:""}</div></div>
+ <div class="card map" style="padding:10px"><svg viewBox="0 0 360 600" id="msvg"><defs><linearGradient id="sky" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#e6f3ff"/><stop offset=".6" stop-color="#fff6f0"/><stop offset="1" stop-color="#fde7ee"/></linearGradient></defs>
+ <rect width="360" height="600" rx="18" fill="url(#sky)"/><path d="M-10 600 C120 520 160 470 230 420 S330 300 380 250" stroke="#bfe3f5" stroke-width="30" fill="none" opacity=".7" stroke-linecap="round"/>
+ <path d="M240 0 C260 40 330 60 380 70" stroke="#bfe3f5" stroke-width="40" fill="none" opacity=".6"/>${deco}
+ <path d="${d}" stroke="#f6d3de" stroke-width="11" fill="none" stroke-linecap="round"/><path id="route" d="${d}" stroke="#fff" stroke-width="2" stroke-dasharray="4 6" fill="none"/>
+ <path id="prog" d="${d}" stroke="#e2587e" stroke-width="5" fill="none" stroke-linecap="round" opacity=".85"/><path id="tmp" fill="none" d=""/>
+ ${stops}<g id="hero">${owl('x="0" y="0" width="44" height="50"')}</g></svg>
+ <p class="mut center" style="margin:6px 0 0">${tr("Tap a stop · Passed levels earn a postcard","Touche une escale · Chaque niveau réussi donne une carte postale")}</p></div>
+ <div id="stopcard"></div>
+ <div class="card row"><label><input type="checkbox" id="st" ${S.strict?"checked":""}> ${L("strict")}</label><span style="flex:1"></span><button class="sec" id="rs" style="min-height:36px;padding:6px 12px">${L("reset")}</button></div>`;
+ // path lengths per stop
+ const tmp=$("#tmp"),route=$("#route"),total=route.getTotalLength();const lens=MAPP.map((_,i)=>{if(!i)return 0;tmp.setAttribute("d",catmull(MAPP,i));return tmp.getTotalLength()});
+ const prog=$("#prog");prog.style.strokeDasharray=total;const hero=$("#hero");
+ const place=l=>{const p=route.getPointAtLength(l);hero.setAttribute("transform",`translate(${p.x-22},${p.y-54})`);prog.style.strokeDashoffset=total-l};
+ const from=lens[Math.min(S.mapPos,cur)],to=lens[cur];
+ if(RM||from>=to){place(to);S.mapPos=cur;save()}else{place(from);hero.classList.add("walking");setTimeout(()=>{const t0=performance.now(),dur=1500+500*(cur-S.mapPos);const step=t=>{let k=Math.min(1,(t-t0)/dur);k=k<.5?2*k*k:1-Math.pow(-2*k+2,2)/2;place(from+(to-from)*k);if(k<1)requestAnimationFrame(step);else{hero.classList.remove("walking");S.mapPos=cur;save();chime(5);sparkleAt(hero);mood("happy",[`On est arrivés à ${STOPS[cur].n} !`,`We made it to ${STOPS[cur].n}!`])}};requestAnimationFrame(step)},600)}
+ app.querySelectorAll(".stop").forEach(g=>g.onclick=()=>openStop(+g.dataset.s));
+ $("#pr").onclick=runPractice;$("#al").onclick=album;if($("#ce"))$("#ce").onclick=()=>cert();
+ $("#st").onchange=e=>{S.strict=e.target.checked;save()};
+ $("#rs").onclick=()=>{if(confirm(tr("Reset all progress?","Tout réinitialiser ?"))){localStorage.removeItem(KEY);S=load();home()}};
+ openStop(selStop!=null?selStop:cur,true)}
+function openStop(i,quiet){selStop=i;document.querySelectorAll(".stop").forEach(g=>g.classList.toggle("sel",+g.dataset.s===i));const lv=LEVELS[i],lock=i>S.unlocked,b=S.best[i]||0,st=STOPS[i];
+ $("#stopcard").innerHTML=`<div class="card"><div class="row"><span style="font-size:34px">${st.e}</span><div style="flex:1"><span class="tag">${tr("Level","Niveau")} ${i} · ${esc(st.n)}</span><div><b>${esc(lv.t[S.ui==="en"?0:1])}</b></div><div class="mut">${lock?"🔒 "+L("locked"):S.passed[i]?"✅ "+tr("Visited","Visitée")+" · "+L("best")+" "+b+"%":L("best")+": "+b+"%"}</div><div class="bar"><i style="width:${b}%"></i></div></div></div><div class="row" style="margin-top:12px">${lock?`<button id="to">${L("testout")}</button><span class="mut">${tr("Score 80% to jump here","80 % pour sauter ici")}</span>`:`<button id="gl">${S.passed[i]?tr("Practice again","Refaire"):L("start")} →</button>`}</div></div>`;
+ if($("#to"))$("#to").onclick=()=>testOut(i);if($("#gl"))$("#gl").onclick=()=>lesson(i);
+ if(!quiet)$("#stopcard").scrollIntoView({behavior:RM?"auto":"smooth",block:"nearest"})}
+
+/* ---------- lessons & exercise flow ---------- */
+let combo=0;
+function lesson(lv){const l=LEVELS[lv];app.innerHTML=`<div class="card">${mascotBlock([`Leçon ${lv} : ${STOPS[lv].n} !`,`Lesson ${lv}: off to ${STOPS[lv].n}!`])}<span class="tag">${L("lesson")} ${lv}</span><h2 class="title">${esc(l.t[S.ui==="en"?0:1])}</h2><p style="line-height:1.55">${l.intro}</p><div class="row"><button id="go">${L("start")}</button><button class="sec" id="bk">${L("back")}</button></div></div>`;$("#go").onclick=()=>runSet(levelSet(lv),r=>finishLevel(lv,r));$("#bk").onclick=home;scrollTo(0,0)}
+function testOut(lv){const qs=shuffle([...levelSet(lv),...(lv>0?levelSet(lv-1):[])]).slice(0,12);runSet(qs,r=>{const p=Math.round(100*r.ok/Math.max(1,r.n));if(p>=80&&lv>0){for(let l=0;l<lv-1;l++)S.passed[l]=true;pass(lv-1,p)}else failScreen(lv,p,true)})}
+function finishLevel(lv,r){const p=Math.round(100*r.ok/Math.max(1,r.n));S.best[lv]=Math.max(S.best[lv]||0,p);save();if(p>=80)pass(lv,p);else failScreen(lv,p)}
+function failScreen(lv,p,test){hdr();setGlow(0);app.innerHTML=`<div class="card center">${mascotBlock(["Tu y es presque, {n} !","So close, {n}! Every try makes you stronger."],"sad")}<p class="q">${L("score")}: ${p}%</p><p>${L("need")}</p><div class="row"><button id="re">${tr("Try again","Réessayer")}</button><button class="sec" id="pr">∞ ${L("practice")}</button><button class="sec" id="bk">🗺️ ${tr("Map","Carte")}</button></div></div>`;
+ $("#re").onclick=()=>test?testOut(lv):runSet(levelSet(lv),r=>finishLevel(lv,r));$("#pr").onclick=runPractice;$("#bk").onclick=home}
+function runPractice(){combo=0;const maxLv=Math.min(S.unlocked,10);let count=0;runStream(()=>{const[l,i]=srsPick(maxLv);count++;return mkEx(l,i,TYPES[Math.random()*TYPES.length|0])},()=>count,true)}
+function runSet(qs,done){combo=0;let k=0,r={ok:0,n:qs.length};runStream(()=>k<qs.length?qs[k++]:null,()=>k+"/"+qs.length,false,ok=>{if(ok)r.ok++;if(ok===null)r.n--},()=>done(r))}
+function runStream(next,prog,endless,onRes=()=>{},onDone=home){const q=next();if(!q)return onDone();show(q,prog(),endless,ok=>{onRes(ok);if(ok!==null){srsUpdate(q.id,ok);if(ok){S.xp+=10+Math.min(combo,10);touchStreak()}save();hdr()}runStream(next,prog,endless,onRes,onDone)})}
+function show(q,prog,endless,cb){window.__q=q;const fr=q.it[0],en=q.it[1];let body="",kind="";const sb=`class="sec" style="min-height:34px;padding:4px 12px"`;
+ if(q.type==="mc"){kind=L("choose");body=`<p class="q">${esc(fr)} <button ${sb} id="pl">🔊</button></p>`+q.opts.map((o,j)=>`<button class="opt" data-o="${j}">${esc(o)}</button>`).join("")}
+ else if(q.type==="fill"){kind=L("fill");body=`<p class="mut">${esc(en)}</p><p class="q">${esc(q.text)}</p>`+q.opts.map((o,j)=>`<button class="opt" data-o="${j}">${esc(o)}</button>`).join("")}
+ else if(q.type==="fr2en"){kind=L("translate");body=`<p class="q">${esc(fr)} <button ${sb} id="pl">🔊</button></p><input type="text" id="in" placeholder="${L("typeEn")}" autocapitalize="off" autocomplete="off" autocorrect="off" spellcheck="false">`}
+ else if(q.type==="en2fr"){kind=L("translate");body=`<p class="q">${esc(en)}</p><input type="text" id="in" placeholder="${L("typeFr")}" lang="fr" autocapitalize="off" autocomplete="off" autocorrect="off" spellcheck="false">`}
+ else if(q.type==="listen"){kind=L("listen");body=`<div class="row" style="margin:10px 0"><button id="pl">${L("play")}</button><button class="sec" id="sl">${L("slow")}</button></div><input type="text" id="in" placeholder="${L("typeFr")}" lang="fr" autocapitalize="off" autocomplete="off" autocorrect="off" spellcheck="false">`}
+ else{kind=L("speak");const live=SR&&!srBlocked;body=`<p class="q">${esc(fr)}</p><p class="mut">${esc(en)}</p><div class="row"><button class="sec" id="pl">🔊</button>${live?`<button id="mic">${L("mic")}</button>`:`<button id="said">🗣️ ${tr("I said it","Je l'ai dit")}</button>`}<button class="sec" id="typ">⌨️ ${tr("Type it instead","Je l'écris")}</button></div><div id="tbox"></div>${live?"":`<div class="fb bad">${SR?tr("The mic isn't available in this viewer, so say it aloud and tap “I said it” (no penalty), or type it.","Le micro n'est pas disponible ici : dis-le à voix haute puis « Je l'ai dit » (sans pénalité), ou écris-le."):L("nosr")}</div>`}`}
+ app.innerHTML=`<div class="card" id="qc"><div class="row" style="justify-content:space-between"><span class="mut">${endless?"∞ #"+prog:prog} · ${tr("Level","Niveau")} ${q.lv}</span><span class="combo" id="combo">${combo>=2?"🔥 x"+combo:""}</span><button ${sb} id="quit">✕</button></div>
+ ${mascotBlock(pick(IDLE),"idle","sm")}<span class="tag">${kind}</span>${body}<div id="fb"></div><div class="row" style="margin-top:12px" id="act">${["fr2en","en2fr","listen"].includes(q.type)?`<button id="ck">${L("check")}</button>`:""}<button class="sec" id="sk">${L("skip")}</button></div></div>`;
+ $("#quit").onclick=()=>{stopRec();home()};
+ let answered=false,src=null;
+ const fin=(ok,extra="")=>{if(answered)return;answered=true;stopRec();
+  if(ok){combo++;S.correct++;S.bestCombo=Math.max(S.bestCombo,combo);chime(combo);sparkleAt(src||$("#fb"));mood("happy",pick(PRAISE));ach("first");if(combo===5)ach("combo5");if(combo===10)ach("combo10");if(combo>=5&&combo%5===0)hearts(14);if(S.correct>=100)ach("c100");if(S.correct>=500)ach("c500");const hr=new Date().getHours();if(hr>=22||hr<4)ach("night")}
+  else{combo=0;wrongTone();const c=$("#qc");c.classList.remove("shake");void c.offsetWidth;c.classList.add("shake");mood("sad",pick(SAD))}
+  setGlow(combo);const ce=$("#combo");ce.textContent=combo>=2?"🔥 x"+combo:"";ce.classList.remove("pop");void ce.offsetWidth;ce.classList.add("pop");
+  $("#fb").innerHTML=`<div class="fb ${ok?"ok":"bad"}">${ok?N(pick([L("correct"),L("correct")+" "+CONFIG.name+" 💕"])):L("wrong")+" <b>"+esc(q.ans)+"</b>"}${extra}${q.type!=="fr2en"&&q.type!=="mc"?"":`<div class="mut">${esc(fr)} = ${esc(en)}</div>`}</div>`;
+  if(q.type!=="listen")speak(fr);$("#act").innerHTML=`<button id="nx">${L("next")} →</button>`;$("#nx").onclick=()=>cb(ok);$("#nx").focus({preventScroll:true})};
+ if($("#pl"))$("#pl").onclick=()=>speak(fr);if($("#sl"))$("#sl").onclick=()=>speak(fr,.6);
+ if(q.type==="listen")setTimeout(()=>speak(fr),300);
+ app.querySelectorAll("[data-o]").forEach(b=>b.onclick=()=>{if(answered)return;const ok=q.opts[+b.dataset.o]===q.ans;b.style.background=ok?"#c9efd8":"#f8d0d8";src=b;if(!ok)app.querySelectorAll("[data-o]").forEach(x=>{if(q.opts[+x.dataset.o]===q.ans)x.style.background="#c9efd8"});fin(ok)});
+ const inp=$("#in");if(inp){inp.focus({preventScroll:true});const check=()=>{if(!inp.value.trim())return;src=inp;fin(typedOk(inp.value,q.ans,S.strict))};$("#ck").onclick=check;inp.onkeydown=e=>{if(e.key==="Enter"){e.preventDefault();answered?$("#nx").click():check()}}}
+ $("#sk").onclick=()=>{stopRec();if(q.type==="speak")return cb(null);combo=0;setGlow(0);cb(false)};
+ if(q.type==="speak"){
+  const typeIt=()=>{stopRec();$("#tbox").innerHTML=`<input type="text" id="in2" style="margin-top:10px" placeholder="${L("typeFr")}" lang="fr" autocapitalize="off" autocomplete="off" autocorrect="off" spellcheck="false">`;$("#act").innerHTML=`<button id="ck2">${L("check")}</button><button class="sec" id="sk">${L("skip")}</button>`;$("#sk").onclick=()=>{stopRec();cb(null)};const i2=$("#in2");i2.focus({preventScroll:true});const ck=()=>{if(!i2.value.trim()||answered)return;src=i2;fin(typedOk(i2.value,fr,S.strict))};$("#ck2").onclick=ck;i2.onkeydown=e=>{if(e.key==="Enter"){e.preventDefault();answered?$("#nx").click():ck()}};$("#typ")&&($("#typ").disabled=true)};
+  $("#typ").onclick=typeIt;
+  if($("#said"))$("#said").onclick=()=>{if(answered)return;answered=true;stopRec();softChime();sparkleAt($("#said"));mood("happy",["Bravo, {n} ! Bien dit !","Well said, {n}!"]);$("#fb").innerHTML=`<div class="fb ok">🗣️ ${tr("Nice! Self-checked, no score change.","Bien ! Auto-évalué, sans effet sur le score.")}</div>`;speak(fr);$("#act").innerHTML=`<button id="nx">${L("next")} →</button>`;$("#nx").onclick=()=>cb(null)};
+  if($("#mic"))$("#mic").onclick=()=>startRec(fr,(heard,score)=>{const pct=Math.round(score*100);if(score>=.75){ach("speak");src=$("#mic");fin(true,`<div>${L("heard")}: « ${esc(heard)} » · ${L("sim")} ${pct}%</div>`)}else{$("#fb").innerHTML=`<div class="fb bad">${L("heard")}: « ${esc(heard)} » · ${L("sim")} ${pct}% (75% ${tr("needed","requis")}). ${tr("Try again, type it, or skip.","Réessaie, écris-le ou passe.")}</div>`;mood("sad",["Encore une fois !","One more time!"])}},
+   err=>{if(answered)return;if(err==="service-not-allowed"||err==="not-allowed")srBlocked=true;const msg=MICMSG[err]||["Oups, le micro a un souci.","Oops, the mic had a hiccup."];mood("sad",msg);
+    $("#fb").innerHTML=`<div class="fb bad">🦉 ${esc(N(msg[S.ui==="fr"?0:1]))}${srBlocked?"<br><small>"+tr("Next speaking exercises will use say-it-aloud mode.","Les prochains exercices oraux passeront en mode « à voix haute ».")+"</small>":""}</div>`;
+    if(srBlocked){const m=$("#mic");if(m)m.remove()}})}}
+
+/* ---------- level-up sequence ---------- */
+function pass(lv,p){S.best[lv]=Math.max(S.best[lv]||0,p);S.passed[lv]=true;if(lv<10)S.unlocked=Math.max(S.unlocked,lv+1);if(lv===10&&!S.doneDate)S.doneDate=Date.now();S.xp+=50;save();
+ ach("lv1");if(p===100)ach("perfect");const n=Object.keys(S.passed).length;if(n>=6)ach("half");if(n>=11)ach("all");celebrate(lv,p)}
+function celebrate(lv,p){stopRec();setGlow(0);hdr();scrollTo(0,0);
+ app.innerHTML=`<div class="card center"><div class="mascot big m-dance" id="masc">${owl()}</div><div class="tag" style="margin-top:10px">📍 ${esc(STOPS[lv].n)}</div><h2 class="title">${tr(`Level ${lv} passed!`,`Niveau ${lv} réussi !`)}</h2>
+ <p class="q">${esc(N(pick(["Bravo {n} ! Tu es incroyable !","Félicitations, {n} !","Quelle championne, {n} !"])))}</p><p>${L("score")}: <b>${p}%</b> ${"⭐".repeat(p===100?3:p>=90?2:1)}</p><p class="mut">+50 XP</p>
+ <button id="c1">💌 ${tr("A letter for you","Une lettre pour toi")}</button></div>`;
+ fanfare();bigFx();$("#c1").onclick=()=>letter(lv)}
+function letter(lv){app.innerHTML=`<div class="card center"><p class="mut">${tr("Tap the envelope","Touche l'enveloppe")}</p><div class="env" id="env"><div class="back"></div><div class="letter"><div class="script" style="font-size:22px">${tr("For","Pour")} ${esc(CONFIG.name)}</div>💕<br>${tr("from","de")} ${esc(CONFIG.from)}</div><div class="front"></div><div class="flap"></div><div class="seal">💗</div></div><div id="nt"></div></div>`;
+ let opened=false;$("#env").onclick=()=>{if(opened)return;opened=true;$("#env").classList.add("open");softChime();hearts(16);setTimeout(()=>{$("#nt").innerHTML=`<div class="note" style="text-align:left;animation:rise .6s both"><div class="script">Ma chère ${esc(CONFIG.name)},</div>${esc(CONFIG.notes[lv]||"")}<div class="script" style="text-align:right">${esc(CONFIG.from)} 💕</div></div><div class="row" style="margin-top:14px"><button id="c2">${tr("Continue","Continuer")} →</button></div>`;$("#c2").onclick=()=>CONFIG.rewards[lv]?reward(lv):postcardScreen(lv)},RM?50:1400)}}
+function reward(lv){const r=CONFIG.rewards[lv];app.innerHTML=`<div class="card"><div class="ticket"><div class="big">${r.emoji||"🎁"}</div><div class="tag">🎁 ${tr("Date unlocked!","Rendez-vous débloqué !")}</div><h3>${esc(r.title)}</h3><p>${esc(r.detail||"")}</p><p class="mut">${tr(`Redeem with ${CONFIG.from} · valid forever 💕`,`À échanger avec ${CONFIG.from} · valide pour toujours 💕`)}</p></div><div class="row" style="margin-top:14px;justify-content:center"><button id="c3">${tr("Continue","Continuer")} →</button></div></div>`;fanfare();hearts(30);confetti(60);$("#c3").onclick=()=>postcardScreen(lv)}
+function postcardHTML(i,locked){const s=STOPS[i];return `<div class="flip${locked?"":" can"}" data-pc="${i}"><div class="in"><div class="pc${locked?" locked":""}" style="background:linear-gradient(135deg,${s.c[0]},${s.c[1]})"><span class="stamp">N° ${i}</span><span class="em">${s.e}</span><span class="sm">${locked?"":"Bisous de"}</span><span class="nm">${locked?"???":esc(s.n)}</span></div>${locked?"":`<div class="pcb"><b>${tr("From","De")} ${esc(CONFIG.from)}:</b><br>${esc(CONFIG.notes[i]||"")}</div>`}</div></div>`}
+function bindFlips(){app.querySelectorAll(".flip.can").forEach(f=>f.onclick=()=>{f.classList.toggle("flipped");tone(1200,0,.12,"sine",.05)})}
+function postcardScreen(lv){const s=STOPS[lv];app.innerHTML=`<div class="card center"><div class="tag">📮 ${tr("New postcard & badge!","Nouvelle carte postale et badge !")}</div><div class="solo">${postcardHTML(lv,false)}</div><div class="medal" style="background:linear-gradient(135deg,${s.c[0]},${s.c[1]})"><span>${s.e}</span></div><b>${esc(s.n)}</b><p class="mut">${tr("Tap the postcard to flip it","Touche la carte pour la retourner")}</p>
+ <div class="row">${lv===10?`<button id="c4">🎓 ${tr("Your certificate","Ton certificat")}</button>`:`<button id="c4">🗺️ ${tr("Continue the journey","Continuer le voyage")} →</button>`}<button class="sec" id="c5">📮 Album</button></div></div>`;
+ bindFlips();softChime();sparkleAt($(".solo"));$("#c4").onclick=()=>lv===10?cert():home();$("#c5").onclick=album}
+function album(){stopRec();setGlow(0);hdr();scrollTo(0,0);const fl=S.ui==="fr"?1:0;const got=Object.keys(S.passed).length,na=Object.keys(S.ach).length;
+ app.innerHTML=`<div class="card">${mascotBlock([`${got}/11 cartes postales !`,`${got}/11 postcards collected!`],"happy","sm")}<h2 class="title">📮 ${tr("Postcards","Cartes postales")}</h2><p class="mut">${tr("Tap a postcard to read its note","Touche une carte pour lire le mot")}</p><div class="pcs">${STOPS.map((_,i)=>postcardHTML(i,!S.passed[i])).join("")}</div></div>
+ <div class="card"><h2 class="title">🏅 ${tr("City badges","Badges des villes")}</h2><div class="badges">${STOPS.map((s,i)=>`<div><div class="medal ${S.passed[i]?"":"locked"}" style="background:linear-gradient(135deg,${s.c[0]},${s.c[1]})"><span>${s.e}</span></div>${S.passed[i]?esc(s.n):"???"}</div>`).join("")}</div></div>
+ <div class="card"><h2 class="title">✨ ${tr("Achievements","Succès")} <small class="mut">${na}/${ACH.length}</small></h2><div class="badges">${ACH.map(a=>`<div><div class="medal ${S.ach[a.id]?"":"locked"}" style="background:#fff4e0"><span>${a.e}</span></div><b>${esc(a.t[fl])}</b><br><span class="mut" style="font-size:10px">${esc(a.d[fl])}</span></div>`).join("")}</div>
+ <p class="mut">${tr("Best combo","Meilleur combo")}: ${S.bestCombo} · ${tr("Correct answers","Bonnes réponses")}: ${S.correct}</p></div>
+ <div class="row"><button class="sec" id="bk">🗺️ ${tr("Back to the map","Retour à la carte")}</button>${S.passed[10]?`<button id="ce">🎓 ${tr("Certificate","Certificat")}</button>`:""}</div>`;
+ bindFlips();$("#bk").onclick=home;if($("#ce"))$("#ce").onclick=()=>cert()}
+function cert(force){stopRec();hdr();scrollTo(0,0);if(!S.passed[10]&&!force){home();return}
+ const dt=new Date(S.doneDate||Date.now()).toLocaleDateString("fr-CA",{day:"numeric",month:"long",year:"numeric"});
+ app.innerHTML=`<div class="cert"><span class="corner" style="left:18px;top:14px">⚜</span><span class="corner" style="right:18px;top:14px">⚜</span><span class="corner" style="left:18px;bottom:14px">⚜</span><span class="corner" style="right:18px;bottom:14px">⚜</span><div class="b1"><div class="b2">
+ <div class="sub">Certificate of Achievement</div><h1>Certificat de réussite</h1><p style="margin:14px 0 0">Ce certificat est fièrement décerné à</p><div class="who script">${esc(CONFIG.name)}</div>
+ <p style="line-height:1.5;max-width:460px;margin:8px auto">pour avoir complété les 11 niveaux du parcours <b>Français 0→10</b>, de Lévis aux Îles-de-la-Madeleine, avec courage, talent et beaucoup d'amour.</p>
+ <p class="mut" style="font-style:italic">for completing all 11 levels of the French 0→10 journey across Quebec</p><div class="seal">🦉</div>
+ <div class="sig"><div><span class="script" style="font-size:20px;color:#5a3446">${esc(CONFIG.from)}</span><br>${tr("With love","Avec amour")}</div><div><span style="font-size:15px;color:#5a3446">${esc(dt)}</span><br>Date</div></div></div></div></div>
+ <div class="row noprint" style="margin-top:16px;justify-content:center"><button id="pt">🖨️ ${tr("Print","Imprimer")}</button><button class="sec" id="bk">🗺️ ${tr("Map","Carte")}</button></div>`;
+ $("#pt").onclick=()=>print();$("#bk").onclick=home;if(!force||S.passed[10]){confetti(60);hearts(12)}}
+
+/* ---------- boot & routes (#debug-pass triggers the level-up sequence for the current level) ---------- */
+$("#lang").onclick=()=>{S.ui=S.ui==="en"?"fr":"en";save();home()};$("#home").onclick=home;
+$("#mute").onclick=()=>{S.muted=!S.muted;save();hdr();if(!S.muted)chime(1)};
+function route(){const h=location.hash;if(h==="#debug-pass"){history.replaceState(null,"",location.pathname+location.search);pass(Math.min(S.unlocked,10),100)}else if(h==="#album")album();else if(h==="#cert")cert(true);else home()}
+addEventListener("hashchange",route);hdr();route();
+</script></body></html>
