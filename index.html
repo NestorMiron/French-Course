@@ -25,6 +25,9 @@ button:active{transform:translateY(3px);box-shadow:0 1px 0 #c43d62}button.sec{ba
 input[type=text]{width:100%;font-size:18px;padding:13px;border:2px solid #f0d5de;border-radius:14px;background:#fff;outline:none;transition:border .2s}input[type=text]:focus{border-color:var(--pri)}
 .fb{margin-top:12px;padding:11px 13px;border-radius:14px;animation:rise .3s both}.fb.ok{background:#e3f6ec;color:#1c6644}.fb.bad{background:#fde8ec;color:#8a2236}
 .tag{display:inline-block;font-size:12px;background:#fbe3ea;color:#a3375a;border-radius:20px;padding:3px 10px;margin-right:6px;font-weight:600}
+.tag.qc{background:#e5f6ea;color:#1d6b45}
+#saved{position:fixed;top:calc(62px + env(safe-area-inset-top));right:14px;z-index:45;background:#e3f6ec;color:#1c6644;font-size:12px;font-weight:800;border-radius:999px;padding:5px 10px;opacity:0;transform:translateY(-4px);transition:opacity .2s,transform .2s;pointer-events:none}
+#saved.on{opacity:1;transform:none}
 label{font-size:14px;display:flex;gap:6px;align-items:center}
 .bar{height:16px;background:#f6e3ea;border-radius:999px;overflow:hidden;margin-top:8px}.bar i{display:block;height:100%;background:linear-gradient(90deg,#58c27d,var(--pri));border-radius:999px;transition:width .4s ease}
 .qbar{margin:8px 0 4px}
@@ -214,9 +217,25 @@ const ACH=[
  {id:"c500",e:"🏅",t:["Word lover","Amoureuse des mots"],d:["500 correct answers","500 bonnes réponses"]},
  {id:"night",e:"🌙",t:["Night owl","Oiseau de nuit"],d:["Practice after 10 pm","Pratiquer après 22 h"]},
  {id:"half",e:"🧭",t:["Halfway there","À mi-chemin"],d:["6 stops visited","6 escales visitées"]},
- {id:"all",e:"👑",t:["Grand tour","Le grand tour"],d:["All 11 stops","Les 11 escales"]}];
+ {id:"all",e:"👑",t:["Grand tour","Le grand tour"],d:["All 11 stops","Les 11 escales"]},
+ {id:"qc",e:"🍁",t:["Quebec ear","Oreille québécoise"],d:["First Québec bonus","Premier bonus Québec"]},
+ {id:"qc11",e:"⚜️",t:["Quebec voice","Voix québécoise"],d:["11 Québec bonus answers","11 réponses bonus Québec"]}];
+const QC=[
+ [["bienvenue","you're welcome",["In Quebec, bienvenue is how you answer merci.","Au Québec, bienvenue répond à merci."]],["c'est correct","it's fine",["Correct means fine or OK.","Correct veut dire que ça va."]]],
+ [["une piastre","a dollar",["Piastre is an everyday word for a dollar.","Une piastre, c'est un dollar au quotidien."]],["icitte","here",["Icitte is the Quebec way to say ici.","Icitte, c'est ici au Québec."]]],
+ [["je suis tanné","I am fed up",["Tanné means you've had enough.","Tanné veut dire qu'on en a assez."]],["pantoute","not at all",["Pantoute means not at all.","Pantoute veut dire pas du tout."]]],
+ [["le char","the car",["A char is a car, not a chariot.","Un char, c'est une auto."]],["le dépanneur","the corner store",["The dépanneur is the corner store.","Le dépanneur, c'est le magasin du coin."]]],
+ [["jaser","to chat",["Jaser is to chat, not to gossip only.","Jaser, c'est discuter."]],["ma blonde","my girlfriend",["Blonde means girlfriend in Quebec.","Une blonde, c'est une copine."]]],
+ [["checker","to check",["Quebec French made check into a verb.","Au Québec, checker est un verbe."]],["la job","the job",["Job is feminine in Quebec: la job.","Au Québec on dit la job."]]],
+ [["on a eu du fun","we had fun",["Avoir du fun is the Quebec way to say it.","Avoir du fun, c'est s'amuser."]],["ben bon","really good",["Ben means really or very.","Ben veut dire vraiment."]]],
+ [["à matin","this morning",["À matin means this morning.","À matin, c'est ce matin."]],["il fait frette","it is freezing",["Frette is colder than froid.","Frette, c'est très froid."]]],
+ [["c'est plate","it is boring",["Plate means boring, not flat.","Plate veut dire ennuyeux."]],["j'ai la langue à terre","I am exhausted",["Langue à terre means wiped out.","La langue à terre, c'est être épuisé."]]],
+ [["j'ai de la misère","I am having trouble",["Avoir de la misère means to struggle.","Avoir de la misère, c'est avoir du mal."]],["faque","so",["Faque means so or therefore.","Faque veut dire donc."]]],
+ [["c'est tiguidou","it is all good",["Tiguidou means great or all good.","Tiguidou, c'est parfait."]],["enweille","come on",["Enweille means come on, let's go.","Enweille, c'est allez."]]]
+];
+const QC_BONUS=8;
 const KEY="frcourse_v1";
-const DEF=()=>({xp:0,streak:0,last:null,best:{},unlocked:0,ui:"en",strict:false,srs:{},muted:false,passed:{},correct:0,ach:{},mapPos:0,bestCombo:0,doneDate:null});
+const DEF=()=>({xp:0,streak:0,last:null,best:{},unlocked:0,ui:"en",strict:false,srs:{},muted:false,passed:{},correct:0,ach:{},mapPos:0,bestCombo:0,doneDate:null,qc:0,resume:null});
 let S=load();function load(){try{return Object.assign(DEF(),JSON.parse(localStorage.getItem(KEY)||"{}"))}catch(e){return DEF()}}
 function save(){try{localStorage.setItem(KEY,JSON.stringify(S))}catch(e){}}
 const RM=window.matchMedia&&matchMedia("(prefers-reduced-motion: reduce)").matches;
@@ -297,6 +316,10 @@ function mkEx(lv,i,type){const it=LEVELS[lv].items[i];const id=lv+":"+i;
  if(type==="fill"){const w=it[0].split(" ");let k=0;w.forEach((x,j)=>{if(x.length>w[k].length)k=j});const ans=w[k];const pool=[...new Set(LEVELS[lv].items.flatMap(x=>x[0].split(" ")).filter(x=>x!==ans&&x.length>2))];w[k]="____";return{id,type,lv,it,text:w.join(" "),ans,opts:shuffle([ans,...shuffle(pool).slice(0,3)])}}
  return{id,type,lv,it,ans:type==="fr2en"?it[1]:it[0]}}
 function levelSet(lv){return LEVELS[lv].items.map((_,i)=>mkEx(lv,i,TYPES[i%TYPES.length]))}
+function qcSet(lv){const items=QC[lv]||[];const pool=QC.flat().map(x=>x[1]);return items.map((it,i)=>{const dis=shuffle(pool.filter(x=>x!==it[1])).slice(0,3);return{id:"qc:"+lv+":"+i,type:"mc",lv,it:[it[0],it[1]],opts:shuffle([it[1],...dis]),ans:it[1],qc:true,note:it[2]}})}
+function markSaved(){let el=$("#saved");if(!el){el=document.createElement("div");el.id="saved";document.body.appendChild(el)}el.textContent=tr("Saved","Enregistré");el.classList.remove("on");void el.offsetWidth;el.classList.add("on");clearTimeout(markSaved._t);markSaved._t=setTimeout(()=>el.classList.remove("on"),1100)}
+function award(q,ok){if(q&&ok!==null){srsUpdate(q.id,!!ok);if(ok){const bonus=q.qc?QC_BONUS:0;S.xp+=10+Math.min(combo,10)+bonus;if(q.qc){S.qc=(S.qc||0)+1;ach("qc");if(S.qc>=11)ach("qc11")}touchStreak()}}save();hdr();markSaved()}
+let noteAnswer=()=>{};
 function srsPick(maxLv){const cands=[];for(let l=0;l<=maxLv;l++)LEVELS[l].items.forEach((_,i)=>{const r=S.srs[l+":"+i]||{w:1,seen:0};cands.push([l,i,r.w*(l===maxLv?2:1)*(r.seen?1:1.5)])});let x=Math.random()*cands.reduce((a,c)=>a+c[2],0);for(const c of cands){x-=c[2];if(x<=0)return c}return cands[0]}
 function srsUpdate(id,ok){const r=S.srs[id]||{w:1,seen:0};r.seen++;r.w=ok?Math.max(.2,r.w*.6):Math.min(8,r.w*2+1);S.srs[id]=r}
 let rec=null,recT=0,srBlocked=false; // srBlocked: remembered for this session after service-not-allowed / not-allowed
@@ -323,8 +346,9 @@ function home(){stopRec();setGlow(0);hdr();const h=new Date().getHours();const c
  const done=Object.keys(S.passed).length,pct=Math.round(100*done/11);
  const fill=S.passed[10]?100:Math.round(100*cur/10);
  const nodes=STOPS.map((st,i)=>{const lock=i>S.unlocked,passed=!!S.passed[i],state=lock?"locked":passed?"done":i===cur?"current":"open";const best=S.best[i]||0;
-  return `<button type="button" class="node ${state}" data-s="${i}" ${i===cur?'aria-current="step"':""}><span class="orb">${passed?"★":lock?"🔒":st.e}</span><span class="nmeta"><span class="ntag">${tr("Level","Niveau")} ${i}${passed?" · "+best+"%":""}</span><b>${esc(st.n)}</b><span class="mut">${esc(LEVELS[i].t[S.ui==="en"?0:1])}</span></span>${i===cur?`<span class="go-pill">${passed?tr("Again","Encore"):L("start")}</span>`:""}</button>`}).join("");
- app.innerHTML=`<div class="card pathhead"><h2 class="title">${esc(N(greet[0]))}${S.passed[10]?" 👑":""}</h2><p class="mut" style="margin:0 0 8px">${esc(N(greet[1]))} · ${tr("Next stop","Prochaine escale")}: ${esc(STOPS[cur].n)}</p>
+  const mid=S.resume&&(S.resume.key==="lv:"+i||S.resume.key==="lv:"+i+":qc");
+  return `<button type="button" class="node ${state}" data-s="${i}" ${i===cur?'aria-current="step"':""}><span class="orb">${passed?"★":lock?"🔒":st.e}</span><span class="nmeta"><span class="ntag">${tr("Level","Niveau")} ${i}${passed?" · "+best+"%":""}</span><b>${esc(st.n)}</b><span class="mut">${esc(LEVELS[i].t[S.ui==="en"?0:1])}</span></span>${i===cur?`<span class="go-pill">${mid?tr("Continue","Continuer"):passed?tr("Again","Encore"):L("start")}</span>`:""}</button>`}).join("");
+ app.innerHTML=`<div class="card pathhead"><h2 class="title">${esc(N(greet[0]))}${S.passed[10]?" 👑":""}</h2><p class="mut" style="margin:0 0 8px">${esc(N(greet[1]))} · ${tr("Next stop","Prochaine escale")}: ${esc(STOPS[cur].n)} · ${S.correct} ${tr("answers saved","réponses enregistrées")}</p>
  <div class="row" style="justify-content:space-between"><b>${done}/11</b><span class="mut">${pct}%</span></div><div class="bar"><i style="width:${pct}%"></i></div>
  <div class="row" style="margin-top:12px"><button id="pr">∞ ${L("practice")}</button><button class="sec" id="al">📮 ${tr("Album","Album")}</button>${S.passed[10]?`<button class="sec" id="ce">🎓 ${tr("Certificate","Certificat")}</button>`:""}</div></div>
  <div class="path" id="path" style="--fill:${fill}">${nodes}</div>
@@ -338,22 +362,34 @@ function home(){stopRec();setGlow(0);hdr();const h=new Date().getHours();const c
  const focus=selStop!=null?selStop:cur;if(focus>1){const el=app.querySelector(`.node[data-s="${focus}"]`);if(el)el.scrollIntoView({behavior:RM?"auto":"smooth",block:"center"})}
  openStop(focus,true);if(S.mapPos!==cur){S.mapPos=cur;save()}}
 function openStop(i,quiet){selStop=i;document.querySelectorAll(".node").forEach(g=>g.classList.toggle("sel",+g.dataset.s===i));const lv=LEVELS[i],lock=i>S.unlocked,b=S.best[i]||0,st=STOPS[i];
- $("#stopcard").innerHTML=`<div class="card"><span style="font-size:32px">${st.e}</span><div style="flex:1;min-width:0"><span class="tag">${tr("Level","Niveau")} ${i}</span><div style="font-weight:800">${esc(st.n)}</div><div class="mut">${lock?L("locked"):S.passed[i]?tr("Visited","Visitée")+" · "+b+"%":esc(lv.t[S.ui==="en"?0:1])}</div></div>${lock?`<button id="to">${L("testout")}</button>`:`<button id="gl">${S.passed[i]?tr("Again","Encore"):L("start")}</button>`}</div>`;
+ const mid=S.resume&&(S.resume.key==="lv:"+i||S.resume.key==="lv:"+i+":qc")?S.resume:null;
+ $("#stopcard").innerHTML=`<div class="card"><span style="font-size:32px">${st.e}</span><div style="flex:1;min-width:0"><span class="tag">${tr("Level","Niveau")} ${i}</span><div style="font-weight:800">${esc(st.n)}</div><div class="mut">${lock?L("locked"):mid?tr("Continue","Continuer")+" · "+Math.min(mid.k,mid.n)+"/"+mid.n:S.passed[i]?tr("Visited","Visitée")+" · "+b+"%":esc(lv.t[S.ui==="en"?0:1])}</div></div>${lock?`<button id="to">${L("testout")}</button>`:`<button id="gl">${mid?tr("Continue","Continuer"):S.passed[i]?tr("Again","Encore"):L("start")}</button>`}</div>`;
  if($("#to"))$("#to").onclick=()=>testOut(i);if($("#gl"))$("#gl").onclick=()=>lesson(i);
  if(!quiet){const el=document.querySelector(`.node[data-s="${i}"]`);if(el)el.scrollIntoView({behavior:RM?"auto":"smooth",block:"center"})}}
 
 /* ---------- lessons & exercise flow ---------- */
 let combo=0;
-function lesson(lv){const l=LEVELS[lv];app.innerHTML=`<div class="card">${mascotBlock([`Leçon ${lv} : ${STOPS[lv].n} !`,`Lesson ${lv}: off to ${STOPS[lv].n}!`])}<span class="tag">${L("lesson")} ${lv}</span><h2 class="title">${esc(l.t[S.ui==="en"?0:1])}</h2><p style="line-height:1.55">${l.intro}</p><div class="row"><button id="go">${L("start")}</button><button class="sec" id="bk">${L("back")}</button></div></div>`;$("#go").onclick=()=>runSet(levelSet(lv),r=>finishLevel(lv,r));$("#bk").onclick=home;scrollTo(0,0)}
-function testOut(lv){const qs=shuffle([...levelSet(lv),...(lv>0?levelSet(lv-1):[])]).slice(0,12);runSet(qs,r=>{const p=Math.round(100*r.ok/Math.max(1,r.n));if(p>=80&&lv>0){for(let l=0;l<lv-1;l++)S.passed[l]=true;pass(lv-1,p)}else failScreen(lv,p,true)})}
-function finishLevel(lv,r){const p=Math.round(100*r.ok/Math.max(1,r.n));S.best[lv]=Math.max(S.best[lv]||0,p);save();if(p>=80)pass(lv,p);else failScreen(lv,p)}
+function lesson(lv){const l=LEVELS[lv];const rs=S.resume&&(S.resume.key==="lv:"+lv||S.resume.key==="lv:"+lv+":qc")?S.resume:null;
+ app.innerHTML=`<div class="card">${mascotBlock([`Leçon ${lv} : ${STOPS[lv].n} !`,`Lesson ${lv}: off to ${STOPS[lv].n}!`])}<span class="tag">${L("lesson")} ${lv}</span><h2 class="title">${esc(l.t[S.ui==="en"?0:1])}</h2><p style="line-height:1.55">${l.intro}</p><p class="mut">🍁 ${tr("Two Québec questions at the end. They give bonus points and do not change your score.","Deux questions québécoises à la fin. Elles donnent des points bonus et ne changent pas ta note.")}</p><div class="row"><button id="go">${rs?tr("Continue","Continuer")+" · "+Math.min(rs.k,rs.n)+"/"+rs.n:L("start")}</button><button class="sec" id="bk">${L("back")}</button></div></div>`;$("#go").onclick=()=>startLevel(lv);$("#bk").onclick=home;scrollTo(0,0)}
+function startLevel(lv){const coreKey="lv:"+lv,qcKey=coreKey+":qc";
+ if(S.resume&&S.resume.key===coreKey&&S.resume.done)return runQc(lv,{ok:S.resume.ok,n:S.resume.n});
+ if(S.resume&&S.resume.key===qcKey&&S.resume.done)return finishLevel(lv,{ok:S.resume.coreOk,n:S.resume.coreN});
+ if(S.resume&&S.resume.key===qcKey)return runQc(lv,{ok:S.resume.coreOk,n:S.resume.coreN});
+ runSet(levelSet(lv),r=>runQc(lv,r),{key:coreKey})}
+function runQc(lv,core){const qs=qcSet(lv);if(!qs.length)return finishLevel(lv,core);runSet(qs,()=>finishLevel(lv,core),{key:"lv:"+lv+":qc",coreOk:core.ok,coreN:core.n})}
+function testOut(lv){const qs=shuffle([...levelSet(lv),...(lv>0?levelSet(lv-1):[])]).slice(0,12);runSet(qs,r=>{const p=Math.round(100*r.ok/Math.max(1,r.n));if(p>=80&&lv>0){for(let l=0;l<lv-1;l++)S.passed[l]=true;pass(lv-1,p)}else failScreen(lv,p,true)},{key:"test:"+lv})}
+function finishLevel(lv,r){const p=Math.round(100*r.ok/Math.max(1,r.n));S.best[lv]=Math.max(S.best[lv]||0,p);if(S.resume&&(S.resume.key==="lv:"+lv||S.resume.key==="lv:"+lv+":qc"))S.resume=null;save();if(p>=80)pass(lv,p);else failScreen(lv,p)}
 function failScreen(lv,p,test){hdr();setGlow(0);app.innerHTML=`<div class="card center">${mascotBlock(["Tu y es presque, {n} !","So close, {n}! Every try makes you stronger."],"sad")}<p class="q">${L("score")}: ${p}%</p><p>${L("need")}</p><div class="row"><button id="re">${tr("Try again","Réessayer")}</button><button class="sec" id="pr">∞ ${L("practice")}</button><button class="sec" id="bk">📍 ${tr("Path","Parcours")}</button></div></div>`;
- $("#re").onclick=()=>test?testOut(lv):runSet(levelSet(lv),r=>finishLevel(lv,r));$("#pr").onclick=runPractice;$("#bk").onclick=home}
-function runPractice(){combo=0;const maxLv=Math.min(S.unlocked,10);let count=0;runStream(()=>{const[l,i]=srsPick(maxLv);count++;return mkEx(l,i,TYPES[Math.random()*TYPES.length|0])},()=>count,true)}
-function runSet(qs,done){combo=0;let k=0,r={ok:0,n:qs.length};runStream(()=>k<qs.length?qs[k++]:null,()=>k+"/"+qs.length,false,ok=>{if(ok)r.ok++;if(ok===null)r.n--},()=>done(r))}
-function runStream(next,prog,endless,onRes=()=>{},onDone=home){const q=next();if(!q)return onDone();show(q,prog(),endless,ok=>{onRes(ok);if(ok!==null){srsUpdate(q.id,ok);if(ok){S.xp+=10+Math.min(combo,10);touchStreak()}save();hdr()}runStream(next,prog,endless,onRes,onDone)})}
+ $("#re").onclick=()=>{if(S.resume&&String(S.resume.key).startsWith(test?"test:"+lv:"lv:"+lv))S.resume=null;save();test?testOut(lv):startLevel(lv)};$("#pr").onclick=runPractice;$("#bk").onclick=home}
+function runPractice(){combo=0;const maxLv=Math.min(S.unlocked,10);let count=0;noteAnswer=()=>{};runStream(()=>{count++;if(Math.random()<0.25){const pool=[];for(let l=0;l<=maxLv;l++)pool.push(...qcSet(l));if(pool.length)return pick(pool)}const[l,i]=srsPick(maxLv);return mkEx(l,i,TYPES[Math.random()*TYPES.length|0])},()=>count,true)}
+function runSet(qs,done,opt={}){combo=0;const key=opt.key||"";let k=0,r={ok:0,n:qs.length};
+ if(key&&S.resume&&S.resume.key===key&&!S.resume.done){k=Math.min(Math.max(0,S.resume.k|0),qs.length);r.ok=Math.min(S.resume.ok|0,k);if(S.resume.n)r.n=S.resume.n}
+ noteAnswer=ok=>{if(ok)r.ok++;else if(ok===null)r.n=Math.max(0,r.n-1);if(key)S.resume={key,k,ok:r.ok,n:r.n,coreOk:opt.coreOk??null,coreN:opt.coreN??null,done:k>=qs.length}};
+ runStream(()=>k<qs.length?qs[k++]:null,()=>k+"/"+qs.length,false,()=>{if(key&&S.resume&&S.resume.key===key)S.resume=null;save();done(r)})}
+function runStream(next,prog,endless,onDone=home){const q=next();if(!q)return onDone();show(q,prog(),endless,()=>runStream(next,prog,endless,onDone))}
 function show(q,prog,endless,cb){window.__q=q;const fr=q.it[0],en=q.it[1];let body="",kind="";const sb=`class="sec" style="min-height:34px;padding:4px 12px"`;
- if(q.type==="mc"){kind=L("choose");body=`<p class="q">${esc(fr)} <button ${sb} id="pl">🔊</button></p>`+q.opts.map((o,j)=>`<button class="opt" data-o="${j}">${esc(o)}</button>`).join("")}
+ if(q.qc){kind=tr("Québec · bonus","Québec · bonus");body=`<p class="mut">${tr("What does this mean in Quebec?","Qu'est-ce que ça veut dire au Québec ?")}</p><p class="q">${esc(fr)} <button ${sb} id="pl">🔊</button></p>`+q.opts.map((o,j)=>`<button class="opt" data-o="${j}">${esc(o)}</button>`).join("")}
+ else if(q.type==="mc"){kind=L("choose");body=`<p class="q">${esc(fr)} <button ${sb} id="pl">🔊</button></p>`+q.opts.map((o,j)=>`<button class="opt" data-o="${j}">${esc(o)}</button>`).join("")}
  else if(q.type==="fill"){kind=L("fill");body=`<p class="mut">${esc(en)}</p><p class="q">${esc(q.text)}</p>`+q.opts.map((o,j)=>`<button class="opt" data-o="${j}">${esc(o)}</button>`).join("")}
  else if(q.type==="fr2en"){kind=L("translate");body=`<p class="q">${esc(fr)} <button ${sb} id="pl">🔊</button></p><input type="text" id="in" placeholder="${L("typeEn")}" autocapitalize="off" autocomplete="off" autocorrect="off" spellcheck="false">`}
  else if(q.type==="en2fr"){kind=L("translate");body=`<p class="q">${esc(en)}</p><input type="text" id="in" placeholder="${L("typeFr")}" lang="fr" autocapitalize="off" autocomplete="off" autocorrect="off" spellcheck="false">`}
@@ -362,24 +398,27 @@ function show(q,prog,endless,cb){window.__q=q;const fr=q.it[0],en=q.it[1];let bo
  const qpct=(!endless&&String(prog).includes("/"))?(()=>{const[a,b]=String(prog).split("/").map(Number);return Math.max(0,Math.min(100,Math.round(100*(a-1)/Math.max(1,b))))})():0;
  app.innerHTML=`<div class="card" id="qc"><div class="row" style="justify-content:space-between"><span class="mut">${endless?"∞ #"+prog:prog} · ${tr("Level","Niveau")} ${q.lv}</span><span class="combo" id="combo">${combo>=2?"🔥 x"+combo:""}</span><button ${sb} id="quit">✕</button></div>
  ${endless?"":`<div class="bar thick qbar"><i style="width:${qpct}%"></i></div>`}
- ${mascotBlock(pick(IDLE),"idle","sm")}<span class="tag">${kind}</span>${body}<div id="fb"></div><div class="row" style="margin-top:12px" id="act">${["fr2en","en2fr","listen"].includes(q.type)?`<button id="ck">${L("check")}</button>`:""}<button class="sec" id="sk">${L("skip")}</button></div></div>`;
+ ${mascotBlock(pick(IDLE),"idle","sm")}<span class="tag${q.qc?" qc":""}">${kind}</span>${body}<div id="fb"></div><div class="row" style="margin-top:12px" id="act">${["fr2en","en2fr","listen"].includes(q.type)?`<button id="ck">${L("check")}</button>`:""}<button class="sec" id="sk">${L("skip")}</button></div></div>`;
  $("#quit").onclick=()=>{stopRec();home()};
  let answered=false,src=null;
  const fin=(ok,extra="")=>{if(answered)return;answered=true;stopRec();
   if(ok){combo++;S.correct++;S.bestCombo=Math.max(S.bestCombo,combo);chime(combo);sparkleAt(src||$("#fb"));mood("happy",pick(PRAISE));ach("first");if(combo===5)ach("combo5");if(combo===10)ach("combo10");if(combo>=5&&combo%5===0)hearts(14);if(S.correct>=100)ach("c100");if(S.correct>=500)ach("c500");const hr=new Date().getHours();if(hr>=22||hr<4)ach("night")}
   else{combo=0;wrongTone();const c=$("#qc");c.classList.remove("shake");void c.offsetWidth;c.classList.add("shake");mood("sad",pick(SAD))}
   setGlow(combo);const ce=$("#combo");ce.textContent=combo>=2?"🔥 x"+combo:"";ce.classList.remove("pop");void ce.offsetWidth;ce.classList.add("pop");
-  $("#fb").innerHTML=`<div class="fb ${ok?"ok":"bad"}">${ok?N(pick([L("correct"),L("correct")+" "+CONFIG.name+" 💕"])):L("wrong")+" <b>"+esc(q.ans)+"</b>"}${extra}${q.type!=="fr2en"&&q.type!=="mc"?"":`<div class="mut">${esc(fr)} = ${esc(en)}</div>`}</div>`;
+  noteAnswer(ok);award(q,ok);
+  const bonus=ok&&q.qc?`<div><b>+${QC_BONUS} ${tr("Québec bonus","bonus Québec")}</b></div>`:"";
+  const note=q.qc&&q.note?`<div class="mut">${esc(tr(q.note[0],q.note[1]))}</div>`:"";
+  $("#fb").innerHTML=`<div class="fb ${ok?"ok":"bad"}">${ok?N(pick([L("correct"),L("correct")+" "+CONFIG.name+" 💕"])):L("wrong")+" <b>"+esc(q.ans)+"</b>"}${bonus}${note}${extra}${q.qc||q.type==="fr2en"||q.type==="mc"?`<div class="mut">${esc(fr)} = ${esc(en)}</div>`:""}</div>`;
   if(q.type!=="listen")speak(fr);$("#act").innerHTML=`<button id="nx">${L("next")} →</button>`;$("#nx").onclick=()=>cb(ok);$("#nx").focus({preventScroll:true})};
  if($("#pl"))$("#pl").onclick=()=>speak(fr);if($("#sl"))$("#sl").onclick=()=>speak(fr,.6);
  if(q.type==="listen")setTimeout(()=>speak(fr),300);
  app.querySelectorAll("[data-o]").forEach(b=>b.onclick=()=>{if(answered)return;const ok=q.opts[+b.dataset.o]===q.ans;b.style.background=ok?"#c9efd8":"#f8d0d8";src=b;if(!ok)app.querySelectorAll("[data-o]").forEach(x=>{if(q.opts[+x.dataset.o]===q.ans)x.style.background="#c9efd8"});fin(ok)});
  const inp=$("#in");if(inp){inp.focus({preventScroll:true});const check=()=>{if(!inp.value.trim())return;src=inp;fin(typedOk(inp.value,q.ans,S.strict))};$("#ck").onclick=check;inp.onkeydown=e=>{if(e.key==="Enter"){e.preventDefault();answered?$("#nx").click():check()}}}
- $("#sk").onclick=()=>{stopRec();if(q.type==="speak")return cb(null);combo=0;setGlow(0);cb(false)};
+ $("#sk").onclick=()=>{stopRec();if(q.type==="speak"){noteAnswer(null);award(q,null);return cb(null)}combo=0;setGlow(0);noteAnswer(false);award(q,false);cb(false)};
  if(q.type==="speak"){
-  const typeIt=()=>{stopRec();$("#tbox").innerHTML=`<input type="text" id="in2" style="margin-top:10px" placeholder="${L("typeFr")}" lang="fr" autocapitalize="off" autocomplete="off" autocorrect="off" spellcheck="false">`;$("#act").innerHTML=`<button id="ck2">${L("check")}</button><button class="sec" id="sk">${L("skip")}</button>`;$("#sk").onclick=()=>{stopRec();cb(null)};const i2=$("#in2");i2.focus({preventScroll:true});const ck=()=>{if(!i2.value.trim()||answered)return;src=i2;fin(typedOk(i2.value,fr,S.strict))};$("#ck2").onclick=ck;i2.onkeydown=e=>{if(e.key==="Enter"){e.preventDefault();answered?$("#nx").click():ck()}};$("#typ")&&($("#typ").disabled=true)};
+  const typeIt=()=>{stopRec();$("#tbox").innerHTML=`<input type="text" id="in2" style="margin-top:10px" placeholder="${L("typeFr")}" lang="fr" autocapitalize="off" autocomplete="off" autocorrect="off" spellcheck="false">`;$("#act").innerHTML=`<button id="ck2">${L("check")}</button><button class="sec" id="sk">${L("skip")}</button>`;$("#sk").onclick=()=>{stopRec();noteAnswer(null);award(q,null);cb(null)};const i2=$("#in2");i2.focus({preventScroll:true});const ck=()=>{if(!i2.value.trim()||answered)return;src=i2;fin(typedOk(i2.value,fr,S.strict))};$("#ck2").onclick=ck;i2.onkeydown=e=>{if(e.key==="Enter"){e.preventDefault();answered?$("#nx").click():ck()}};$("#typ")&&($("#typ").disabled=true)};
   $("#typ").onclick=typeIt;
-  if($("#said"))$("#said").onclick=()=>{if(answered)return;answered=true;stopRec();softChime();sparkleAt($("#said"));mood("happy",["Bravo, {n} ! Bien dit !","Well said, {n}!"]);$("#fb").innerHTML=`<div class="fb ok">🗣️ ${tr("Nice! Self-checked, no score change.","Bien ! Auto-évalué, sans effet sur le score.")}</div>`;speak(fr);$("#act").innerHTML=`<button id="nx">${L("next")} →</button>`;$("#nx").onclick=()=>cb(null)};
+  if($("#said"))$("#said").onclick=()=>{if(answered)return;answered=true;stopRec();noteAnswer(null);award(q,null);softChime();sparkleAt($("#said"));mood("happy",["Bravo, {n} ! Bien dit !","Well said, {n}!"]);$("#fb").innerHTML=`<div class="fb ok">🗣️ ${tr("Nice! Self-checked, no score change.","Bien ! Auto-évalué, sans effet sur le score.")}</div>`;speak(fr);$("#act").innerHTML=`<button id="nx">${L("next")} →</button>`;$("#nx").onclick=()=>cb(null)};
   if($("#mic"))$("#mic").onclick=()=>startRec(fr,(heard,score)=>{const pct=Math.round(score*100);if(score>=.75){ach("speak");src=$("#mic");fin(true,`<div>${L("heard")}: « ${esc(heard)} » · ${L("sim")} ${pct}%</div>`)}else{$("#fb").innerHTML=`<div class="fb bad">${L("heard")}: « ${esc(heard)} » · ${L("sim")} ${pct}% (75% ${tr("needed","requis")}). ${tr("Try again, type it, or skip.","Réessaie, écris-le ou passe.")}</div>`;mood("sad",["Encore une fois !","One more time!"])}},
    err=>{if(answered)return;if(err==="service-not-allowed"||err==="not-allowed")srBlocked=true;const msg=MICMSG[err]||["Oups, le micro a un souci.","Oops, the mic had a hiccup."];mood("sad",msg);
     $("#fb").innerHTML=`<div class="fb bad">🦉 ${esc(N(msg[S.ui==="fr"?0:1]))}${srBlocked?"<br><small>"+tr("Next speaking exercises will use say-it-aloud mode.","Les prochains exercices oraux passeront en mode « à voix haute ».")+"</small>":""}</div>`;
@@ -405,7 +444,7 @@ function album(){stopRec();setGlow(0);hdr();scrollTo(0,0);const fl=S.ui==="fr"?1
  app.innerHTML=`<div class="card">${mascotBlock([`${got}/11 cartes postales !`,`${got}/11 postcards collected!`],"happy","sm")}<h2 class="title">📮 ${tr("Postcards","Cartes postales")}</h2><p class="mut">${tr("Tap a postcard to read its note","Touche une carte pour lire le mot")}</p><div class="pcs">${STOPS.map((_,i)=>postcardHTML(i,!S.passed[i])).join("")}</div></div>
  <div class="card"><h2 class="title">🏅 ${tr("City badges","Badges des villes")}</h2><div class="badges">${STOPS.map((s,i)=>`<div><div class="medal ${S.passed[i]?"":"locked"}" style="background:linear-gradient(135deg,${s.c[0]},${s.c[1]})"><span>${s.e}</span></div>${S.passed[i]?esc(s.n):"???"}</div>`).join("")}</div></div>
  <div class="card"><h2 class="title">✨ ${tr("Achievements","Succès")} <small class="mut">${na}/${ACH.length}</small></h2><div class="badges">${ACH.map(a=>`<div><div class="medal ${S.ach[a.id]?"":"locked"}" style="background:#fff4e0"><span>${a.e}</span></div><b>${esc(a.t[fl])}</b><br><span class="mut" style="font-size:10px">${esc(a.d[fl])}</span></div>`).join("")}</div>
- <p class="mut">${tr("Best combo","Meilleur combo")}: ${S.bestCombo} · ${tr("Correct answers","Bonnes réponses")}: ${S.correct}</p></div>
+ <p class="mut">${tr("Best combo","Meilleur combo")}: ${S.bestCombo} · ${tr("Correct answers","Bonnes réponses")}: ${S.correct} · 🍁 ${S.qc||0}</p></div>
  <div class="row"><button class="sec" id="bk">📍 ${tr("Back to the path","Retour au parcours")}</button>${S.passed[10]?`<button id="ce">🎓 ${tr("Certificate","Certificat")}</button>`:""}</div>`;
  bindFlips();$("#bk").onclick=home;if($("#ce"))$("#ce").onclick=()=>cert()}
 function cert(force){stopRec();hdr();scrollTo(0,0);if(!S.passed[10]&&!force){home();return}
