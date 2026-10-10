@@ -4,7 +4,7 @@
 <meta name="theme-color" content="#5c3d32">
 <title>Le voyage de Carolina · Français 0→10</title>
 <style>
-:root{--bg1:#f4ead8;--bg2:#efe2cc;--card:#fffaf2;--ink:#3c2a22;--mut:#8b7364;--pri:#7a3e3a;--pri2:#5c3d32;--ok:#2f6b4f;--bad:#8d3a3a;--gold:#a67c4e;--lock:#d5cdc4;--g:0}
+:root{--bg1:#f4ead8;--bg2:#efe2cc;--card:#fffaf2;--ink:#3c2a22;--mut:#8b7364;--pri:#7a3e3a;--pri2:#5c3d32;--ok:#2f6b4f;--bad:#8d3a3a;--gold:#a67c4e;--lock:#d5cdc4;--g:0;--ease:cubic-bezier(.2,.8,.2,1)}
 *{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
 html{background:var(--bg1)}
 body{margin:0;min-height:100vh;font-family:Palatino,"Palatino Linotype","Iowan Old Style",Georgia,serif;color:var(--ink);background-color:var(--bg1);background-image:linear-gradient(90deg,transparent 16px,rgba(176,92,92,.32) 17px,rgba(176,92,92,.32) 19px,transparent 20px),repeating-linear-gradient(var(--bg1) 0 31px,rgba(176,140,100,.28) 31px 32px);background-attachment:fixed;-webkit-text-size-adjust:100%}
@@ -14,16 +14,18 @@ header h1{font-size:18px;margin:0;flex:1;cursor:pointer;white-space:nowrap;overf
 .hb{background:transparent;color:var(--ink);border:1px solid #d9cbb6;min-height:32px;padding:4px 9px;border-radius:20px;font-size:14px;box-shadow:none}
 button.hb:active{transform:none;box-shadow:none}
 main{max-width:640px;margin:0 auto;padding:14px 14px calc(30px + env(safe-area-inset-bottom))}
-.card{background:var(--card);border:1px solid #eadcc8;border-radius:2px 16px 14px 3px;padding:18px;margin-bottom:14px;box-shadow:0 1px 0 rgba(92,61,50,.08),0 12px 28px rgba(92,61,50,.06);animation:rise .45s ease both}
-@keyframes rise{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:none}}
-button{font:inherit;border:0;border-radius:3px 14px 12px 4px;padding:14px 18px;background:#5c3d32;color:#fbf6ee;cursor:pointer;min-height:56px;font-weight:650;font-size:17px;box-shadow:0 2px 0 #3a261e;transition:transform .12s,box-shadow .12s}
-button:active{transform:translateY(2px);box-shadow:0 0 0 #3a261e}button.sec{background:#fffaf2;color:var(--ink);box-shadow:none;border:1.5px solid #cbbba4}button:disabled{opacity:.5}
+.card{background:var(--card);border:1px solid #eadcc8;border-radius:2px 16px 14px 3px;padding:18px;margin-bottom:14px;box-shadow:0 1px 0 rgba(92,61,50,.08),0 12px 28px rgba(92,61,50,.06);animation:rise .4s var(--ease) both}
+main .card:nth-child(2){animation-delay:.06s}main .card:nth-child(3){animation-delay:.12s}main .card:nth-child(4){animation-delay:.18s}main .card:nth-child(5){animation-delay:.24s}
+@keyframes rise{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:none}}
+button{font:inherit;border:0;border-radius:3px 14px 12px 4px;padding:14px 18px;background:#5c3d32;color:#fbf6ee;cursor:pointer;min-height:56px;font-weight:650;font-size:17px;box-shadow:0 2px 0 #3a261e;transition:transform .15s var(--ease),box-shadow .15s var(--ease)}
+button:active{transform:scale(.97);box-shadow:0 0 0 #3a261e}button.sec{background:#fffaf2;color:var(--ink);box-shadow:none;border:1.5px solid #cbbba4}button:disabled{opacity:.5}
 .row{display:flex;gap:8px;flex-wrap:wrap;align-items:center}.center{text-align:center}.center .row{justify-content:center}
 .mut{color:var(--mut);font-size:14px}.q{font-size:22px;margin:8px 0 14px;line-height:1.35}
 .opt{display:block;width:100%;text-align:left;margin:8px 0;background:#fffaf2;color:var(--ink);border:1.5px solid #d7c4ae;box-shadow:none;font-weight:600;font-size:18px;min-height:64px;padding:16px 18px;border-radius:2px 14px 12px 3px;transition:background .2s,transform .12s}
 .opt:active{transform:translateY(2px)}
 input[type=text]{width:100%;font:inherit;font-size:18px;padding:13px;border:0;border-bottom:1.5px solid #cbbba4;border-radius:0;background:transparent;outline:none;transition:border .2s}input[type=text]:focus{border-color:var(--pri)}
-.fb{margin-top:12px;padding:11px 13px;border-radius:2px 12px 10px 2px;animation:rise .3s both}.fb.ok{background:#e7f3ea;color:#1d4d36}.fb.bad{background:#f8ece8;color:#6e2e2e}
+.fb{margin-top:12px;padding:11px 13px;border-radius:2px 12px 10px 2px;animation:rise .3s var(--ease) both}.fb.ok{background:#e7f3ea;color:#1d4d36;animation:spring .4s var(--ease) both}.fb.bad{background:#f8ece8;color:#6e2e2e}
+@keyframes spring{0%{opacity:0;transform:scale(.92)}55%{opacity:1;transform:scale(1.045)}100%{opacity:1;transform:scale(1)}}
 .tag{display:inline-block;font-size:12px;background:#f3e6d8;color:#7a3e3a;border-radius:2px;padding:3px 10px;margin-right:6px;font-weight:650;letter-spacing:.03em}
 .tag.qc{background:#e7f3ea;color:#1d6b45}
 #saved{position:fixed;top:calc(62px + env(safe-area-inset-top));right:14px;z-index:45;background:#fffaf2;color:#2f6b4f;border:1px solid #c9ddcf;font-size:12px;font-weight:700;font-style:italic;border-radius:2px 10px 8px 2px;padding:5px 10px;opacity:0;transform:translateY(-4px);transition:opacity .2s,transform .2s;pointer-events:none}
@@ -31,7 +33,9 @@ input[type=text]{width:100%;font:inherit;font-size:18px;padding:13px;border:0;bo
 .inapp{background:#fff4e4;color:#5c3d32;border-bottom:1px solid #e0d0bc;padding:10px 14px;font-size:14px;line-height:1.4}
 #heard{min-height:1.2em;font-style:italic}
 label{font-size:14px;display:flex;gap:6px;align-items:center}
-.bar{height:10px;background:#eadfce;border-radius:999px;overflow:hidden;margin-top:8px}.bar i{display:block;height:100%;background:#5c3d32;border-radius:999px;transition:width .4s ease}
+.bar{height:10px;background:#eadfce;border-radius:999px;overflow:hidden;margin-top:8px}.bar.thick{height:14px}
+.bar i{display:block;height:100%;width:100%;background:#5c3d32;border-radius:999px;transform-origin:left center;animation:barin .4s var(--ease) both}
+@keyframes barin{from{transform:scaleX(0)}to{transform:scaleX(var(--p,0))}}
 .qbar{margin:8px 0 4px}
 h2.title{font-family:Georgia,"Times New Roman",serif;font-size:30px;margin:2px 0 6px;color:#5c3d32;font-weight:650}
 .script{font-family:"Snell Roundhand","Apple Chancery","Segoe Script","Brush Script MT",cursive}
@@ -44,8 +48,8 @@ h2.title{font-family:Georgia,"Times New Roman",serif;font-size:30px;margin:2px 0
 .owl .wl{transform-origin:right top}.owl .wr{transform-origin:left top}
 .owl .eyes{animation:blink 4.5s infinite}
 @keyframes blink{0%,93%,100%{transform:scaleY(1)}96%{transform:scaleY(.1)}}
-.m-idle .ob{animation:bob 2.8s ease-in-out infinite}
-@keyframes bob{50%{transform:translateY(-4%)}}
+.m-idle .ob{animation:bob 3.2s var(--ease) infinite}
+@keyframes bob{0%,100%{transform:translateY(0) rotate(0)}50%{transform:translateY(-3%) rotate(-1.2deg)}}
 .m-happy .ob{animation:hop .45s ease-out 2}.m-happy .wl{animation:flapL .22s 4 alternate}.m-happy .wr{animation:flapR .22s 4 alternate}
 @keyframes hop{40%{transform:translateY(-16%) scale(1.04,.97)}}
 @keyframes flapL{to{transform:rotate(28deg)}}@keyframes flapR{to{transform:rotate(-28deg)}}
@@ -60,7 +64,7 @@ h2.title{font-family:Georgia,"Times New Roman",serif;font-size:30px;margin:2px 0
 #glow{position:fixed;inset:0;pointer-events:none;z-index:15;box-shadow:inset 0 0 calc(var(--g)*70px) calc(var(--g)*18px) rgba(166,124,78,calc(var(--g)*.45));transition:box-shadow .5s}
 .combo{font-weight:800;color:#7a3e3a;font-size:16px;min-width:20px;font-style:italic}.combo.pop{animation:cpop .35s}
 @keyframes cpop{50%{transform:scale(1.5)}}
-.shake{animation:shake .45s}@keyframes shake{20%,60%{transform:translateX(-7px)}40%,80%{transform:translateX(7px)}}
+.shake{animation:shake .4s var(--ease)}@keyframes shake{0%,100%{transform:translateX(0)}20%{transform:translateX(-6px)}40%{transform:translateX(5px)}60%{transform:translateX(-3px)}80%{transform:translateX(2px)}}
 #fx{position:fixed;inset:0;pointer-events:none;z-index:30;width:100%;height:100%}
 #toasts{position:fixed;left:0;right:0;bottom:calc(18px + env(safe-area-inset-bottom));z-index:40;display:flex;flex-direction:column;align-items:center;gap:6px;pointer-events:none}
 .toast{background:#fffaf2;border:1px solid #eadcc8;border-radius:2px 14px 12px 2px;padding:10px 14px;box-shadow:0 8px 26px rgba(92,61,50,.16);display:flex;gap:10px;align-items:center;animation:tin .4s both;font-size:14px}.toast.out{animation:tout .4s both}.te{font-size:28px}
@@ -70,15 +74,17 @@ h2.title{font-family:Georgia,"Times New Roman",serif;font-size:30px;margin:2px 0
 .path{position:relative;display:flex;flex-direction:column;gap:12px;margin:0 0 14px}
 .path:before{content:"";position:absolute;left:45px;top:46px;bottom:46px;width:12px;border-radius:8px;background:#e7d8c4;z-index:0}
 .path:after{content:"";position:absolute;left:45px;top:46px;width:12px;height:calc((100% - 92px) * var(--fill,0) / 100);border-radius:8px;background:#5c3d32;z-index:0}
-button.node{position:relative;z-index:1;display:flex;align-items:center;gap:14px;width:100%;text-align:left;background:#fffaf2;color:var(--ink);border:1px solid #eadcc8;box-shadow:0 1px 0 #eadcc8;border-radius:2px 18px 16px 3px;min-height:92px;padding:10px 12px;font-weight:650}
-button.node:active{transform:translateY(1px);box-shadow:none}
+button.node{position:relative;z-index:1;display:flex;align-items:center;gap:14px;width:100%;text-align:left;background:#fffaf2;color:var(--ink);border:1px solid #eadcc8;box-shadow:0 1px 0 #eadcc8;border-radius:2px 18px 16px 3px;min-height:92px;padding:10px 12px;font-weight:650;animation:rise .4s var(--ease) both}
+.path .node:nth-child(1){animation-delay:.03s}.path .node:nth-child(2){animation-delay:.06s}.path .node:nth-child(3){animation-delay:.09s}.path .node:nth-child(4){animation-delay:.12s}.path .node:nth-child(5){animation-delay:.15s}.path .node:nth-child(6){animation-delay:.18s}.path .node:nth-child(7){animation-delay:.21s}.path .node:nth-child(8){animation-delay:.24s}.path .node:nth-child(9){animation-delay:.27s}.path .node:nth-child(10){animation-delay:.3s}.path .node:nth-child(11){animation-delay:.33s}
+button.node:active{transform:scale(.985);box-shadow:none}
 button.node.sel{border-color:#7a3e3a}
 button.node .orb{width:72px;height:72px;flex:none;border-radius:50%;display:grid;place-items:center;font-size:28px;background:#fffaf2;color:var(--ink);border:2px solid #5c3d32;box-shadow:none}
 button.node.done .orb{background:#2f6b4f;color:#fffaf2;border-color:#2f6b4f}
 button.node.locked{color:#8b7364}
 button.node.locked .orb{background:#f0e6da;color:#a8988c;border-color:#d5cdc4}
 button.node.current{border-color:#7a3e3a;background:#fff8ef}
-button.node.current .orb{background:#7a3e3a;color:#fffaf2;border-color:#7a3e3a;box-shadow:0 0 0 6px #f0e2d2}
+button.node.current .orb{background:#7a3e3a;color:#fffaf2;border-color:#7a3e3a;box-shadow:0 0 0 6px #f0e2d2;animation:pulse 1.8s var(--ease) infinite}
+@keyframes pulse{0%,100%{transform:scale(1)}50%{transform:scale(1.06)}}
 button.node .nmeta{display:flex;flex-direction:column;gap:1px;min-width:0;flex:1}
 button.node .nmeta b{font-size:20px;line-height:1.15;font-family:Georgia,serif}
 button.node .ntag{font-size:12px;color:#7a3e3a;letter-spacing:.04em;font-variant:small-caps}
@@ -132,9 +138,42 @@ button.node.locked .ntag{color:var(--mut)}
 .cert .seal{width:70px;height:70px;border-radius:50%;margin:14px auto 0;background:radial-gradient(#f3c86b,#c9902f);display:grid;place-items:center;font-size:30px;box-shadow:0 3px 8px #0003}
 @media print{header,#fx,#glow,#toasts,.noprint{display:none!important}body,html{background:#fff!important}main{max-width:none;padding:0}.cert{box-shadow:none;animation:none}.card{box-shadow:none}}
 @page{size:landscape;margin:12mm}
+main{view-transition-name:screen}
+main.arrive{animation:vtIn .32s var(--ease)}
+::view-transition-old(root),::view-transition-new(root){animation:none}
+::view-transition-old(screen){animation:vtOut .28s var(--ease) both}
+::view-transition-new(screen){animation:vtIn .36s var(--ease) both}
+@keyframes vtOut{to{opacity:0;transform:translateY(8px)}}
+@keyframes vtIn{from{opacity:0;transform:translateY(10px)}}
+.skills{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.skill{display:flex;align-items:center;gap:8px;padding:8px;border:1px solid #eadfce;border-radius:2px 12px 10px 2px;background:#fffdf8;min-width:0}
+.skill b{display:block;font-size:14px;line-height:1.2}
+.skill .mut{font-size:12px}
+.ring{width:54px;height:54px;flex:none}
+.ring.big{width:124px;height:124px}
+.ring .track{fill:none;stroke:#eadfce;stroke-width:3.2}
+.ring .val{fill:none;stroke:#7a3e3a;stroke-width:3.2;stroke-linecap:round;stroke-dasharray:100;stroke-dashoffset:100;transform:rotate(-90deg);transform-origin:center;animation:ringin .4s var(--ease) forwards}
+.skill:nth-child(2) .val{animation-delay:.05s}.skill:nth-child(3) .val{animation-delay:.1s}.skill:nth-child(4) .val{animation-delay:.15s}.skill:nth-child(5) .val{animation-delay:.2s}.skill:nth-child(6) .val{animation-delay:.25s}
+@keyframes ringin{to{stroke-dashoffset:var(--off,100)}}
+.overall{display:flex;flex-direction:column;align-items:center;text-align:center;gap:2px}
+.ovwrap{position:relative;width:124px;height:124px}
+.ovnum{position:absolute;inset:0;display:grid;place-items:center;font-family:Georgia,serif;font-size:28px;color:#5c3d32;pointer-events:none}
+.stats{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.statbox{background:#fffdf8;border:1px solid #eadfce;border-radius:2px 12px 10px 2px;padding:10px 12px}
+.statbox b{display:block;font-family:Georgia,serif;font-size:26px;color:#5c3d32;line-height:1.1}
+.sug{border-left:3px solid #c45c5c;padding:4px 0 4px 12px;font-size:20px;line-height:1.35}
+.week{width:100%;height:auto;display:block}
+.week .wbar{fill:#c4a574;transform-box:fill-box;transform-origin:center bottom;animation:barup .4s var(--ease) both}
+@keyframes barup{from{transform:scaleY(0)}to{transform:scaleY(1)}}
+.week polyline{fill:none;stroke:#7a3e3a;stroke-width:2.2;stroke-linejoin:round;stroke-linecap:round}
+.week circle{fill:#7a3e3a}
+.week text{fill:#8b7364;font-size:11px;font-family:Palatino,Georgia,serif}
+.legend{display:flex;gap:14px;font-size:12px;color:var(--mut);margin-top:6px}
+.legend i{display:inline-block;width:12px;height:8px;border-radius:2px;margin-right:4px;vertical-align:middle}
+.legend .xp{background:#c4a574}.legend .ac{background:#7a3e3a;height:3px}
 @media (prefers-reduced-motion:reduce){*,*:before,*:after{animation-duration:.01ms!important;animation-iteration-count:1!important;transition-duration:.01ms!important}}
 </style></head><body>
-<header><h1 id="home"><span class="hdr-owl" id="hdr-owl"></span><span id="htitle"></span></h1><span class="stat" id="xp"></span><span class="stat" id="streak"></span><button class="hb" id="mute" aria-label="mute"></button><button class="hb" id="lang"></button></header>
+<header><h1 id="home"><span class="hdr-owl m-idle" id="hdr-owl"></span><span id="htitle"></span></h1><span class="stat" id="xp"></span><span class="stat" id="streak"></span><button class="hb" id="mute" aria-label="mute"></button><button class="hb" id="lang"></button></header>
 <main id="app"></main>
 <div id="glow"></div><canvas id="fx"></canvas><div id="toasts"></div>
 <script>
@@ -172,11 +211,11 @@ const CONFIG={
 
 const LEVELS=[
 {t:["Greetings & basics","Salutations et bases"],intro:"French greetings depend on time and formality. <b>Bonjour</b> (hello/good day), <b>bonsoir</b> (good evening), <b>salut</b> (hi/bye, informal). In Quebec, <b>bonjour</b> is also used to say goodbye during the day. Use <b>tu</b> with friends, <b>vous</b> with strangers (Quebec uses tu very freely).",
-items:[["bonjour","hello"],["bonsoir","good evening"],["salut","hi"],["merci","thank you"],["merci beaucoup","thank you very much"],["s'il vous plaît","please"],["oui","yes"],["non","no"],["au revoir","goodbye"],["je m'appelle Nestor","my name is Nestor"],["comment ça va","how are you"],["ça va bien","I am doing well"],["de rien","you're welcome"],["excusez-moi","excuse me"],["bonne nuit","good night"],["à bientôt","see you soon"]]},
+items:[["bonjour","hello"],["bonsoir","good evening"],["salut","hi"],["merci","thank you"],["merci beaucoup","thank you very much"],["s'il vous plaît","please"],["oui","yes"],["non","no"],["au revoir","goodbye"],["je m'appelle Carolina","my name is Carolina"],["comment ça va","how are you"],["ça va bien","I am doing well"],["de rien","you're welcome"],["excusez-moi","excuse me"],["bonne nuit","good night"],["à bientôt","see you soon"]]},
 {t:["Numbers, days & colours","Nombres, jours et couleurs"],intro:"Numbers 1–10: un, deux, trois, quatre, cinq, six, sept, huit, neuf, dix. Days are not capitalized: lundi, mardi, mercredi, jeudi, vendredi, samedi, dimanche. Colour adjectives usually come <i>after</i> the noun: <b>une voiture rouge</b>.",
 items:[["un","one"],["deux","two"],["trois","three"],["cinq","five"],["dix","ten"],["vingt","twenty"],["lundi","Monday"],["vendredi","Friday"],["dimanche","Sunday"],["rouge","red"],["bleu","blue"],["vert","green"],["noir","black"],["blanc","white"],["une voiture rouge","a red car"],["aujourd'hui c'est lundi","today is Monday"]]},
 {t:["Être & avoir, people","Être et avoir, les gens"],intro:"The two key verbs. <b>être</b> (to be): je suis, tu es, il/elle est, nous sommes, vous êtes, ils sont. <b>avoir</b> (to have): j'ai, tu as, il a, nous avons, vous avez, ils ont. Age uses avoir: <b>j'ai trente ans</b>.",
-items:[["je suis canadien","I am Canadian"],["tu es fatigué","you are tired"],["elle est grande","she is tall"],["nous sommes amis","we are friends"],["vous êtes gentil","you are kind"],["ils sont ici","they are here"],["j'ai un chien","I have a dog"],["tu as faim","you are hungry"],["il a froid","he is cold"],["nous avons une maison","we have a house"],["vous avez raison","you are right"],["elles ont deux enfants","they have two children"],["j'ai trente ans","I am thirty years old"],["mon frère est médecin","my brother is a doctor"],["ma sœur a un chat","my sister has a cat"],["je suis content","I am happy"]]},
+items:[["je suis canadienne","I am Canadian"],["tu es fatigué","you are tired"],["elle est grande","she is tall"],["nous sommes amis","we are friends"],["vous êtes gentil","you are kind"],["ils sont ici","they are here"],["j'ai un chien","I have a dog"],["tu as faim","you are hungry"],["il a froid","he is cold"],["nous avons une maison","we have a house"],["vous avez raison","you are right"],["elles ont deux enfants","they have two children"],["j'ai trente ans","I am thirty years old"],["mon frère est médecin","my brother is a doctor"],["ma sœur a un chat","my sister has a cat"],["je suis contente","I am happy"]]},
 {t:["Food, café & shopping","Nourriture, café et magasinage"],intro:"Ordering: <b>Je voudrais…</b> (I would like…). Partitive articles: <b>du pain</b>, <b>de la soupe</b>, <b>de l'eau</b>, <b>des pommes</b>. In Quebec, shopping is <b>magasiner</b>, and breakfast/lunch/dinner are <b>déjeuner / dîner / souper</b>.",
 items:[["je voudrais un café","I would like a coffee"],["l'addition s'il vous plaît","the bill please"],["du pain","some bread"],["de l'eau","some water"],["des pommes","some apples"],["combien ça coûte","how much does it cost"],["c'est trop cher","it is too expensive"],["j'aime le fromage","I like cheese"],["je n'aime pas le poisson","I don't like fish"],["le déjeuner","breakfast"],["le dîner","lunch"],["le souper","dinner"],["je vais magasiner","I am going shopping"],["une bouteille de vin","a bottle of wine"],["j'ai soif","I am thirsty"],["c'est délicieux","it is delicious"]]},
 {t:["Present tense -er verbs & routine","Présent des verbes en -er"],intro:"Regular -er verbs: parler → je parle, tu parles, il parle, nous parlons, vous parlez, ils parlent. Reflexive verbs for routine: <b>je me lève</b>, <b>je me couche</b>. Negation wraps the verb: <b>je ne parle pas</b>.",
@@ -184,13 +223,13 @@ items:[["je parle français","I speak French"],["tu travailles beaucoup","you wo
 {t:["Irregular verbs & questions","Verbes irréguliers et questions"],intro:"Key irregulars: <b>aller</b> (je vais, nous allons), <b>faire</b> (je fais, vous faites), <b>pouvoir</b> (je peux), <b>vouloir</b> (je veux), <b>prendre</b> (je prends). Questions: <b>Est-ce que tu viens?</b> or inversion <b>Viens-tu?</b>. Question words: où, quand, pourquoi, comment, qui, quoi.",
 items:[["je vais au travail","I am going to work"],["qu'est-ce que tu fais","what are you doing"],["je peux t'aider","I can help you"],["je veux dormir","I want to sleep"],["nous prenons le métro","we take the subway"],["où est la gare","where is the train station"],["quand est-ce que tu arrives","when do you arrive"],["pourquoi es-tu triste","why are you sad"],["qui est-ce","who is it"],["il fait beau","the weather is nice"],["je dois partir","I have to leave"],["elle sait nager","she knows how to swim"],["ils viennent ce soir","they are coming tonight"],["vous voulez du café","do you want some coffee"],["je vais manger","I am going to eat"],["je viens de manger","I just ate"]]},
 {t:["Passé composé","Le passé composé"],intro:"Past events: <b>avoir/être + past participle</b>. Most verbs use avoir: <b>j'ai mangé</b>. Movement verbs (aller, venir, partir, arriver, naître, mourir…) and reflexives use être and agree: <b>elle est allée</b>, <b>nous nous sommes levés</b>.",
-items:[["j'ai mangé une pizza","I ate a pizza"],["tu as fini tes devoirs","you finished your homework"],["il a pris le bus","he took the bus"],["nous avons vu un film","we saw a movie"],["elle est allée à Québec","she went to Quebec City"],["ils sont arrivés hier","they arrived yesterday"],["je suis né en hiver","I was born in winter"],["vous avez fait du ski","you went skiing"],["j'ai perdu mon téléphone","I lost my phone"],["elle s'est levée tôt","she got up early"],["nous sommes partis à midi","we left at noon"],["je n'ai pas compris","I did not understand"],["as-tu bien dormi","did you sleep well"],["il a plu toute la journée","it rained all day"],["j'ai lu ce livre","I read this book"],["on a eu du plaisir","we had fun"]]},
-{t:["Imparfait & future","L'imparfait et le futur"],intro:"<b>Imparfait</b> describes past habits and background: <b>quand j'étais petit, je jouais dehors</b>. Endings: -ais, -ais, -ait, -ions, -iez, -aient. <b>Futur simple</b>: infinitive + -ai, -as, -a, -ons, -ez, -ont: <b>je parlerai</b>; irregular stems: ser-, aur-, ir-, fer-, pourr-.",
-items:[["quand j'étais petit","when I was little"],["je jouais dehors","I used to play outside"],["il faisait froid","it was cold"],["nous habitions à Laval","we used to live in Laval"],["elle lisait quand je suis arrivé","she was reading when I arrived"],["je parlerai avec lui","I will speak with him"],["tu seras content","you will be happy"],["nous irons à la plage","we will go to the beach"],["il fera beau demain","the weather will be nice tomorrow"],["j'aurai le temps","I will have time"],["ils pourront venir","they will be able to come"],["vous ferez attention","you will be careful"],["avant, je fumais","before, I used to smoke"],["il y avait beaucoup de neige","there was a lot of snow"],["je te téléphonerai ce soir","I will call you tonight"],["on verra","we will see"]]},
+items:[["j'ai mangé une pizza","I ate a pizza"],["tu as fini tes devoirs","you finished your homework"],["il a pris le bus","he took the bus"],["nous avons vu un film","we saw a movie"],["elle est allée à Québec","she went to Quebec City"],["ils sont arrivés hier","they arrived yesterday"],["je suis née en hiver","I was born in winter"],["vous avez fait du ski","you went skiing"],["j'ai perdu mon téléphone","I lost my phone"],["elle s'est levée tôt","she got up early"],["nous sommes partis à midi","we left at noon"],["je n'ai pas compris","I did not understand"],["as-tu bien dormi","did you sleep well"],["il a plu toute la journée","it rained all day"],["j'ai lu ce livre","I read this book"],["on a eu du plaisir","we had fun"]]},
+{t:["Imparfait & future","L'imparfait et le futur"],intro:"<b>Imparfait</b> describes past habits and background: <b>quand j'étais petite, je jouais dehors</b>. Endings: -ais, -ais, -ait, -ions, -iez, -aient. <b>Futur simple</b>: infinitive + -ai, -as, -a, -ons, -ez, -ont: <b>je parlerai</b>; irregular stems: ser-, aur-, ir-, fer-, pourr-.",
+items:[["quand j'étais petite","when I was little"],["je jouais dehors","I used to play outside"],["il faisait froid","it was cold"],["nous habitions à Laval","we used to live in Laval"],["elle lisait quand je suis arrivée","she was reading when I arrived"],["je parlerai avec lui","I will speak with him"],["tu seras content","you will be happy"],["nous irons à la plage","we will go to the beach"],["il fera beau demain","the weather will be nice tomorrow"],["j'aurai le temps","I will have time"],["ils pourront venir","they will be able to come"],["vous ferez attention","you will be careful"],["avant, je fumais","before, I used to smoke"],["il y avait beaucoup de neige","there was a lot of snow"],["je te téléphonerai ce soir","I will call you tonight"],["on verra","we will see"]]},
 {t:["Pronouns & conditional","Pronoms et conditionnel"],intro:"Object pronouns go before the verb: <b>je le vois</b>, <b>je lui parle</b>. <b>y</b> replaces a place (<b>j'y vais</b>), <b>en</b> replaces a quantity (<b>j'en veux</b>). <b>Conditionnel</b> = future stem + imparfait endings: <b>je voudrais, j'aimerais, si j'avais le temps, je voyagerais</b>.",
 items:[["je le vois","I see him"],["je lui parle","I am talking to him"],["je les aime","I love them"],["j'y vais demain","I am going there tomorrow"],["j'en veux deux","I want two of them"],["donne-le-moi","give it to me"],["je ne le connais pas","I don't know him"],["j'aimerais voyager","I would like to travel"],["pourriez-vous m'aider","could you help me"],["si j'avais le temps, je voyagerais","if I had the time, I would travel"],["à ta place, je resterais","in your place, I would stay"],["il devrait se reposer","he should rest"],["nous en parlerons","we will talk about it"],["tu me manques","I miss you"],["elle y pense souvent","she often thinks about it"],["ça me plaît","I like it"]]},
 {t:["Subjunctive & complex sentences","Le subjonctif"],intro:"The <b>subjonctif</b> follows expressions of necessity, wish, emotion and doubt + <b>que</b>: <b>il faut que</b>, <b>je veux que</b>, <b>bien que</b>, <b>avant que</b>. Irregulars: être → que je sois, avoir → que j'aie, faire → que je fasse, aller → que j'aille, pouvoir → que je puisse.",
-items:[["il faut que tu partes","you have to leave"],["je veux que tu viennes","I want you to come"],["bien qu'il soit fatigué","although he is tired"],["avant que nous partions","before we leave"],["je suis content que tu sois là","I am happy that you are here"],["il faut que je fasse mes devoirs","I have to do my homework"],["je doute qu'il puisse venir","I doubt he can come"],["pour que tu comprennes","so that you understand"],["il est important que vous sachiez","it is important that you know"],["j'ai peur qu'il pleuve","I am afraid it will rain"],["à moins qu'elle ait raison","unless she is right"],["je ne pense pas qu'il ait fini","I don't think he has finished"],["si j'avais su, je serais venu","if I had known, I would have come"],["le livre dont je parle","the book I am talking about"],["la ville où je suis né","the city where I was born"],["ce qui compte, c'est la santé","what matters is health"]]},
+items:[["il faut que tu partes","you have to leave"],["je veux que tu viennes","I want you to come"],["bien qu'il soit fatigué","although he is tired"],["avant que nous partions","before we leave"],["je suis contente que tu sois là","I am happy that you are here"],["il faut que je fasse mes devoirs","I have to do my homework"],["je doute qu'il puisse venir","I doubt he can come"],["pour que tu comprennes","so that you understand"],["il est important que vous sachiez","it is important that you know"],["j'ai peur qu'il pleuve","I am afraid it will rain"],["à moins qu'elle ait raison","unless she is right"],["je ne pense pas qu'il ait fini","I don't think he has finished"],["si j'avais su, je serais venue","if I had known, I would have come"],["le livre dont je parle","the book I am talking about"],["la ville où je suis née","the city where I was born"],["ce qui compte, c'est la santé","what matters is health"]]},
 {t:["Idioms, Québécois & reading","Expressions, québécois et lecture"],intro:"Quebec French has its own vocabulary: <b>char</b> (car), <b>blonde/chum</b> (girlfriend/boyfriend), <b>dépanneur</b> (corner store), <b>c'est plate</b> (it's boring), <b>avoir de la misère</b> (to have trouble), <b>tiguidou</b> (great/OK). General idioms: <b>poser un lapin</b> (stand someone up), <b>avoir le cafard</b> (feel down).<br><br><i>Lecture :</i> « Samedi matin, Julie est allée au dépanneur acheter du lait. Il faisait frette, mais elle avait hâte de faire du ski avec son chum. Malheureusement, il lui a posé un lapin. Elle a trouvé ça plate, mais elle est allée skier toute seule et elle a eu ben du fun. »",
 items:[["mon char est brisé","my car is broken"],["ma blonde","my girlfriend"],["mon chum","my boyfriend"],["je vais au dépanneur","I am going to the corner store"],["c'est plate","it is boring"],["il fait frette","it is freezing cold"],["j'ai de la misère","I am having trouble"],["avoir hâte","to look forward"],["c'est tiguidou","it is all good"],["il m'a posé un lapin","he stood me up"],["j'ai le cafard","I feel down"],["coûter les yeux de la tête","to cost an arm and a leg"],["avoir du fun","to have fun"],["être dans la lune","to be daydreaming"],["Julie est allée au dépanneur","Julie went to the corner store"],["il lui a posé un lapin","he stood her up"]]}
 ];
@@ -226,7 +265,7 @@ const ACH=[
 const QC=[
  [["bienvenue","you're welcome",["In Quebec, bienvenue is how you answer merci.","Au Québec, bienvenue répond à merci."]],["c'est correct","it's fine",["Correct means fine or OK.","Correct veut dire que ça va."]]],
  [["une piastre","a dollar",["Piastre is an everyday word for a dollar.","Une piastre, c'est un dollar au quotidien."]],["icitte","here",["Icitte is the Quebec way to say ici.","Icitte, c'est ici au Québec."]]],
- [["je suis tanné","I am fed up",["Tanné means you've had enough.","Tanné veut dire qu'on en a assez."]],["pantoute","not at all",["Pantoute means not at all.","Pantoute veut dire pas du tout."]]],
+ [["je suis tannée","I am fed up",["Tanné means you've had enough.","Tanné veut dire qu'on en a assez."]],["pantoute","not at all",["Pantoute means not at all.","Pantoute veut dire pas du tout."]]],
  [["le char","the car",["A char is a car, not a chariot.","Un char, c'est une auto."]],["le dépanneur","the corner store",["The dépanneur is the corner store.","Le dépanneur, c'est le magasin du coin."]]],
  [["jaser","to chat",["Jaser is to chat, not to gossip only.","Jaser, c'est discuter."]],["ma blonde","my girlfriend",["Blonde means girlfriend in Quebec.","Une blonde, c'est une copine."]]],
  [["checker","to check",["Quebec French made check into a verb.","Au Québec, checker est un verbe."]],["la job","the job",["Job is feminine in Quebec: la job.","Au Québec on dit la job."]]],
@@ -238,18 +277,26 @@ const QC=[
 ];
 const QC_BONUS=8;
 const KEY="frcourse_v1";
-const DEF=()=>({xp:0,streak:0,last:null,best:{},unlocked:0,ui:"en",strict:false,srs:{},muted:false,passed:{},correct:0,ach:{},mapPos:0,bestCombo:0,doneDate:null,qc:0,resume:null});
-let S=load();function load(){try{return Object.assign(DEF(),JSON.parse(localStorage.getItem(KEY)||"{}"))}catch(e){return DEF()}}
+const DEF=()=>({xp:0,streak:0,last:null,best:{},unlocked:0,ui:"en",strict:false,srs:{},muted:false,passed:{},correct:0,ach:{},mapPos:0,bestCombo:0,doneDate:null,qc:0,resume:null,log:[],secs:0});
+let S=load();function load(){try{const s=Object.assign(DEF(),JSON.parse(localStorage.getItem(KEY)||"{}"));if(!Array.isArray(s.log))s.log=[];if(typeof s.secs!=="number"||!isFinite(s.secs))s.secs=0;return s}catch(e){return DEF()}}
 function save(){try{localStorage.setItem(KEY,JSON.stringify(S))}catch(e){}}
 const RM=window.matchMedia&&matchMedia("(prefers-reduced-motion: reduce)").matches;
 const L=k=>UI[S.ui][k];const $=s=>document.querySelector(s);const app=$("#app");
+let vtOn=false,vtSync=false,vtBusy=false,shownXp=null,qT0=0;
+const appHTML=Object.getOwnPropertyDescriptor(Element.prototype,"innerHTML");
+Object.defineProperty(app,"innerHTML",{configurable:true,get(){return appHTML.get.call(this)},set(v){
+ if(vtOn&&!vtBusy&&!RM&&vtSync){vtBusy=true;try{document.startViewTransition(()=>{appHTML.set.call(app,v)})}catch(e){appHTML.set.call(app,v)}finally{vtBusy=false}return}
+ appHTML.set.call(this,v);
+ if(!vtOn||RM)return;
+ this.classList.remove("arrive");void this.offsetWidth;this.classList.add("arrive");
+}});
 const tr=(en,fr)=>S.ui==="fr"?fr:en;const N=s=>String(s).replace(/\{n\}/g,CONFIG.name);
 const esc=s=>String(s).replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
 const pick=a=>a[Math.random()*a.length|0];
 const line=p=>`<b>${esc(N(p[0]))}</b><br><small>${esc(N(p[1]))}</small>`;
 function todayStr(d=new Date()){return d.getFullYear()+"-"+(d.getMonth()+1)+"-"+d.getDate()}
 function touchStreak(){const t=todayStr();if(S.last===t)return;const y=new Date();y.setDate(y.getDate()-1);S.streak=(S.last===todayStr(y))?S.streak+1:1;S.last=t;save();if(S.streak>=3)ach("day3");if(S.streak>=7)ach("day7")}
-function hdr(){if($("#hdr-owl")&&!$("#hdr-owl").innerHTML)$("#hdr-owl").innerHTML=owl();$("#htitle").textContent=`${CONFIG.name} · Français`;$("#xp").textContent="⭐ "+S.xp;$("#streak").textContent="🔥 "+S.streak;$("#lang").textContent=S.ui==="en"?"FR":"EN";$("#mute").textContent=S.muted?"🔇":"🔊";document.documentElement.lang=S.ui}
+function hdr(){if($("#hdr-owl")&&!$("#hdr-owl").innerHTML)$("#hdr-owl").innerHTML=owl();$("#htitle").textContent=`${CONFIG.name} · Français`;const xpEl=$("#xp");if(xpEl){if(shownXp===null||RM||shownXp===S.xp){xpEl.textContent="⭐ "+S.xp;shownXp=S.xp}else{const from=shownXp,to=S.xp;shownXp=to;const t0=performance.now();const step=now=>{const p=Math.min(1,(now-t0)/400);const e=1-Math.pow(1-p,3);if($("#xp"))$("#xp").textContent="⭐ "+Math.round(from+(to-from)*e);if(p<1)requestAnimationFrame(step)};requestAnimationFrame(step)}}$("#streak").textContent="🔥 "+S.streak;$("#lang").textContent=S.ui==="en"?"FR":"EN";$("#mute").textContent=S.muted?"🔇":"🔊";document.documentElement.lang=S.ui}
 
 /* ---------- sound (WebAudio, no files) ---------- */
 let AC=null;function ac(){if(S.muted)return null;try{AC=AC||new(window.AudioContext||window.webkitAudioContext)();if(AC.state==="suspended")AC.resume();return AC}catch(e){return null}}
@@ -325,7 +372,27 @@ function mkEx(lv,i,type){const it=LEVELS[lv].items[i];const id=lv+":"+i;
 function levelSet(lv){return LEVELS[lv].items.map((_,i)=>mkEx(lv,i,TYPES[i%TYPES.length]))}
 function qcSet(lv){const items=QC[lv]||[];const pool=QC.flat().map(x=>x[1]);return items.map((it,i)=>{const dis=shuffle(pool.filter(x=>x!==it[1])).slice(0,3);return{id:"qc:"+lv+":"+i,type:"mc",lv,it:[it[0],it[1]],opts:shuffle([it[1],...dis]),ans:it[1],qc:true,note:it[2]}})}
 function markSaved(){let el=$("#saved");if(!el){el=document.createElement("div");el.id="saved";document.body.appendChild(el)}el.textContent=tr("Saved","Enregistré");el.classList.remove("on");void el.offsetWidth;el.classList.add("on");clearTimeout(markSaved._t);markSaved._t=setTimeout(()=>el.classList.remove("on"),1100)}
-function award(q,ok){if(q&&ok!==null){srsUpdate(q.id,!!ok);if(ok){const bonus=q.qc?QC_BONUS:0;S.xp+=10+Math.min(combo,10)+bonus;if(q.qc){S.qc=(S.qc||0)+1;ach("qc");if(S.qc>=11)ach("qc11")}touchStreak()}}save();hdr();markSaved()}
+const CATS=[
+ {id:"vocab",e:"📖",en:"Vocabulary",fr:"Vocabulaire"},
+ {id:"listen",e:"👂",en:"Listening",fr:"Écoute"},
+ {id:"speak",e:"🗣️",en:"Speaking",fr:"Oral"},
+ {id:"grammar",e:"✏️",en:"Grammar",fr:"Grammaire"},
+ {id:"write",e:"✍️",en:"Writing",fr:"Écrit"},
+ {id:"qc",e:"🍁",en:"Quebec expressions",fr:"Expressions québécoises"}
+];
+const GRAMMAR_LV={2:1,4:1,5:1,6:1,7:1,8:1,9:1};
+function qCategory(q){if(!q)return"vocab";if(q.qc)return"qc";if(q.type==="listen")return"listen";if(q.type==="speak")return"speak";if(q.type==="fr2en"||q.type==="en2fr"||q.type==="fill")return"write";return GRAMMAR_LV[q.lv]?"grammar":"vocab"}
+function catRows(id){return(S.log||[]).filter(r=>r&&r.c===id)}
+function weighted(rows){if(!rows||!rows.length)return null;let wsum=0,okw=0;const n=rows.length;rows.forEach((r,i)=>{const w=Math.pow(.85,n-1-i);wsum+=w;okw+=w*(r.ok?1:0)});return Math.round(100*okw/Math.max(wsum,1e-9))}
+function catScore(id){return weighted(catRows(id))}
+function overallScore(){return weighted((S.log||[]).filter(r=>r&&r.c))}
+function answerXp(q,ok){return ok?10+Math.min(combo,10)+(q&&q.qc?QC_BONUS:0):0}
+function pushLog(row){if(!Array.isArray(S.log))S.log=[];S.log.push(row);if(S.log.length>600)S.log.splice(0,S.log.length-600)}
+function logAnswer(q,ok,x){pushLog({c:qCategory(q),ok:ok?1:0,t:Date.now(),x:x||0})}
+function logXp(x){if(x)pushLog({t:Date.now(),x:x|0,bonus:1})}
+function bankTime(){if(!qT0)return;const dt=Math.round((Date.now()-qT0)/1000);qT0=0;if(dt>=1)S.secs=(S.secs||0)+Math.min(dt,180)}
+function fmtTime(sec){sec=Math.max(0,Math.round(sec||0));if(sec<60)return sec+" s";const m=Math.round(sec/60);if(m<60)return m+" min";const h=Math.floor(m/60),rm=m%60;return h+" h"+(rm?" "+rm+" min":"")}
+function award(q,ok){if(q&&ok!==null){srsUpdate(q.id,!!ok);const x=answerXp(q,ok);logAnswer(q,ok,x);if(ok){S.xp+=x;if(q.qc){S.qc=(S.qc||0)+1;ach("qc");if(S.qc>=11)ach("qc11")}touchStreak()}}save();hdr();markSaved()}
 let noteAnswer=()=>{};
 function srsPick(maxLv){const cands=[];for(let l=0;l<=maxLv;l++)LEVELS[l].items.forEach((_,i)=>{const r=S.srs[l+":"+i]||{w:1,seen:0};cands.push([l,i,r.w*(l===maxLv?2:1)*(r.seen?1:1.5)])});let x=Math.random()*cands.reduce((a,c)=>a+c[2],0);for(const c of cands){x-=c[2];if(x<=0)return c}return cands[0]}
 function srsUpdate(id,ok){const r=S.srs[id]||{w:1,seen:0};r.seen++;r.w=ok?Math.max(.2,r.w*.6):Math.min(8,r.w*2+1);S.srs[id]=r}
@@ -387,9 +454,110 @@ function beginListen(target,done,fail){
  }
  startRec(target,done,fail);
 }
+/* ---------- progress dashboard ---------- */
+function sugLine(c,n){
+ const fr=S.ui==="fr";
+ if(c.id==="vocab")return fr?`« Ton vocabulaire est à ${n} %, on pratique ? »`:`Your vocabulary is at ${n}%. Shall we practice?`;
+ if(c.id==="listen")return fr?`« Ton écoute est à ${n} %, on pratique ? »`:`Your listening is at ${n}%. Shall we practice?`;
+ if(c.id==="speak")return fr?`« Ton oral est à ${n} %, on pratique ? »`:`Your speaking is at ${n}%. Shall we practice?`;
+ if(c.id==="grammar")return fr?`« Ta grammaire est à ${n} %, on pratique ? »`:`Your grammar is at ${n}%. Shall we practice?`;
+ if(c.id==="write")return fr?`« Ton écrit est à ${n} %, on pratique ? »`:`Your writing is at ${n}%. Shall we practice?`;
+ return fr?`« Tes expressions québécoises sont à ${n} %, on pratique ? »`:`Your Quebec expressions are at ${n}%. Shall we practice?`;
+}
+function canFocus(cat){
+ const maxLv=Math.min(S.unlocked,10);
+ if(cat==="qc")return QC.slice(0,maxLv+1).some(a=>a&&a.length);
+ if(cat==="grammar")return [2,4,5,6,7,8,9].some(l=>l<=maxLv);
+ if(cat==="vocab")return [0,1,3,10].some(l=>l<=maxLv);
+ return maxLv>=0;
+}
+function nextFocus(cat){
+ const maxLv=Math.min(S.unlocked,10);
+ if(cat==="qc"){const pool=[];for(let l=0;l<=maxLv;l++)pool.push(...qcSet(l));return pool.length?pick(pool):null}
+ const types=cat==="listen"?["listen"]:cat==="speak"?["speak"]:cat==="write"?["fr2en","en2fr","fill"]:["mc"];
+ for(let n=0;n<40;n++){
+  let ls;
+  if(cat==="grammar")ls=[2,4,5,6,7,8,9].filter(l=>l<=maxLv);
+  else if(cat==="vocab")ls=[0,1,3,10].filter(l=>l<=maxLv);
+  else ls=Array.from({length:maxLv+1},(_,i)=>i);
+  if(!ls.length)return null;
+  const l=pick(ls),i=Math.random()*LEVELS[l].items.length|0,q=mkEx(l,i,pick(types));
+  if(qCategory(q)===cat)return q;
+ }
+ return null;
+}
+function runFocus(cat){if(location.hash)history.pushState(null,"",location.pathname+location.search);combo=0;let count=0;noteAnswer=()=>{};runStream(()=>{const q=nextFocus(cat);if(!q)return null;count++;return q},()=>count,true)}
+function ringSvg(pct,big){const off=pct==null?100:Math.max(0,Math.min(100,100-pct));return `<svg class="ring${big?" big":""}" viewBox="0 0 36 36" aria-hidden="true"><circle class="track" cx="18" cy="18" r="15.5"></circle>${pct==null?"":`<circle class="val" cx="18" cy="18" r="15.5" pathLength="100" style="--off:${off}"></circle>`}</svg>`}
+function weekDays(){
+ const out=[];
+ for(let i=6;i>=0;i--){
+  const d=new Date();d.setHours(12,0,0,0);d.setDate(d.getDate()-i);
+  const key=todayStr(d);
+  const rows=(S.log||[]).filter(r=>r&&r.t&&todayStr(new Date(r.t))===key);
+  const graded=rows.filter(r=>r.c);
+  const xp=rows.reduce((a,r)=>a+(+r.x||0),0);
+  const acc=graded.length?Math.round(100*graded.filter(r=>r.ok).length/graded.length):null;
+  const label=d.toLocaleDateString(S.ui==="fr"?"fr-CA":"en-CA",{weekday:"short"}).replace(/\.$/,"");
+  out.push({xp,acc,n:graded.length,label});
+ }
+ return out;
+}
+function weekSvg(days){
+ const W=320,H=148,padL=6,padR=6,padT=8,padB=22,iw=W-padL-padR,ih=H-padT-padB;
+ const maxX=Math.max(8,...days.map(d=>d.xp)),slot=iw/7,bw=slot*0.5;
+ let bars="",labels="",dots="";const pts=[];
+ days.forEach((d,i)=>{
+  const x=padL+slot*i+slot/2,bh=d.xp?(d.xp/maxX)*ih:0,y=padT+ih-bh;
+  if(bh>0)bars+=`<rect class="wbar" x="${(x-bw/2).toFixed(1)}" y="${y.toFixed(1)}" width="${bw.toFixed(1)}" height="${Math.max(bh,2).toFixed(1)}" rx="2" style="animation-delay:${i*40}ms"></rect>`;
+  labels+=`<text x="${x.toFixed(1)}" y="${H-4}" text-anchor="middle">${esc(d.label)}</text>`;
+  if(d.acc!=null){const ay=padT+ih-(d.acc/100)*ih;pts.push(x.toFixed(1)+","+ay.toFixed(1));dots+=`<circle cx="${x.toFixed(1)}" cy="${ay.toFixed(1)}" r="3.2"></circle>`}
+ });
+ const line=pts.length>1?`<polyline points="${pts.join(" ")}"></polyline>`:"";
+ return `<svg class="week" viewBox="0 0 ${W} ${H}" role="img" aria-label="${tr("Accuracy and XP over the last 7 days","Précision et XP des 7 derniers jours")}">${bars}${line}${dots}${labels}</svg>`;
+}
+function countNums(){document.querySelectorAll(".cnt").forEach(el=>{
+ if(el.dataset.n===""){el.textContent="—";return}
+ const to=+el.dataset.n,suf=el.dataset.suf||"";
+ if(RM){el.textContent=to+suf;return}
+ const t0=performance.now();
+ const step=now=>{const p=Math.min(1,(now-t0)/400);const e=1-Math.pow(1-p,3);el.textContent=Math.round(to*e)+suf;if(p<1)requestAnimationFrame(step)};
+ requestAnimationFrame(step);
+})}
+function dashboard(){
+ stopRec();setGlow(0);hdr();scrollTo(0,0);
+ const ov=overallScore();
+ const stats=CATS.map(c=>({...c,n:catRows(c.id).length,p:catScore(c.id)}));
+ const known=stats.filter(c=>c.n>0);
+ const best=known.slice().sort((a,b)=>b.p-a.p||b.n-a.n)[0]||null;
+ const worst=known.slice().sort((a,b)=>a.p-b.p||b.n-a.n)[0]||null;
+ const days=weekDays();
+ const quiet=days.every(d=>!d.n&&!d.xp);
+ const nm=c=>S.ui==="fr"?c.fr:c.en;
+ const skills=stats.map(c=>`<div class="skill">${ringSvg(c.p)}<div style="min-width:0"><b>${c.e} ${esc(nm(c))}</b><span class="mut"><span class="cnt" data-n="${c.p==null?"":c.p}" data-suf="%">${c.p==null?"—":"0%"}</span>${c.n?" · "+c.n:""}</span></div></div>`).join("");
+ const sw=!best?`<p class="mut">${tr("Strengths and soft spots show up after a few saved answers.","Les points forts et les points à travailler apparaissent après quelques réponses.")}</p>`:`<p><b>${tr("Strength","Point fort")}</b> · ${best.e} ${esc(nm(best))} · ${best.p}%</p>${worst&&worst.id!==best.id?`<p><b>${tr("To practice","À travailler")}</b> · ${worst.e} ${esc(nm(worst))} · ${worst.p}%</p>`:""}`;
+ const focus=worst;
+ const ready=focus&&canFocus(focus.id);
+ const sug=focus?`<p class="sug script">${esc(sugLine(focus,focus.p))}</p><button id="gopr">${ready?tr("Practice this","On pratique"):tr("Back to the path","Retour au parcours")}</button>${ready?"":`<p class="mut">${tr("This skill opens on a later stop.","Cette compétence s'ouvre à une prochaine escale.")}</p>`}`:`<p class="sug script">${tr("Answer a few exercises and this page will keep your notebook.","Réponds à quelques exercices et cette page tiendra ton carnet.")}</p><button id="gopr">${tr("Back to the path","Retour au parcours")}</button>`;
+ const passed=Object.keys(S.passed||{}).length;
+ app.innerHTML=`<div class="card"><p class="script deck">${tr("For","Pour")} ${esc(CONFIG.name)}</p><h2 class="title">${tr("Progress","Progrès")}</h2>
+ <div class="overall"><div class="ovwrap">${ringSvg(ov,true)}<div class="ovnum cnt" data-n="${ov==null?"":ov}" data-suf="%">${ov==null?"—":"0%"}</div></div><b>${tr("Overall","Ensemble")}</b><p class="mut" style="margin:4px 0 0">${tr("Recent answers count more.","Les réponses récentes comptent plus.")}</p></div>
+ <div class="row" style="margin-top:12px"><button class="sec" id="bk">📍 ${tr("Path","Parcours")}</button></div></div>
+ <div class="card"><h2 class="title" style="font-size:24px">${tr("Skills","Compétences")}</h2><div class="skills">${skills}</div></div>
+ <div class="card"><h2 class="title" style="font-size:24px">${tr("This week","Cette semaine")}</h2>${weekSvg(days)}<div class="legend"><span><i class="xp"></i>${tr("XP","XP")}</span><span><i class="ac"></i>${tr("Accuracy","Précision")}</span></div>${quiet?`<p class="mut">${tr("This week is still quiet. A few answers will draw the chart.","Cette semaine est encore calme. Quelques réponses traceront le graphique.")}</p>`:""}</div>
+ <div class="card">${mascotBlock(focus?["On regarde ton carnet.","Let's look at your notebook."]:["Ton carnet est ouvert.","Your notebook is open."],"idle","sm")}${sw}${sug}</div>
+ <div class="card"><div class="stats">
+ <div class="statbox"><span class="mut">${tr("Answers","Réponses")}</span><b class="cnt" data-n="${S.correct||0}">0</b></div>
+ <div class="statbox"><span class="mut">${tr("Streak","Série")}</span><b>${S.streak||0}</b></div>
+ <div class="statbox"><span class="mut">${tr("Time practiced","Temps de pratique")}</span><b>${esc(fmtTime(S.secs))}</b></div>
+ <div class="statbox"><span class="mut">${tr("Levels passed","Niveaux réussis")}</span><b>${passed}/11</b></div>
+ </div></div>`;
+ $("#bk").onclick=home;
+ $("#gopr").onclick=()=>{if(focus&&ready)runFocus(focus.id);else home()};
+ countNums();
+}
 /* ---------- home = vertical lesson path ---------- */
 let selStop=null;
-function home(){stopRec();setGlow(0);hdr();const h=new Date().getHours();const cur=Math.min(S.unlocked,10);
+function home(){stopRec();if(location.hash)history.pushState(null,"",location.pathname+location.search);setGlow(0);hdr();const h=new Date().getHours();const cur=Math.min(S.unlocked,10);
  const greet=[`${h>=18||h<4?"Bonsoir":"Bonjour"} {n} !`,`${h>=18||h<4?"Good evening":"Hello"} {n}!`];
  const done=Object.keys(S.passed).length,pct=Math.round(100*done/11);
  const fill=S.passed[10]?100:Math.round(100*cur/10);
@@ -397,14 +565,14 @@ function home(){stopRec();setGlow(0);hdr();const h=new Date().getHours();const c
   const mid=S.resume&&(S.resume.key==="lv:"+i||S.resume.key==="lv:"+i+":qc");
   return `<button type="button" class="node ${state}" data-s="${i}" ${i===cur?'aria-current="step"':""}><span class="orb">${passed?"★":lock?"🔒":st.e}</span><span class="nmeta"><span class="ntag">${tr("Level","Niveau")} ${i}${passed?" · "+best+"%":""}</span><b>${esc(st.n)}</b><span class="mut">${esc(LEVELS[i].t[S.ui==="en"?0:1])}</span></span>${i===cur?`<span class="go-pill">${mid?tr("Continue","Continuer"):passed?tr("Again","Encore"):L("start")}</span>`:""}</button>`}).join("");
  app.innerHTML=`<div class="card pathhead"><p class="script deck">${tr("For","Pour")} ${esc(CONFIG.name)}, ${tr("from","de")} ${esc(CONFIG.from)}</p><h2 class="title">${esc(N(greet[0]))}${S.passed[10]?" 👑":""}</h2><p class="mut" style="margin:0 0 8px">${esc(N(greet[1]))} · ${tr("Next stop","Prochaine escale")}: ${esc(STOPS[cur].n)} · ${S.correct} ${tr("answers saved","réponses enregistrées")}</p>
- <div class="row" style="justify-content:space-between"><b>${done}/11</b><span class="mut">${pct}%</span></div><div class="bar"><i style="width:${pct}%"></i></div>
- <div class="row" style="margin-top:12px"><button id="pr">∞ ${L("practice")}</button><button class="sec" id="al">📮 ${tr("Album","Album")}</button>${S.passed[10]?`<button class="sec" id="ce">🎓 ${tr("Certificate","Certificat")}</button>`:""}</div></div>
+ <div class="row" style="justify-content:space-between"><b>${done}/11</b><span class="mut">${pct}%</span></div><div class="bar"><i style="--p:${(pct/100).toFixed(4)}"></i></div>
+ <div class="row" style="margin-top:12px"><button id="pr">∞ ${L("practice")}</button><button class="sec" id="al">📮 ${tr("Album","Album")}</button><button class="sec" id="dash">📊 ${tr("Progress","Progrès")}</button>${S.passed[10]?`<button class="sec" id="ce">🎓 ${tr("Certificate","Certificat")}</button>`:""}</div></div>
  <div class="path" id="path" style="--fill:${fill}">${nodes}</div>
  <p class="mut center">${tr("Tap a stop, then the button at the bottom.","Touche une escale, puis le bouton en bas.")}</p>
  <div class="card"><div class="row"><label><input type="checkbox" id="st" ${S.strict?"checked":""}> ${L("strict")}</label><span style="flex:1"></span><button class="sec" id="rs" style="min-height:44px;padding:8px 12px">${L("reset")}</button></div><div class="row" style="margin-top:10px"><button class="sec" id="mictest">🎤 ${tr("Test microphone","Tester le micro")}</button></div><p id="mictest-out" class="mut" style="margin:8px 0 0"></p></div>
  <div style="height:160px"></div><div class="dock" id="stopcard"></div>`;
  app.querySelectorAll(".node").forEach(g=>g.onclick=()=>openStop(+g.dataset.s));
- $("#pr").onclick=runPractice;$("#al").onclick=album;if($("#ce"))$("#ce").onclick=()=>cert();
+ $("#pr").onclick=runPractice;$("#al").onclick=album;$("#dash").onclick=()=>{if(location.hash!=="#progress")location.hash="#progress";else dashboard()};if($("#ce"))$("#ce").onclick=()=>cert();
  $("#st").onchange=e=>{S.strict=e.target.checked;save()};
  $("#rs").onclick=()=>{if(confirm(tr("Reset all progress?","Tout réinitialiser ?"))){localStorage.removeItem(KEY);S=load();home()}};
  $("#mictest").onclick=()=>{const out=$("#mictest-out");if(out)out.textContent=L("listening");beginListen("bonjour",(heard)=>{if($("#mictest-out"))$("#mictest-out").textContent=`${L("heard")}: « ${heard||""} »`},err=>{if($("#mictest-out"))$("#mictest-out").textContent=micLine(err)})};
@@ -446,11 +614,12 @@ function show(q,prog,endless,cb){window.__q=q;const fr=q.it[0],en=q.it[1];let bo
  else{kind=L("speak");const live=!!speechCtor();body=`<p class="q">${esc(fr)}</p><p class="mut">${esc(en)}</p><div class="row"><button class="sec" id="pl">🔊</button>${live?`<button id="mic">${L("mic")}</button>`:""}<button id="said">🗣️ ${tr("I said it","Je l'ai dit")}</button><button class="sec" id="typ">⌨️ ${tr("Type it instead","Je l'écris")}</button></div><p id="heard" class="mut"></p><div id="tbox"></div>${live?"":`<div class="fb bad">${L("nosr")}</div>`}`}
  const qpct=(!endless&&String(prog).includes("/"))?(()=>{const[a,b]=String(prog).split("/").map(Number);return Math.max(0,Math.min(100,Math.round(100*(a-1)/Math.max(1,b))))})():0;
  app.innerHTML=`<div class="card" id="qc"><div class="row" style="justify-content:space-between"><span class="mut">${endless?"∞ #"+prog:prog} · ${tr("Level","Niveau")} ${q.lv}</span><span class="combo" id="combo">${combo>=2?"🔥 x"+combo:""}</span><button ${sb} id="quit">✕</button></div>
- ${endless?"":`<div class="bar thick qbar"><i style="width:${qpct}%"></i></div>`}
+ ${endless?"":`<div class="bar thick qbar"><i style="--p:${(qpct/100).toFixed(4)}"></i></div>`}
  ${mascotBlock(pick(IDLE),"idle","sm")}<span class="tag${q.qc?" qc":""}">${kind}</span>${body}<div id="fb"></div><div class="row" style="margin-top:12px" id="act">${["fr2en","en2fr","listen"].includes(q.type)?`<button id="ck">${L("check")}</button>`:""}<button class="sec" id="sk">${L("skip")}</button></div></div>`;
- $("#quit").onclick=()=>{stopRec();home()};
+ qT0=Date.now();
+ $("#quit").onclick=()=>{stopRec();bankTime();save();home()};
  let answered=false,src=null;
-  const fin=(ok,extra="")=>{if(answered)return;answered=true;stopRec();const micBtn=$("#mic");if(micBtn)micBtn.disabled=true;
+  const fin=(ok,extra="")=>{if(answered)return;answered=true;stopRec();bankTime();const micBtn=$("#mic");if(micBtn)micBtn.disabled=true;
   if(ok){combo++;S.correct++;S.bestCombo=Math.max(S.bestCombo,combo);chime(combo);sparkleAt(src||$("#fb"));mood("happy",pick(PRAISE));ach("first");if(combo===5)ach("combo5");if(combo===10)ach("combo10");if(combo>=5&&combo%5===0)hearts(14);if(S.correct>=100)ach("c100");if(S.correct>=500)ach("c500");const hr=new Date().getHours();if(hr>=22||hr<4)ach("night")}
   else{combo=0;wrongTone();const c=$("#qc");c.classList.remove("shake");void c.offsetWidth;c.classList.add("shake");mood("sad",pick(SAD))}
   setGlow(combo);const ce=$("#combo");ce.textContent=combo>=2?"🔥 x"+combo:"";ce.classList.remove("pop");void ce.offsetWidth;ce.classList.add("pop");
@@ -463,17 +632,17 @@ function show(q,prog,endless,cb){window.__q=q;const fr=q.it[0],en=q.it[1];let bo
  if(q.type==="listen")setTimeout(()=>speak(fr),300);
  app.querySelectorAll("[data-o]").forEach(b=>b.onclick=()=>{if(answered)return;const ok=q.opts[+b.dataset.o]===q.ans;b.style.background=ok?"#c9efd8":"#f8d0d8";src=b;if(!ok)app.querySelectorAll("[data-o]").forEach(x=>{if(q.opts[+x.dataset.o]===q.ans)x.style.background="#c9efd8"});fin(ok)});
  const inp=$("#in");if(inp){inp.focus({preventScroll:true});const check=()=>{if(!inp.value.trim())return;src=inp;fin(typedOk(inp.value,q.ans,S.strict))};$("#ck").onclick=check;inp.onkeydown=e=>{if(e.key==="Enter"){e.preventDefault();answered?$("#nx").click():check()}}}
- $("#sk").onclick=()=>{stopRec();if(q.type==="speak"){noteAnswer(null);award(q,null);return cb(null)}combo=0;setGlow(0);noteAnswer(false);award(q,false);cb(false)};
+ $("#sk").onclick=()=>{stopRec();bankTime();if(q.type==="speak"){noteAnswer(null);award(q,null);return cb(null)}combo=0;setGlow(0);noteAnswer(false);award(q,false);cb(false)};
  if(q.type==="speak"){
-  const typeIt=()=>{stopRec();$("#tbox").innerHTML=`<input type="text" id="in2" style="margin-top:10px" placeholder="${L("typeFr")}" lang="fr" autocapitalize="off" autocomplete="off" autocorrect="off" spellcheck="false">`;$("#act").innerHTML=`<button id="ck2">${L("check")}</button><button class="sec" id="sk">${L("skip")}</button>`;$("#sk").onclick=()=>{stopRec();noteAnswer(null);award(q,null);cb(null)};const i2=$("#in2");i2.focus({preventScroll:true});const ck=()=>{if(!i2.value.trim()||answered)return;src=i2;fin(typedOk(i2.value,fr,S.strict))};$("#ck2").onclick=ck;i2.onkeydown=e=>{if(e.key==="Enter"){e.preventDefault();answered?$("#nx").click():ck()}};$("#typ")&&($("#typ").disabled=true)};
+  const typeIt=()=>{stopRec();$("#tbox").innerHTML=`<input type="text" id="in2" style="margin-top:10px" placeholder="${L("typeFr")}" lang="fr" autocapitalize="off" autocomplete="off" autocorrect="off" spellcheck="false">`;$("#act").innerHTML=`<button id="ck2">${L("check")}</button><button class="sec" id="sk">${L("skip")}</button>`;$("#sk").onclick=()=>{stopRec();bankTime();noteAnswer(null);award(q,null);cb(null)};const i2=$("#in2");i2.focus({preventScroll:true});const ck=()=>{if(!i2.value.trim()||answered)return;src=i2;fin(typedOk(i2.value,fr,S.strict))};$("#ck2").onclick=ck;i2.onkeydown=e=>{if(e.key==="Enter"){e.preventDefault();answered?$("#nx").click():ck()}};$("#typ")&&($("#typ").disabled=true)};
   $("#typ").onclick=typeIt;
-  if($("#said"))$("#said").onclick=()=>{if(answered)return;answered=true;stopRec();noteAnswer(null);award(q,null);softChime();sparkleAt($("#said"));mood("happy",["Bravo, {n} ! Bien dit !","Well said, {n}!"]);$("#fb").innerHTML=`<div class="fb ok">🗣️ ${tr("Nice! Self-checked, no score change.","Bien ! Auto-évalué, sans effet sur le score.")}</div>`;speak(fr);$("#act").innerHTML=`<button id="nx">${L("next")} →</button>`;$("#nx").onclick=()=>cb(null)};
+  if($("#said"))$("#said").onclick=()=>{if(answered)return;answered=true;stopRec();bankTime();noteAnswer(null);award(q,null);softChime();sparkleAt($("#said"));mood("happy",["Bravo, {n} ! Bien dit !","Well said, {n}!"]);$("#fb").innerHTML=`<div class="fb ok">🗣️ ${tr("Nice! Self-checked, no score change.","Bien ! Auto-évalué, sans effet sur le score.")}</div>`;speak(fr);$("#act").innerHTML=`<button id="nx">${L("next")} →</button>`;$("#nx").onclick=()=>cb(null)};
   if($("#mic"))$("#mic").onclick=()=>beginListen(fr,(heard,score)=>{const pct=Math.round(score*100);if(score>=.75){ach("speak");src=$("#mic");fin(true,`<div>${L("heard")}: « ${esc(heard)} » · ${L("sim")} ${pct}%</div>`)}else{$("#fb").innerHTML=`<div class="fb bad">${L("heard")}: « ${esc(heard)} » · ${L("sim")} ${pct}% (75% ${tr("needed","requis")}). ${tr("Try again, type it, or skip.","Réessaie, écris-le ou passe.")}</div>`;mood("sad",["Encore une fois !","One more time!"])}},
    err=>{if(answered)return;mood("sad",[MICMSG[err]?MICMSG[err][0]:micLine(err),micLine(err)]);
     $("#fb").innerHTML=`<div class="fb bad">🦉 ${esc(micLine(err))}</div>`;resetMicUi()})}}
 
 /* ---------- level-up sequence ---------- */
-function pass(lv,p){S.best[lv]=Math.max(S.best[lv]||0,p);S.passed[lv]=true;if(lv<10)S.unlocked=Math.max(S.unlocked,lv+1);if(lv===10&&!S.doneDate)S.doneDate=Date.now();S.xp+=50;save();
+function pass(lv,p){S.best[lv]=Math.max(S.best[lv]||0,p);S.passed[lv]=true;if(lv<10)S.unlocked=Math.max(S.unlocked,lv+1);if(lv===10&&!S.doneDate)S.doneDate=Date.now();S.xp+=50;logXp(50);save();
  ach("lv1");if(p===100)ach("perfect");const n=Object.keys(S.passed).length;if(n>=6)ach("half");if(n>=11)ach("all");celebrate(lv,p)}
 function celebrate(lv,p){stopRec();setGlow(0);hdr();scrollTo(0,0);
  app.innerHTML=`<div class="card center"><div class="mascot big m-dance" id="masc">${owl()}</div><div class="tag" style="margin-top:10px">📍 ${esc(STOPS[lv].n)}</div><h2 class="title">${tr(`Level ${lv} passed!`,`Niveau ${lv} réussi !`)}</h2>
@@ -508,7 +677,9 @@ function cert(force){stopRec();hdr();scrollTo(0,0);if(!S.passed[10]&&!force){hom
 /* ---------- boot & routes (#debug-pass triggers the level-up sequence for the current level) ---------- */
 $("#lang").onclick=()=>{S.ui=S.ui==="en"?"fr":"en";save();home()};$("#home").onclick=home;
 $("#mute").onclick=()=>{S.muted=!S.muted;save();hdr();if(!S.muted)chime(1)};
-function route(){const h=location.hash;if(h==="#debug-pass"){history.replaceState(null,"",location.pathname+location.search);pass(Math.min(S.unlocked,10),100)}else if(h==="#album")album();else if(h==="#cert")cert(true);else home()}
+function route(){const h=location.hash;if(h==="#debug-pass"){history.replaceState(null,"",location.pathname+location.search);pass(Math.min(S.unlocked,10),100)}else if(h==="#album")album();else if(h==="#cert")cert(true);else if(h==="#progress")dashboard();else home()}
 addEventListener("hashchange",route);hdr();route();
+if(typeof document.startViewTransition==="function"){let ran=false;try{document.startViewTransition(()=>{ran=true})}catch(e){}vtSync=ran}
+vtOn=true;
 if(inAppBrowser()&&!$("#inapp")){const b=document.createElement("div");b.id="inapp";b.className="inapp";b.innerHTML=`🎤 ${tr("This in-app browser can't use the microphone. Tap the menu and choose Open in Safari.","Ce navigateur intégré ne peut pas utiliser le micro. Ouvre le menu et choisis Ouvrir dans Safari.")}`;document.body.prepend(b)}
 </script></body></html>
