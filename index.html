@@ -101,28 +101,12 @@ button.node.locked .ntag{color:var(--mut)}
 .dock{position:fixed;left:0;right:0;bottom:0;z-index:25;padding:10px 14px calc(12px + env(safe-area-inset-bottom));background:linear-gradient(transparent,#f4ead8 28%);pointer-events:none}
 .dock .card{pointer-events:auto;max-width:640px;margin:0 auto;display:flex;align-items:center;gap:12px;padding:12px 14px}
 .dock .card button{min-width:132px;flex:none}
-/* envelope */
-.env{position:relative;width:270px;height:170px;margin:70px auto 26px;cursor:pointer;perspective:800px}
-.env .back{position:absolute;inset:0;background:#c4a574;border-radius:4px}
-.env .letter{position:absolute;left:14px;right:14px;bottom:8px;height:150px;background:#fffaf2;border-radius:2px;z-index:2;transition:transform .9s .45s ease;padding:16px;font-size:13px;color:#5c3d32;text-align:center;font-family:"Snell Roundhand","Apple Chancery","Segoe Script","Brush Script MT",cursive}
-.env .front{position:absolute;inset:0;z-index:3;border-radius:4px;background:linear-gradient(#e7d3b0,#d4b896);clip-path:polygon(0 0,50% 52%,100% 0,100% 100%,0 100%)}
-.env .flap{position:absolute;left:0;right:0;top:0;height:58%;z-index:4;background:#ead9bc;clip-path:polygon(0 0,100% 0,50% 100%);transform-origin:top;transition:transform .55s ease,z-index 0s .3s}
-.env .seal{position:absolute;left:50%;top:44%;transform:translate(-50%,-50%);z-index:5;font-size:30px;transition:opacity .3s}
-.env.open .flap{transform:rotateX(180deg);z-index:1}.env.open .seal{opacity:0}.env.open .letter{transform:translateY(-105px)}
-.env:not(.open){animation:wiggle 2s infinite}@keyframes wiggle{0%,80%,100%{transform:none}85%{transform:rotate(-3deg)}90%{transform:rotate(3deg)}95%{transform:rotate(-2deg)}}
-.note{background:#fffaf2 repeating-linear-gradient(#fffaf2 0 31px,#e7d3c0 31px 32px);border-radius:2px;padding:22px 20px 22px 28px;font-size:20px;line-height:32px;color:#4a342c;box-shadow:inset 3px 0 0 #c45c5c,inset 0 0 0 1px #eadcc8;font-family:"Segoe Script","Snell Roundhand","Apple Chancery",cursive}
-.note .script{font-size:26px}
-/* reward ticket */
-.ticket{border:1.5px dashed #c4a574;border-radius:2px;padding:20px;background:#fffaf2;text-align:center}
-.ticket .big{font-size:52px}.ticket h3{font-family:Georgia,serif;font-size:23px;color:#5c3d32;margin:8px 0}
 /* postcards */
 .pcs{display:grid;grid-template-columns:1fr 1fr;gap:12px}
-.flip{perspective:900px;cursor:pointer}.flip .in{position:relative;transition:transform .6s;transform-style:preserve-3d;aspect-ratio:3/2}.flip.flipped .in{transform:rotateY(180deg)}
-.pc,.pcb{position:absolute;inset:0;border-radius:12px;border:5px solid #fff;box-shadow:0 4px 14px #0000001f;backface-visibility:hidden;-webkit-backface-visibility:hidden;overflow:hidden}
-.pc{display:flex;flex-direction:column;justify-content:flex-end;padding:8px;color:#fff;text-shadow:0 1px 4px #0006}
+.pcard{aspect-ratio:3/2}
+.pc{position:relative;height:100%;border-radius:12px;border:5px solid #fff;box-shadow:0 4px 14px #0000001f;overflow:hidden;display:flex;flex-direction:column;justify-content:flex-end;padding:8px;color:#fff;text-shadow:0 1px 4px #0006}
 .pc .em{position:absolute;right:8px;top:4px;font-size:40px;text-shadow:none}.pc .sm{font-size:11px;opacity:.95}.pc .nm{font-size:17px;font-weight:700;line-height:1.1}
 .pc .stamp{position:absolute;left:6px;top:6px;border:2px dashed #fff9;border-radius:4px;font-size:10px;padding:1px 4px}
-.pcb{transform:rotateY(180deg);background:#fffaf2;color:#4a342c;font-size:13px;padding:10px;line-height:1.35;overflow:auto;font-family:"Segoe Script","Snell Roundhand","Apple Chancery",cursive}
 .pc.locked{filter:grayscale(1) brightness(.35);opacity:.35}
 .solo{max-width:300px;margin:10px auto}
 .badges{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;text-align:center;font-size:11px}
@@ -183,29 +167,7 @@ main.arrive{animation:vtIn .32s var(--ease)}
    ===================================================================== */
 const CONFIG={
   name:"Carolina",          // used in greetings, praise, mascot lines and the certificate
-  from:"Nestor",            // signs the notes and the certificate
-  // ⚠️ PLACEHOLDER NOTES — replace with your own words!
-  // notes[i] is revealed (envelope animation) when she passes level i (0..10).
-  notes:[
-    "Your very first level! I'm so proud of you. Every French word you learn makes me smile. Je t'aime. ❤️",
-    "Numbers and colours… and you're still my favourite colour of all. Keep going, ma belle!",
-    "Être et avoir: tu es incroyable, and I have the luckiest heart in Quebec.",
-    "Now you can order us croissants. I'll be the one staring at you instead of the menu.",
-    "You speak French every day now, like you speak to my heart every day. Bravo, mon amour!",
-    "Halfway to Montréal already! Thank you for learning my world with me.",
-    "Passé composé: the best thing that ever happened to me? Toi.",
-    "Quand j'étais petit, I dreamed of someone like you. Demain, on fera encore plus de rêves ensemble.",
-    "Si j'avais un vœu, je choisirais encore toi. Tu me manques even when you're right next to me.",
-    "Il faut que tu saches: je suis fou de toi. Subjunctive mastered, heart stolen.",
-    "You did it! From Lévis to the Magdalen Islands, tu es ma plus belle aventure. Je t'aime, Carolina."
-  ],
-  // ⚠️ PLACEHOLDER REWARDS — level index → real-life date, shown after that level's note.
-  rewards:{
-    2:{emoji:"🍷",title:"Dinner at a French bistro of your choice",detail:"You order everything en français, I'll just smile."},
-    5:{emoji:"🥞",title:"A cozy crêpes & café morning",detail:"Sunday breakfast at a crêperie, my treat."},
-    8:{emoji:"🎻",title:"A surprise evening in Old Montréal",detail:"Dress up a little. The rest is a secret."},
-    10:{emoji:"🏰",title:"Weekend in Québec City",detail:"Château views, poutine and long walks on the Terrasse Dufferin."}
-  }
+  from:"Nestor"             // signs the certificate
 };
 /* ===================================================================== */
 
@@ -647,23 +609,19 @@ function pass(lv,p){S.best[lv]=Math.max(S.best[lv]||0,p);S.passed[lv]=true;if(lv
 function celebrate(lv,p){stopRec();setGlow(0);hdr();scrollTo(0,0);
  app.innerHTML=`<div class="card center"><div class="mascot big m-dance" id="masc">${owl()}</div><div class="tag" style="margin-top:10px">📍 ${esc(STOPS[lv].n)}</div><h2 class="title">${tr(`Level ${lv} passed!`,`Niveau ${lv} réussi !`)}</h2>
  <p class="q">${esc(N(pick(["Bravo {n} ! Tu es incroyable !","Félicitations, {n} !","Quelle championne, {n} !"])))}</p><p>${L("score")}: <b>${p}%</b> ${"⭐".repeat(p===100?3:p>=90?2:1)}</p><p class="mut">+50 XP</p>
- <button id="c1">💌 ${tr("A letter for you","Une lettre pour toi")}</button></div>`;
- fanfare();bigFx();$("#c1").onclick=()=>letter(lv)}
-function letter(lv){app.innerHTML=`<div class="card center"><p class="mut">${tr("Tap the envelope","Touche l'enveloppe")}</p><div class="env" id="env"><div class="back"></div><div class="letter"><div class="script" style="font-size:22px">${tr("For","Pour")} ${esc(CONFIG.name)}</div>💕<br>${tr("from","de")} ${esc(CONFIG.from)}</div><div class="front"></div><div class="flap"></div><div class="seal">💗</div></div><div id="nt"></div></div>`;
- let opened=false;$("#env").onclick=()=>{if(opened)return;opened=true;$("#env").classList.add("open");softChime();hearts(16);setTimeout(()=>{$("#nt").innerHTML=`<div class="note" style="text-align:left;animation:rise .6s both"><div class="script">Ma chère ${esc(CONFIG.name)},</div>${esc(CONFIG.notes[lv]||"")}<div class="script" style="text-align:right">${esc(CONFIG.from)} 💕</div></div><div class="row" style="margin-top:14px"><button id="c2">${tr("Continue","Continuer")} →</button></div>`;$("#c2").onclick=()=>CONFIG.rewards[lv]?reward(lv):postcardScreen(lv)},RM?50:1400)}}
-function reward(lv){const r=CONFIG.rewards[lv];app.innerHTML=`<div class="card"><div class="ticket"><div class="big">${r.emoji||"🎁"}</div><div class="tag">🎁 ${tr("Date unlocked!","Rendez-vous débloqué !")}</div><h3>${esc(r.title)}</h3><p>${esc(r.detail||"")}</p><p class="mut">${tr(`Redeem with ${CONFIG.from} · valid forever 💕`,`À échanger avec ${CONFIG.from} · valide pour toujours 💕`)}</p></div><div class="row" style="margin-top:14px;justify-content:center"><button id="c3">${tr("Continue","Continuer")} →</button></div></div>`;fanfare();hearts(30);confetti(60);$("#c3").onclick=()=>postcardScreen(lv)}
-function postcardHTML(i,locked){const s=STOPS[i];return `<div class="flip${locked?"":" can"}" data-pc="${i}"><div class="in"><div class="pc${locked?" locked":""}" style="background:linear-gradient(135deg,${s.c[0]},${s.c[1]})"><span class="stamp">N° ${i}</span><span class="em">${s.e}</span><span class="sm">${locked?"":"Bisous de"}</span><span class="nm">${locked?"???":esc(s.n)}</span></div>${locked?"":`<div class="pcb"><b>${tr("From","De")} ${esc(CONFIG.from)}:</b><br>${esc(CONFIG.notes[i]||"")}</div>`}</div></div>`}
-function bindFlips(){app.querySelectorAll(".flip.can").forEach(f=>f.onclick=()=>{f.classList.toggle("flipped");tone(1200,0,.12,"sine",.05)})}
-function postcardScreen(lv){const s=STOPS[lv];app.innerHTML=`<div class="card center"><div class="tag">📮 ${tr("New postcard & badge!","Nouvelle carte postale et badge !")}</div><div class="solo">${postcardHTML(lv,false)}</div><div class="medal" style="background:linear-gradient(135deg,${s.c[0]},${s.c[1]})"><span>${s.e}</span></div><b>${esc(s.n)}</b><p class="mut">${tr("Tap the postcard to flip it","Touche la carte pour la retourner")}</p>
- <div class="row">${lv===10?`<button id="c4">🎓 ${tr("Your certificate","Ton certificat")}</button>`:`<button id="c4">🗺️ ${tr("Continue the journey","Continuer le voyage")} →</button>`}<button class="sec" id="c5">📮 Album</button></div></div>`;
- bindFlips();softChime();sparkleAt($(".solo"));$("#c4").onclick=()=>lv===10?cert():home();$("#c5").onclick=album}
+ <button id="c1">📮 ${tr("Your postcard","Ta carte postale")}</button></div>`;
+ fanfare();bigFx();$("#c1").onclick=()=>postcardScreen(lv)}
+function postcardHTML(i,locked){const s=STOPS[i];return `<div class="pcard" data-pc="${i}"><div class="pc${locked?" locked":""}" style="background:linear-gradient(135deg,${s.c[0]},${s.c[1]})"><span class="stamp">N° ${i}</span><span class="em">${s.e}</span><span class="sm">${locked?"":"Bisous de"}</span><span class="nm">${locked?"???":esc(s.n)}</span></div></div>`}
+function postcardScreen(lv){const s=STOPS[lv];app.innerHTML=`<div class="card center"><div class="tag">📮 ${tr("New postcard & badge!","Nouvelle carte postale et badge !")}</div><div class="solo">${postcardHTML(lv,false)}</div><div class="medal" style="background:linear-gradient(135deg,${s.c[0]},${s.c[1]})"><span>${s.e}</span></div><b>${esc(s.n)}</b>
+ <div class="row" style="margin-top:12px">${lv===10?`<button id="c4">🎓 ${tr("Your certificate","Ton certificat")}</button>`:`<button id="c4">🗺️ ${tr("Continue the journey","Continuer le voyage")} →</button>`}<button class="sec" id="c5">📮 Album</button></div></div>`;
+ softChime();sparkleAt($(".solo"));$("#c4").onclick=()=>lv===10?cert():home();$("#c5").onclick=album}
 function album(){stopRec();setGlow(0);hdr();scrollTo(0,0);const fl=S.ui==="fr"?1:0;const got=Object.keys(S.passed).length,na=Object.keys(S.ach).length;
- app.innerHTML=`<div class="card">${mascotBlock([`${got}/11 cartes postales !`,`${got}/11 postcards collected!`],"happy","sm")}<h2 class="title">📮 ${tr("Postcards","Cartes postales")}</h2><p class="mut">${tr("Tap a postcard to read its note","Touche une carte pour lire le mot")}</p><div class="pcs">${STOPS.map((_,i)=>postcardHTML(i,!S.passed[i])).join("")}</div></div>
+ app.innerHTML=`<div class="card">${mascotBlock([`${got}/11 cartes postales !`,`${got}/11 postcards collected!`],"happy","sm")}<h2 class="title">📮 ${tr("Postcards","Cartes postales")}</h2><p class="mut">${tr("The cities on your map.","Les villes de ton parcours.")}</p><div class="pcs">${STOPS.map((_,i)=>postcardHTML(i,!S.passed[i])).join("")}</div></div>
  <div class="card"><h2 class="title">🏅 ${tr("City badges","Badges des villes")}</h2><div class="badges">${STOPS.map((s,i)=>`<div><div class="medal ${S.passed[i]?"":"locked"}" style="background:linear-gradient(135deg,${s.c[0]},${s.c[1]})"><span>${s.e}</span></div>${S.passed[i]?esc(s.n):"???"}</div>`).join("")}</div></div>
  <div class="card"><h2 class="title">✨ ${tr("Achievements","Succès")} <small class="mut">${na}/${ACH.length}</small></h2><div class="badges">${ACH.map(a=>`<div><div class="medal ${S.ach[a.id]?"":"locked"}" style="background:#fff4e0"><span>${a.e}</span></div><b>${esc(a.t[fl])}</b><br><span class="mut" style="font-size:10px">${esc(a.d[fl])}</span></div>`).join("")}</div>
  <p class="mut">${tr("Best combo","Meilleur combo")}: ${S.bestCombo} · ${tr("Correct answers","Bonnes réponses")}: ${S.correct} · 🍁 ${S.qc||0}</p></div>
  <div class="row"><button class="sec" id="bk">📍 ${tr("Back to the path","Retour au parcours")}</button>${S.passed[10]?`<button id="ce">🎓 ${tr("Certificate","Certificat")}</button>`:""}</div>`;
- bindFlips();$("#bk").onclick=home;if($("#ce"))$("#ce").onclick=()=>cert()}
+ $("#bk").onclick=home;if($("#ce"))$("#ce").onclick=()=>cert()}
 function cert(force){stopRec();hdr();scrollTo(0,0);if(!S.passed[10]&&!force){home();return}
  const dt=new Date(S.doneDate||Date.now()).toLocaleDateString("fr-CA",{day:"numeric",month:"long",year:"numeric"});
  app.innerHTML=`<div class="cert"><span class="corner" style="left:18px;top:14px">⚜</span><span class="corner" style="right:18px;top:14px">⚜</span><span class="corner" style="left:18px;bottom:14px">⚜</span><span class="corner" style="right:18px;bottom:14px">⚜</span><div class="b1"><div class="b2">
