@@ -9,22 +9,25 @@
 html{background:var(--bg1)}
 body{margin:0;min-height:100vh;font-family:-apple-system,system-ui,"Segoe UI",Roboto,sans-serif;color:var(--ink);background:linear-gradient(160deg,var(--bg1),var(--bg2) 60%,#f6e6ff);background-attachment:fixed;-webkit-text-size-adjust:100%}
 header{position:sticky;top:0;z-index:20;display:flex;align-items:center;gap:8px;padding:calc(10px + env(safe-area-inset-top)) 12px 10px;background:linear-gradient(120deg,var(--pri),var(--pri2));color:#fff;box-shadow:0 4px 18px #e2587e40;border-radius:0 0 18px 18px}
-header h1{font-size:17px;margin:0;flex:1;cursor:pointer;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+header h1{font-size:17px;margin:0;flex:1;cursor:pointer;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;display:flex;align-items:center;gap:6px}
 .stat{font-size:13px;background:#ffffff2e;border-radius:20px;padding:4px 9px;white-space:nowrap}
-.hb{background:#ffffff33;color:#fff;min-height:32px;padding:4px 9px;border-radius:20px;font-size:14px}
+.hb{background:#ffffff33;color:#fff;min-height:32px;padding:4px 9px;border-radius:20px;font-size:14px;box-shadow:none}
+button.hb:active{transform:none;box-shadow:none}
 main{max-width:640px;margin:0 auto;padding:14px 14px calc(30px + env(safe-area-inset-bottom))}
 .card{background:var(--card);border-radius:22px;padding:18px;margin-bottom:14px;box-shadow:0 6px 24px #b9577a1c,0 1px 3px #0000000d;animation:rise .45s ease both}
 @keyframes rise{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:none}}
-button{font:inherit;border:0;border-radius:14px;padding:12px 18px;background:linear-gradient(120deg,var(--pri),var(--pri2));color:#fff;cursor:pointer;min-height:46px;font-weight:600;box-shadow:0 4px 12px #e2587e33;transition:transform .15s,box-shadow .15s}
-button:active{transform:scale(.96)}button.sec{background:#f6e9ee;color:var(--ink);box-shadow:none}button:disabled{opacity:.5}
+button{font:inherit;border:0;border-radius:16px;padding:14px 18px;background:linear-gradient(180deg,#ff7b98,var(--pri));color:#fff;cursor:pointer;min-height:56px;font-weight:700;font-size:17px;box-shadow:0 4px 0 #c43d62;transition:transform .12s,box-shadow .12s}
+button:active{transform:translateY(3px);box-shadow:0 1px 0 #c43d62}button.sec{background:#fff;color:var(--ink);box-shadow:0 4px 0 #ead5de;border:2px solid #f3d5df}button:disabled{opacity:.5}
 .row{display:flex;gap:8px;flex-wrap:wrap;align-items:center}.center{text-align:center}.center .row{justify-content:center}
 .mut{color:var(--mut);font-size:14px}.q{font-size:21px;margin:8px 0 14px;line-height:1.35}
-.opt{display:block;width:100%;text-align:left;margin:7px 0;background:#fbeff3;color:var(--ink);box-shadow:none;font-weight:500;transition:background .2s,transform .15s}
+.opt{display:block;width:100%;text-align:left;margin:8px 0;background:#fff;color:var(--ink);border:3px solid #f0c9d4;box-shadow:0 4px 0 #f0c9d4;font-weight:650;font-size:18px;min-height:64px;padding:16px 18px;border-radius:18px;transition:background .2s,transform .12s,box-shadow .12s}
+.opt:active{transform:translateY(3px);box-shadow:0 1px 0 #f0c9d4}
 input[type=text]{width:100%;font-size:18px;padding:13px;border:2px solid #f0d5de;border-radius:14px;background:#fff;outline:none;transition:border .2s}input[type=text]:focus{border-color:var(--pri)}
 .fb{margin-top:12px;padding:11px 13px;border-radius:14px;animation:rise .3s both}.fb.ok{background:#e3f6ec;color:#1c6644}.fb.bad{background:#fde8ec;color:#8a2236}
 .tag{display:inline-block;font-size:12px;background:#fbe3ea;color:#a3375a;border-radius:20px;padding:3px 10px;margin-right:6px;font-weight:600}
 label{font-size:14px;display:flex;gap:6px;align-items:center}
-.bar{height:7px;background:#f6e3ea;border-radius:4px;overflow:hidden;margin-top:6px}.bar i{display:block;height:100%;background:linear-gradient(90deg,var(--pri),var(--gold));border-radius:4px}
+.bar{height:16px;background:#f6e3ea;border-radius:999px;overflow:hidden;margin-top:8px}.bar i{display:block;height:100%;background:linear-gradient(90deg,#58c27d,var(--pri));border-radius:999px;transition:width .4s ease}
+.qbar{margin:8px 0 4px}
 h2.title{font-family:Georgia,"Times New Roman",serif;font-size:28px;margin:6px 0;color:#b23a62}
 .script{font-family:"Snell Roundhand","Apple Chancery","Segoe Script","Brush Script MT",cursive}
 /* mascot */
@@ -56,10 +59,36 @@ h2.title{font-family:Georgia,"Times New Roman",serif;font-size:28px;margin:6px 0
 #toasts{position:fixed;left:0;right:0;bottom:calc(18px + env(safe-area-inset-bottom));z-index:40;display:flex;flex-direction:column;align-items:center;gap:6px;pointer-events:none}
 .toast{background:#fff;border-radius:16px;padding:10px 14px;box-shadow:0 8px 26px #b9577a40;display:flex;gap:10px;align-items:center;animation:tin .4s both;font-size:14px}.toast.out{animation:tout .4s both}.te{font-size:28px}
 @keyframes tin{from{opacity:0;transform:translateY(20px)}}@keyframes tout{to{opacity:0;transform:translateY(20px)}}
-/* map */
-.map svg{width:100%;height:auto;display:block;border-radius:18px}
-.stop{cursor:pointer}.stop text{font-size:11px;font-weight:700;fill:#5a3a4a;paint-order:stroke;stroke:#fff;stroke-width:3px}
-.stop.locked circle{fill:var(--lock)}.stop.locked text{fill:#a99aa3}.stop.sel circle.ring{stroke:#e2587e;stroke-width:3}
+/* lesson path */
+.pathhead{position:relative;padding-bottom:16px}
+.path{position:relative;display:flex;flex-direction:column;gap:12px;margin:0 0 14px}
+.path:before{content:"";position:absolute;left:45px;top:46px;bottom:46px;width:12px;border-radius:8px;background:#f6d3df;z-index:0}
+.path:after{content:"";position:absolute;left:45px;top:46px;width:12px;height:calc((100% - 92px) * var(--fill,0) / 100);border-radius:8px;background:linear-gradient(#58c27d,var(--pri));z-index:0}
+button.node{position:relative;z-index:1;display:flex;align-items:center;gap:14px;width:100%;text-align:left;background:#fff;color:var(--ink);border:3px solid #f3d5df;box-shadow:0 4px 0 #ead5de;border-radius:24px;min-height:92px;padding:10px 12px;font-weight:700}
+button.node:active{transform:translateY(3px);box-shadow:0 1px 0 #ead5de}
+button.node.sel{border-color:var(--pri)}
+button.node .orb{width:72px;height:72px;flex:none;border-radius:50%;display:grid;place-items:center;font-size:30px;background:linear-gradient(180deg,#ff8aa8,var(--pri));color:#fff;box-shadow:0 5px 0 #b83a5e}
+button.node.done .orb{background:linear-gradient(180deg,#7ddea0,#2e9e6a);box-shadow:0 5px 0 #1d7a4a}
+button.node.locked{color:#8a7482}
+button.node.locked .orb{background:#e7dfe4;color:#8a7482;box-shadow:0 5px 0 #cfc4cb}
+button.node.current{border-color:var(--pri);background:#fff7f9}
+button.node.current .orb{box-shadow:0 0 0 6px #ffe3ec,0 5px 0 #b83a5e}
+button.node .nmeta{display:flex;flex-direction:column;gap:1px;min-width:0;flex:1}
+button.node .nmeta b{font-size:18px;line-height:1.15}
+button.node .ntag{font-size:12px;color:var(--pri);letter-spacing:.02em}
+button.node.done .ntag{color:var(--ok)}
+button.node.locked .ntag{color:var(--mut)}
+.go-pill{margin-left:4px;background:var(--pri);color:#fff;border-radius:999px;padding:8px 12px;font-size:14px;white-space:nowrap;box-shadow:0 3px 0 #c43d62}
+.hdr-owl{width:34px;height:38px;display:inline-flex;flex:none}
+.hdr-owl .owl{width:34px}
+#act{flex-direction:column;align-items:stretch}
+#act button{width:100%}
+.actions{display:flex;flex-direction:column;gap:8px;margin-top:12px}
+.actions button{width:100%}
+.go-pill{pointer-events:none}
+.dock{position:fixed;left:0;right:0;bottom:0;z-index:25;padding:10px 14px calc(12px + env(safe-area-inset-bottom));background:linear-gradient(transparent,#fff6f0 28%);pointer-events:none}
+.dock .card{pointer-events:auto;max-width:640px;margin:0 auto;display:flex;align-items:center;gap:12px;padding:12px 14px}
+.dock .card button{min-width:132px;flex:none}
 /* envelope */
 .env{position:relative;width:270px;height:170px;margin:70px auto 26px;cursor:pointer;perspective:800px}
 .env .back{position:absolute;inset:0;background:#e79bb1;border-radius:10px}
@@ -99,7 +128,7 @@ h2.title{font-family:Georgia,"Times New Roman",serif;font-size:28px;margin:6px 0
 @page{size:landscape;margin:12mm}
 @media (prefers-reduced-motion:reduce){*,*:before,*:after{animation-duration:.01ms!important;animation-iteration-count:1!important;transition-duration:.01ms!important}}
 </style></head><body>
-<header><h1 id="home">🦉 <span id="htitle"></span></h1><span class="stat" id="xp"></span><span class="stat" id="streak"></span><button class="hb" id="mute" aria-label="mute"></button><button class="hb" id="lang"></button></header>
+<header><h1 id="home"><span class="hdr-owl" id="hdr-owl"></span><span id="htitle"></span></h1><span class="stat" id="xp"></span><span class="stat" id="streak"></span><button class="hb" id="mute" aria-label="mute"></button><button class="hb" id="lang"></button></header>
 <main id="app"></main>
 <div id="glow"></div><canvas id="fx"></canvas><div id="toasts"></div>
 <script>
@@ -169,7 +198,6 @@ const STOPS=[
  {n:"Charlevoix",e:"⛰️",c:["#9bd3a8","#3c7d6b"]},{n:"Tadoussac",e:"🐋",c:["#8fd3fe","#2b4c8c"]},{n:"Saguenay",e:"🛶",c:["#a1c4fd","#4a6b8a"]},
  {n:"Trois-Rivières",e:"🌉",c:["#fbc2eb","#7a6fd6"]},{n:"Montréal",e:"🥯",c:["#f7b267","#c0392b"]},{n:"Mont-Tremblant",e:"🎿",c:["#e0eafc","#6d8fc7"]},
  {n:"Percé",e:"🪨",c:["#ffcf9f","#d35d6e"]},{n:"Îles-de-la-Madeleine",e:"🏖️",c:["#fddb92","#4fb3bf"]}];
-const MAPP=[[70,560],[190,532],[300,482],[250,412],[120,388],[55,318],[160,266],[292,232],[262,152],[118,118],[214,50]];
 const PRAISE=[["Bravo, {n} !","Well done, {n}!"],["Super !","Great!"],["Tu es géniale !","You're amazing!"],["Excellent !","Excellent!"],["Wow, {n} !","Wow, {n}!"],["Parfait !","Perfect!"],["Je suis fier de toi !","I'm proud of you!"],["Magnifique !","Beautiful!"]];
 const SAD=[["Presque !","Almost!"],["Pas grave, {n} !","No worries, {n}!"],["On continue !","Let's keep going!"],["Courage !","You've got this!"]];
 const IDLE=[["Allez, {n} !","Come on, {n}!"],["Prête ?","Ready?"],["Tu peux le faire !","You can do it!"],["On apprend ensemble !","We learn together!"]];
@@ -199,7 +227,7 @@ const pick=a=>a[Math.random()*a.length|0];
 const line=p=>`<b>${esc(N(p[0]))}</b><br><small>${esc(N(p[1]))}</small>`;
 function todayStr(d=new Date()){return d.getFullYear()+"-"+(d.getMonth()+1)+"-"+d.getDate()}
 function touchStreak(){const t=todayStr();if(S.last===t)return;const y=new Date();y.setDate(y.getDate()-1);S.streak=(S.last===todayStr(y))?S.streak+1:1;S.last=t;save();if(S.streak>=3)ach("day3");if(S.streak>=7)ach("day7")}
-function hdr(){$("#htitle").textContent=`${CONFIG.name} · Français`;$("#xp").textContent="⭐ "+S.xp;$("#streak").textContent="🔥 "+S.streak;$("#lang").textContent=S.ui==="en"?"FR":"EN";$("#mute").textContent=S.muted?"🔇":"🔊";document.documentElement.lang=S.ui}
+function hdr(){if($("#hdr-owl")&&!$("#hdr-owl").innerHTML)$("#hdr-owl").innerHTML=owl();$("#htitle").textContent=`${CONFIG.name} · Français`;$("#xp").textContent="⭐ "+S.xp;$("#streak").textContent="🔥 "+S.streak;$("#lang").textContent=S.ui==="en"?"FR":"EN";$("#mute").textContent=S.muted?"🔇":"🔊";document.documentElement.lang=S.ui}
 
 /* ---------- sound (WebAudio, no files) ---------- */
 let AC=null;function ac(){if(S.muted)return null;try{AC=AC||new(window.AudioContext||window.webkitAudioContext)();if(AC.state==="suspended")AC.resume();return AC}catch(e){return null}}
@@ -288,47 +316,38 @@ function startRec(target,done,fail){stopRec();let settled=false;const end=(fn,ar
  rec.onend=()=>end(fail,"no-speech");
  recT=setTimeout(()=>end(fail,"timeout"),8000);
  try{rec.start()}catch(e){end(fail,"service-not-allowed")}}
-/* ---------- home = journey map ---------- */
-function catmull(P,upto){let d=`M${P[0][0]} ${P[0][1]}`;for(let i=0;i<upto;i++){const p0=P[i-1]||P[i],p1=P[i],p2=P[i+1],p3=P[i+2]||p2;d+=` C${p1[0]+(p2[0]-p0[0])/6} ${p1[1]+(p2[1]-p0[1])/6} ${p2[0]-(p3[0]-p1[0])/6} ${p2[1]-(p3[1]-p1[1])/6} ${p2[0]} ${p2[1]}`}return d}
+/* ---------- home = vertical lesson path ---------- */
 let selStop=null;
 function home(){stopRec();setGlow(0);hdr();const h=new Date().getHours();const cur=Math.min(S.unlocked,10);
  const greet=[`${h>=18||h<4?"Bonsoir":"Bonjour"} {n} !`,`${h>=18||h<4?"Good evening":"Hello"} {n}!`];
- const d=catmull(MAPP,10);
- let stops="";MAPP.forEach((p,i)=>{const lock=i>S.unlocked,done=S.passed[i],right=p[0]<180;stops+=`<g class="stop ${lock?"locked":""}" data-s="${i}"><circle class="ring" cx="${p[0]}" cy="${p[1]}" r="17" fill="#fff" stroke="${done?"#d4a24c":"#f3c1cf"}" stroke-width="3"/><circle cx="${p[0]}" cy="${p[1]}" r="12" fill="${done?"#e2587e":lock?"":"#f08a5d"}"/><text x="${p[0]}" y="${p[1]+4}" text-anchor="middle" style="fill:#fff;stroke:none;font-size:11px">${done?"★":i}</text><text x="${right?p[0]+22:p[0]-22}" y="${p[1]+4}" text-anchor="${right?"start":"end"}">${lock?"🔒 ":""}${esc(STOPS[i].n)}</text></g>`});
- const deco=[["🌲",20,470],["🌲",330,560],["❄️",320,380],["🌲",22,220],["⛰️",320,300],["🌲",190,190],["❄️",40,90],["🐟",300,95],["🌊",310,40],["🍁",210,400],["🌲",120,20],["❄️",200,590]].map(e=>`<text x="${e[1]}" y="${e[2]}" font-size="18" opacity=".55">${e[0]}</text>`).join("");
- app.innerHTML=`<div class="card">${mascotBlock([greet[0]+(S.passed[10]?" 👑":""),greet[1]],"idle")}
- <div class="row"><button id="pr">∞ ${L("practice")}</button><button class="sec" id="al">📮 ${tr("Album","Album")}</button>${S.passed[10]?`<button class="sec" id="ce">🎓 ${tr("Certificate","Certificat")}</button>`:""}</div></div>
- <div class="card map" style="padding:10px"><svg viewBox="0 0 360 600" id="msvg"><defs><linearGradient id="sky" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#e6f3ff"/><stop offset=".6" stop-color="#fff6f0"/><stop offset="1" stop-color="#fde7ee"/></linearGradient></defs>
- <rect width="360" height="600" rx="18" fill="url(#sky)"/><path d="M-10 600 C120 520 160 470 230 420 S330 300 380 250" stroke="#bfe3f5" stroke-width="30" fill="none" opacity=".7" stroke-linecap="round"/>
- <path d="M240 0 C260 40 330 60 380 70" stroke="#bfe3f5" stroke-width="40" fill="none" opacity=".6"/>${deco}
- <path d="${d}" stroke="#f6d3de" stroke-width="11" fill="none" stroke-linecap="round"/><path id="route" d="${d}" stroke="#fff" stroke-width="2" stroke-dasharray="4 6" fill="none"/>
- <path id="prog" d="${d}" stroke="#e2587e" stroke-width="5" fill="none" stroke-linecap="round" opacity=".85"/><path id="tmp" fill="none" d=""/>
- ${stops}<g id="hero">${owl('x="0" y="0" width="44" height="50"')}</g></svg>
- <p class="mut center" style="margin:6px 0 0">${tr("Tap a stop · Passed levels earn a postcard","Touche une escale · Chaque niveau réussi donne une carte postale")}</p></div>
- <div id="stopcard"></div>
- <div class="card row"><label><input type="checkbox" id="st" ${S.strict?"checked":""}> ${L("strict")}</label><span style="flex:1"></span><button class="sec" id="rs" style="min-height:36px;padding:6px 12px">${L("reset")}</button></div>`;
- // path lengths per stop
- const tmp=$("#tmp"),route=$("#route"),total=route.getTotalLength();const lens=MAPP.map((_,i)=>{if(!i)return 0;tmp.setAttribute("d",catmull(MAPP,i));return tmp.getTotalLength()});
- const prog=$("#prog");prog.style.strokeDasharray=total;const hero=$("#hero");
- const place=l=>{const p=route.getPointAtLength(l);hero.setAttribute("transform",`translate(${p.x-22},${p.y-54})`);prog.style.strokeDashoffset=total-l};
- const from=lens[Math.min(S.mapPos,cur)],to=lens[cur];
- if(RM||from>=to){place(to);S.mapPos=cur;save()}else{place(from);hero.classList.add("walking");setTimeout(()=>{const t0=performance.now(),dur=1500+500*(cur-S.mapPos);const step=t=>{let k=Math.min(1,(t-t0)/dur);k=k<.5?2*k*k:1-Math.pow(-2*k+2,2)/2;place(from+(to-from)*k);if(k<1)requestAnimationFrame(step);else{hero.classList.remove("walking");S.mapPos=cur;save();chime(5);sparkleAt(hero);mood("happy",[`On est arrivés à ${STOPS[cur].n} !`,`We made it to ${STOPS[cur].n}!`])}};requestAnimationFrame(step)},600)}
- app.querySelectorAll(".stop").forEach(g=>g.onclick=()=>openStop(+g.dataset.s));
+ const done=Object.keys(S.passed).length,pct=Math.round(100*done/11);
+ const fill=S.passed[10]?100:Math.round(100*cur/10);
+ const nodes=STOPS.map((st,i)=>{const lock=i>S.unlocked,passed=!!S.passed[i],state=lock?"locked":passed?"done":i===cur?"current":"open";const best=S.best[i]||0;
+  return `<button type="button" class="node ${state}" data-s="${i}" ${i===cur?'aria-current="step"':""}><span class="orb">${passed?"★":lock?"🔒":st.e}</span><span class="nmeta"><span class="ntag">${tr("Level","Niveau")} ${i}${passed?" · "+best+"%":""}</span><b>${esc(st.n)}</b><span class="mut">${esc(LEVELS[i].t[S.ui==="en"?0:1])}</span></span>${i===cur?`<span class="go-pill">${passed?tr("Again","Encore"):L("start")}</span>`:""}</button>`}).join("");
+ app.innerHTML=`<div class="card pathhead"><h2 class="title">${esc(N(greet[0]))}${S.passed[10]?" 👑":""}</h2><p class="mut" style="margin:0 0 8px">${esc(N(greet[1]))} · ${tr("Next stop","Prochaine escale")}: ${esc(STOPS[cur].n)}</p>
+ <div class="row" style="justify-content:space-between"><b>${done}/11</b><span class="mut">${pct}%</span></div><div class="bar"><i style="width:${pct}%"></i></div>
+ <div class="row" style="margin-top:12px"><button id="pr">∞ ${L("practice")}</button><button class="sec" id="al">📮 ${tr("Album","Album")}</button>${S.passed[10]?`<button class="sec" id="ce">🎓 ${tr("Certificate","Certificat")}</button>`:""}</div></div>
+ <div class="path" id="path" style="--fill:${fill}">${nodes}</div>
+ <p class="mut center">${tr("Tap a stop, then the button at the bottom.","Touche une escale, puis le bouton en bas.")}</p>
+ <div class="card row"><label><input type="checkbox" id="st" ${S.strict?"checked":""}> ${L("strict")}</label><span style="flex:1"></span><button class="sec" id="rs" style="min-height:44px;padding:8px 12px">${L("reset")}</button></div>
+ <div style="height:160px"></div><div class="dock" id="stopcard"></div>`;
+ app.querySelectorAll(".node").forEach(g=>g.onclick=()=>openStop(+g.dataset.s));
  $("#pr").onclick=runPractice;$("#al").onclick=album;if($("#ce"))$("#ce").onclick=()=>cert();
  $("#st").onchange=e=>{S.strict=e.target.checked;save()};
  $("#rs").onclick=()=>{if(confirm(tr("Reset all progress?","Tout réinitialiser ?"))){localStorage.removeItem(KEY);S=load();home()}};
- openStop(selStop!=null?selStop:cur,true)}
-function openStop(i,quiet){selStop=i;document.querySelectorAll(".stop").forEach(g=>g.classList.toggle("sel",+g.dataset.s===i));const lv=LEVELS[i],lock=i>S.unlocked,b=S.best[i]||0,st=STOPS[i];
- $("#stopcard").innerHTML=`<div class="card"><div class="row"><span style="font-size:34px">${st.e}</span><div style="flex:1"><span class="tag">${tr("Level","Niveau")} ${i} · ${esc(st.n)}</span><div><b>${esc(lv.t[S.ui==="en"?0:1])}</b></div><div class="mut">${lock?"🔒 "+L("locked"):S.passed[i]?"✅ "+tr("Visited","Visitée")+" · "+L("best")+" "+b+"%":L("best")+": "+b+"%"}</div><div class="bar"><i style="width:${b}%"></i></div></div></div><div class="row" style="margin-top:12px">${lock?`<button id="to">${L("testout")}</button><span class="mut">${tr("Score 80% to jump here","80 % pour sauter ici")}</span>`:`<button id="gl">${S.passed[i]?tr("Practice again","Refaire"):L("start")} →</button>`}</div></div>`;
+ const focus=selStop!=null?selStop:cur;if(focus>1){const el=app.querySelector(`.node[data-s="${focus}"]`);if(el)el.scrollIntoView({behavior:RM?"auto":"smooth",block:"center"})}
+ openStop(focus,true);if(S.mapPos!==cur){S.mapPos=cur;save()}}
+function openStop(i,quiet){selStop=i;document.querySelectorAll(".node").forEach(g=>g.classList.toggle("sel",+g.dataset.s===i));const lv=LEVELS[i],lock=i>S.unlocked,b=S.best[i]||0,st=STOPS[i];
+ $("#stopcard").innerHTML=`<div class="card"><span style="font-size:32px">${st.e}</span><div style="flex:1;min-width:0"><span class="tag">${tr("Level","Niveau")} ${i}</span><div style="font-weight:800">${esc(st.n)}</div><div class="mut">${lock?L("locked"):S.passed[i]?tr("Visited","Visitée")+" · "+b+"%":esc(lv.t[S.ui==="en"?0:1])}</div></div>${lock?`<button id="to">${L("testout")}</button>`:`<button id="gl">${S.passed[i]?tr("Again","Encore"):L("start")}</button>`}</div>`;
  if($("#to"))$("#to").onclick=()=>testOut(i);if($("#gl"))$("#gl").onclick=()=>lesson(i);
- if(!quiet)$("#stopcard").scrollIntoView({behavior:RM?"auto":"smooth",block:"nearest"})}
+ if(!quiet){const el=document.querySelector(`.node[data-s="${i}"]`);if(el)el.scrollIntoView({behavior:RM?"auto":"smooth",block:"center"})}}
 
 /* ---------- lessons & exercise flow ---------- */
 let combo=0;
 function lesson(lv){const l=LEVELS[lv];app.innerHTML=`<div class="card">${mascotBlock([`Leçon ${lv} : ${STOPS[lv].n} !`,`Lesson ${lv}: off to ${STOPS[lv].n}!`])}<span class="tag">${L("lesson")} ${lv}</span><h2 class="title">${esc(l.t[S.ui==="en"?0:1])}</h2><p style="line-height:1.55">${l.intro}</p><div class="row"><button id="go">${L("start")}</button><button class="sec" id="bk">${L("back")}</button></div></div>`;$("#go").onclick=()=>runSet(levelSet(lv),r=>finishLevel(lv,r));$("#bk").onclick=home;scrollTo(0,0)}
 function testOut(lv){const qs=shuffle([...levelSet(lv),...(lv>0?levelSet(lv-1):[])]).slice(0,12);runSet(qs,r=>{const p=Math.round(100*r.ok/Math.max(1,r.n));if(p>=80&&lv>0){for(let l=0;l<lv-1;l++)S.passed[l]=true;pass(lv-1,p)}else failScreen(lv,p,true)})}
 function finishLevel(lv,r){const p=Math.round(100*r.ok/Math.max(1,r.n));S.best[lv]=Math.max(S.best[lv]||0,p);save();if(p>=80)pass(lv,p);else failScreen(lv,p)}
-function failScreen(lv,p,test){hdr();setGlow(0);app.innerHTML=`<div class="card center">${mascotBlock(["Tu y es presque, {n} !","So close, {n}! Every try makes you stronger."],"sad")}<p class="q">${L("score")}: ${p}%</p><p>${L("need")}</p><div class="row"><button id="re">${tr("Try again","Réessayer")}</button><button class="sec" id="pr">∞ ${L("practice")}</button><button class="sec" id="bk">🗺️ ${tr("Map","Carte")}</button></div></div>`;
+function failScreen(lv,p,test){hdr();setGlow(0);app.innerHTML=`<div class="card center">${mascotBlock(["Tu y es presque, {n} !","So close, {n}! Every try makes you stronger."],"sad")}<p class="q">${L("score")}: ${p}%</p><p>${L("need")}</p><div class="row"><button id="re">${tr("Try again","Réessayer")}</button><button class="sec" id="pr">∞ ${L("practice")}</button><button class="sec" id="bk">📍 ${tr("Path","Parcours")}</button></div></div>`;
  $("#re").onclick=()=>test?testOut(lv):runSet(levelSet(lv),r=>finishLevel(lv,r));$("#pr").onclick=runPractice;$("#bk").onclick=home}
 function runPractice(){combo=0;const maxLv=Math.min(S.unlocked,10);let count=0;runStream(()=>{const[l,i]=srsPick(maxLv);count++;return mkEx(l,i,TYPES[Math.random()*TYPES.length|0])},()=>count,true)}
 function runSet(qs,done){combo=0;let k=0,r={ok:0,n:qs.length};runStream(()=>k<qs.length?qs[k++]:null,()=>k+"/"+qs.length,false,ok=>{if(ok)r.ok++;if(ok===null)r.n--},()=>done(r))}
@@ -340,7 +359,9 @@ function show(q,prog,endless,cb){window.__q=q;const fr=q.it[0],en=q.it[1];let bo
  else if(q.type==="en2fr"){kind=L("translate");body=`<p class="q">${esc(en)}</p><input type="text" id="in" placeholder="${L("typeFr")}" lang="fr" autocapitalize="off" autocomplete="off" autocorrect="off" spellcheck="false">`}
  else if(q.type==="listen"){kind=L("listen");body=`<div class="row" style="margin:10px 0"><button id="pl">${L("play")}</button><button class="sec" id="sl">${L("slow")}</button></div><input type="text" id="in" placeholder="${L("typeFr")}" lang="fr" autocapitalize="off" autocomplete="off" autocorrect="off" spellcheck="false">`}
  else{kind=L("speak");const live=SR&&!srBlocked;body=`<p class="q">${esc(fr)}</p><p class="mut">${esc(en)}</p><div class="row"><button class="sec" id="pl">🔊</button>${live?`<button id="mic">${L("mic")}</button>`:`<button id="said">🗣️ ${tr("I said it","Je l'ai dit")}</button>`}<button class="sec" id="typ">⌨️ ${tr("Type it instead","Je l'écris")}</button></div><div id="tbox"></div>${live?"":`<div class="fb bad">${SR?tr("The mic isn't available in this viewer, so say it aloud and tap “I said it” (no penalty), or type it.","Le micro n'est pas disponible ici : dis-le à voix haute puis « Je l'ai dit » (sans pénalité), ou écris-le."):L("nosr")}</div>`}`}
+ const qpct=(!endless&&String(prog).includes("/"))?(()=>{const[a,b]=String(prog).split("/").map(Number);return Math.max(0,Math.min(100,Math.round(100*(a-1)/Math.max(1,b))))})():0;
  app.innerHTML=`<div class="card" id="qc"><div class="row" style="justify-content:space-between"><span class="mut">${endless?"∞ #"+prog:prog} · ${tr("Level","Niveau")} ${q.lv}</span><span class="combo" id="combo">${combo>=2?"🔥 x"+combo:""}</span><button ${sb} id="quit">✕</button></div>
+ ${endless?"":`<div class="bar thick qbar"><i style="width:${qpct}%"></i></div>`}
  ${mascotBlock(pick(IDLE),"idle","sm")}<span class="tag">${kind}</span>${body}<div id="fb"></div><div class="row" style="margin-top:12px" id="act">${["fr2en","en2fr","listen"].includes(q.type)?`<button id="ck">${L("check")}</button>`:""}<button class="sec" id="sk">${L("skip")}</button></div></div>`;
  $("#quit").onclick=()=>{stopRec();home()};
  let answered=false,src=null;
@@ -385,7 +406,7 @@ function album(){stopRec();setGlow(0);hdr();scrollTo(0,0);const fl=S.ui==="fr"?1
  <div class="card"><h2 class="title">🏅 ${tr("City badges","Badges des villes")}</h2><div class="badges">${STOPS.map((s,i)=>`<div><div class="medal ${S.passed[i]?"":"locked"}" style="background:linear-gradient(135deg,${s.c[0]},${s.c[1]})"><span>${s.e}</span></div>${S.passed[i]?esc(s.n):"???"}</div>`).join("")}</div></div>
  <div class="card"><h2 class="title">✨ ${tr("Achievements","Succès")} <small class="mut">${na}/${ACH.length}</small></h2><div class="badges">${ACH.map(a=>`<div><div class="medal ${S.ach[a.id]?"":"locked"}" style="background:#fff4e0"><span>${a.e}</span></div><b>${esc(a.t[fl])}</b><br><span class="mut" style="font-size:10px">${esc(a.d[fl])}</span></div>`).join("")}</div>
  <p class="mut">${tr("Best combo","Meilleur combo")}: ${S.bestCombo} · ${tr("Correct answers","Bonnes réponses")}: ${S.correct}</p></div>
- <div class="row"><button class="sec" id="bk">🗺️ ${tr("Back to the map","Retour à la carte")}</button>${S.passed[10]?`<button id="ce">🎓 ${tr("Certificate","Certificat")}</button>`:""}</div>`;
+ <div class="row"><button class="sec" id="bk">📍 ${tr("Back to the path","Retour au parcours")}</button>${S.passed[10]?`<button id="ce">🎓 ${tr("Certificate","Certificat")}</button>`:""}</div>`;
  bindFlips();$("#bk").onclick=home;if($("#ce"))$("#ce").onclick=()=>cert()}
 function cert(force){stopRec();hdr();scrollTo(0,0);if(!S.passed[10]&&!force){home();return}
  const dt=new Date(S.doneDate||Date.now()).toLocaleDateString("fr-CA",{day:"numeric",month:"long",year:"numeric"});
@@ -394,7 +415,7 @@ function cert(force){stopRec();hdr();scrollTo(0,0);if(!S.passed[10]&&!force){hom
  <p style="line-height:1.5;max-width:460px;margin:8px auto">pour avoir complété les 11 niveaux du parcours <b>Français 0→10</b>, de Lévis aux Îles-de-la-Madeleine, avec courage, talent et beaucoup d'amour.</p>
  <p class="mut" style="font-style:italic">for completing all 11 levels of the French 0→10 journey across Quebec</p><div class="seal">🦉</div>
  <div class="sig"><div><span class="script" style="font-size:20px;color:#5a3446">${esc(CONFIG.from)}</span><br>${tr("With love","Avec amour")}</div><div><span style="font-size:15px;color:#5a3446">${esc(dt)}</span><br>Date</div></div></div></div></div>
- <div class="row noprint" style="margin-top:16px;justify-content:center"><button id="pt">🖨️ ${tr("Print","Imprimer")}</button><button class="sec" id="bk">🗺️ ${tr("Map","Carte")}</button></div>`;
+ <div class="row noprint" style="margin-top:16px;justify-content:center"><button id="pt">🖨️ ${tr("Print","Imprimer")}</button><button class="sec" id="bk">📍 ${tr("Path","Parcours")}</button></div>`;
  $("#pt").onclick=()=>print();$("#bk").onclick=home;if(!force||S.passed[10]){confetti(60);hearts(12)}}
 
 /* ---------- boot & routes (#debug-pass triggers the level-up sequence for the current level) ---------- */
