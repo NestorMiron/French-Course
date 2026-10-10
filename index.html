@@ -28,6 +28,8 @@ input[type=text]{width:100%;font:inherit;font-size:18px;padding:13px;border:0;bo
 .tag.qc{background:#e7f3ea;color:#1d6b45}
 #saved{position:fixed;top:calc(62px + env(safe-area-inset-top));right:14px;z-index:45;background:#fffaf2;color:#2f6b4f;border:1px solid #c9ddcf;font-size:12px;font-weight:700;font-style:italic;border-radius:2px 10px 8px 2px;padding:5px 10px;opacity:0;transform:translateY(-4px);transition:opacity .2s,transform .2s;pointer-events:none}
 #saved.on{opacity:1;transform:none}
+.inapp{background:#fff4e4;color:#5c3d32;border-bottom:1px solid #e0d0bc;padding:10px 14px;font-size:14px;line-height:1.4}
+#heard{min-height:1.2em;font-style:italic}
 label{font-size:14px;display:flex;gap:6px;align-items:center}
 .bar{height:10px;background:#eadfce;border-radius:999px;overflow:hidden;margin-top:8px}.bar i{display:block;height:100%;background:#5c3d32;border-radius:999px;transition:width .4s ease}
 .qbar{margin:8px 0 4px}
@@ -309,7 +311,11 @@ function typedOk(ans,target,strict){const a=norm(ans,strict),t=norm(target,stric
 let voice=null;function pickVoice(){const v=speechSynthesis.getVoices();voice=v.find(x=>/fr[-_]CA/i.test(x.lang))||v.find(x=>/fr[-_]FR/i.test(x.lang))||v.find(x=>/^fr/i.test(x.lang))||null}
 if("speechSynthesis" in window){pickVoice();speechSynthesis.onvoiceschanged=pickVoice}
 function speak(t,rate=.95){if(!("speechSynthesis" in window))return;speechSynthesis.cancel();const u=new SpeechSynthesisUtterance(t);u.lang=voice?voice.lang:"fr-CA";if(voice)u.voice=voice;u.rate=rate;speechSynthesis.speak(u)}
-const SR=window.SpeechRecognition||window.webkitSpeechRecognition;
+function speechCtor(){return window.SpeechRecognition||window.webkitSpeechRecognition}
+function inAppBrowser(){const ua=navigator.userAgent||"";return /Instagram|FBAN|FBAV|FB_IAB|Messenger|Line\/|Twitter|Snapchat|GSA\/|GitHub|MicroMessenger|TikTok|Bytedance|LinkedInApp|Pinterest|WhatsApp/i.test(ua)}
+let micPrimedMem=false,micNeedsUnlock=false;
+function micPrimed(){if(micPrimedMem)return true;try{return sessionStorage.getItem("frcourse_mic")==="1"}catch(e){return false}}
+function setMicPrimed(){micPrimedMem=true;try{sessionStorage.setItem("frcourse_mic","1")}catch(e){}}
 function shuffle(a){a=a.slice();for(let i=a.length-1;i>0;i--){const j=Math.random()*(i+1)|0;[a[i],a[j]]=[a[j],a[i]]}return a}
 function mkEx(lv,i,type){const it=LEVELS[lv].items[i];const id=lv+":"+i;
  if(type==="fill"&&it[0].split(" ").length<2)type="mc";
@@ -323,23 +329,64 @@ function award(q,ok){if(q&&ok!==null){srsUpdate(q.id,!!ok);if(ok){const bonus=q.
 let noteAnswer=()=>{};
 function srsPick(maxLv){const cands=[];for(let l=0;l<=maxLv;l++)LEVELS[l].items.forEach((_,i)=>{const r=S.srs[l+":"+i]||{w:1,seen:0};cands.push([l,i,r.w*(l===maxLv?2:1)*(r.seen?1:1.5)])});let x=Math.random()*cands.reduce((a,c)=>a+c[2],0);for(const c of cands){x-=c[2];if(x<=0)return c}return cands[0]}
 function srsUpdate(id,ok){const r=S.srs[id]||{w:1,seen:0};r.seen++;r.w=ok?Math.max(.2,r.w*.6):Math.min(8,r.w*2+1);S.srs[id]=r}
-let rec=null,recT=0,srBlocked=false; // srBlocked: remembered for this session after service-not-allowed / not-allowed
-function stopRec(){clearTimeout(recT);try{rec&&rec.abort()}catch(e){}rec=null;const m=$("#mic");if(m){m.textContent=L("mic");m.disabled=false}}
+let rec=null,recT=0,srLang="fr-CA";
+function resetMicUi(){const m=$("#mic");if(m){m.textContent=L("mic");m.disabled=false}}
+function stopRec(){clearTimeout(recT);const r=rec;rec=null;if(r){try{r.onresult=r.onerror=r.onend=null}catch(e){}try{r.abort()}catch(e){}}resetMicUi()}
 const MICMSG={
- "service-not-allowed":["Le micro ne marche pas ici. Ouvre la page dans Safari ou Chrome !","The mic doesn't work in this viewer. Open the page in Safari or Chrome."],
- "not-allowed":["Le micro est bloqué. Ouvre la page dans Safari ou Chrome et autorise le micro.","The mic is blocked. Open the page in Safari or Chrome and allow the microphone."],
- "audio-capture":["Je n'entends pas de micro. Vérifie-le, ou écris la réponse !","I can't find a microphone. Check it, or type the answer!"],
- "network":["Pas de connexion pour la reconnaissance vocale.","Speech recognition needs an internet connection."],
- "no-speech":["Je n'ai rien entendu. On réessaie ?","I didn't hear anything. Try again?"],
- "timeout":["Je n'ai rien entendu. On réessaie ?","I didn't hear anything. Try again?"]};
-function startRec(target,done,fail){stopRec();let settled=false;const end=(fn,arg)=>{if(settled)return;settled=true;clearTimeout(recT);const r=rec;rec=null;try{r&&r.abort()}catch(e){}const m=$("#mic");if(m){m.textContent=L("mic");m.disabled=false}fn(arg)};
- try{rec=new SR()}catch(e){return fail("service-not-allowed")}
- rec.lang="fr-CA";rec.interimResults=false;rec.maxAlternatives=5;const m=$("#mic");if(m){m.textContent=L("listening");m.disabled=true}
- rec.onresult=e=>{let best="",bs=0;for(const a of e.results[0]){const s=sim(a.transcript,target);if(s>bs){bs=s;best=a.transcript}}end(()=>done(best,bs))};
- rec.onerror=e=>end(fail,(e&&e.error)||"unknown");
- rec.onend=()=>end(fail,"no-speech");
- recT=setTimeout(()=>end(fail,"timeout"),8000);
- try{rec.start()}catch(e){end(fail,"service-not-allowed")}}
+ "service-not-allowed":["Active Siri et la dictée dans Réglages. Si tu es dans Instagram, Facebook ou une autre appli, ouvre la page dans Safari.","Turn on Siri & Dictation in Settings. If this is inside Instagram, Facebook, or another app, open the page in Safari."],
+ "not-allowed":["Le micro est bloqué. Réglages > Safari > Microphone, ou touche aA > Réglages du site web, puis autorise le micro.","The microphone is blocked. Allow it in Settings > Safari > Microphone, or tap aA > Website Settings."],
+ "audio-capture":["Je ne trouve pas de micro. Vérifie-le, ou écris la réponse.","I can't find a microphone. Check it, or type the answer."],
+ "network":["La reconnaissance vocale a besoin d'Internet.","Speech recognition needs an internet connection."],
+ "no-speech":["Je n'ai rien entendu. Réessaie, un peu plus près du téléphone.","I didn't hear anything. Try again, and speak a little closer."],
+ "timeout":["Je n'ai rien entendu. Réessaie, un peu plus près du téléphone.","I didn't hear anything. Try again, and speak a little closer."],
+ "language-not-supported":["Le français du Canada n'est pas disponible. Touche Parler encore : on essaie le français de France.","Canadian French isn't available here. Tap Speak again and I'll try French from France."]
+};
+function micLine(code){const m=MICMSG[code]||["Oups, le micro a un souci. Réessaie, ou écris la réponse.","The microphone had a problem. Try again, or type the answer."];return m[S.ui==="fr"?0:1]}
+function pickAlt(result,target){let best="",bs=-1;const list=result||[];for(let i=0;i<list.length;i++){const t=list[i].transcript||"";const s=target?sim(t,target):1;if(s>bs){bs=s;best=t}}return{best,bs:bs<0?0:bs}}
+function showHeard(text){const el=$("#heard")||$("#mictest-out");if(el)el.textContent=text||""}
+function startRec(target,done,fail){
+ const Ctor=speechCtor();
+ if(!Ctor){fail("service-not-allowed");return}
+ clearTimeout(recT);
+ if(rec){try{rec.onresult=rec.onerror=rec.onend=null;rec.abort()}catch(e){}rec=null}
+ let session;try{session=new Ctor()}catch(e){fail("service-not-allowed");return}
+ rec=session;
+ session.lang=srLang;
+ session.interimResults=true;
+ session.continuous=false;
+ session.maxAlternatives=5;
+ const m=$("#mic");if(m){m.textContent=L("listening");m.disabled=true}
+ let settled=false,last="",lastScore=0;
+ function finish(fn,arg,fromEngine){if(settled)return;settled=true;clearTimeout(recT);try{session.onresult=session.onerror=session.onend=null}catch(e){}if(!fromEngine){try{session.stop()}catch(e){}}if(rec===session)rec=null;resetMicUi();fn(arg)}
+ session.onresult=e=>{
+  for(let i=e.resultIndex||0;i<e.results.length;i++){const res=e.results[i];const hit=pickAlt(res,target);last=hit.best;lastScore=hit.bs;showHeard(last);if(res.isFinal){finish(()=>done(hit.best,hit.bs),null,true);return}}
+ };
+ session.onerror=e=>{
+  const code=(e&&e.error)||"unknown";
+  if(code==="aborted")return;
+  if(code==="language-not-supported"&&session.lang!=="fr-FR"){srLang="fr-FR";finish(fail,"language-not-supported",true);return}
+  if(code==="no-speech"&&last){finish(()=>done(last,lastScore),null,true);return}
+  if(code==="not-allowed")micNeedsUnlock=true;
+  finish(fail,code,true);
+ };
+ session.onend=()=>{if(settled)return;if(last)finish(()=>done(last,lastScore),null,true);else finish(fail,"no-speech",true)};
+ recT=setTimeout(()=>{if(settled)return;if(last)finish(()=>done(last,lastScore));else finish(fail,"timeout")},8000);
+ try{session.start()}catch(e){finish(fail,"service-not-allowed")}
+}
+function beginListen(target,done,fail){
+ const Ctor=speechCtor();
+ if(!Ctor){fail("service-not-allowed");return}
+ // iOS Safari drops the user-gesture if start() waits on getUserMedia, and an
+ // open capture stream makes webkitSpeechRecognition fail. Speak calls start()
+ // in this tap. Only after a not-allowed error do we spend one tap on a
+ // permission prompt, stop the tracks, and wait for the next tap to start().
+ if(micNeedsUnlock&&!micPrimed()&&navigator.mediaDevices&&navigator.mediaDevices.getUserMedia){
+  const m=$("#mic");if(m){m.disabled=true;m.textContent=L("listening")}
+  navigator.mediaDevices.getUserMedia({audio:true}).then(stream=>{try{stream.getTracks().forEach(t=>t.stop())}catch(e){}setMicPrimed();micNeedsUnlock=false;resetMicUi();showHeard("");const ready=tr("Microphone ready. Tap Speak again.","Micro prêt. Touche Parler encore.");if($("#mictest-out"))$("#mictest-out").textContent=tr("Microphone ready. Tap Test microphone again.","Micro prêt. Touche Tester le micro encore.");if($("#fb"))$("#fb").innerHTML=`<div class="fb ok">${ready}</div>`}).catch(err=>{resetMicUi();const denied=err&&(err.name==="NotAllowedError"||err.name==="SecurityError"||err.name==="PermissionDeniedError");fail(denied?"not-allowed":"audio-capture")});
+  return;
+ }
+ startRec(target,done,fail);
+}
 /* ---------- home = vertical lesson path ---------- */
 let selStop=null;
 function home(){stopRec();setGlow(0);hdr();const h=new Date().getHours();const cur=Math.min(S.unlocked,10);
@@ -354,12 +401,13 @@ function home(){stopRec();setGlow(0);hdr();const h=new Date().getHours();const c
  <div class="row" style="margin-top:12px"><button id="pr">∞ ${L("practice")}</button><button class="sec" id="al">📮 ${tr("Album","Album")}</button>${S.passed[10]?`<button class="sec" id="ce">🎓 ${tr("Certificate","Certificat")}</button>`:""}</div></div>
  <div class="path" id="path" style="--fill:${fill}">${nodes}</div>
  <p class="mut center">${tr("Tap a stop, then the button at the bottom.","Touche une escale, puis le bouton en bas.")}</p>
- <div class="card row"><label><input type="checkbox" id="st" ${S.strict?"checked":""}> ${L("strict")}</label><span style="flex:1"></span><button class="sec" id="rs" style="min-height:44px;padding:8px 12px">${L("reset")}</button></div>
+ <div class="card"><div class="row"><label><input type="checkbox" id="st" ${S.strict?"checked":""}> ${L("strict")}</label><span style="flex:1"></span><button class="sec" id="rs" style="min-height:44px;padding:8px 12px">${L("reset")}</button></div><div class="row" style="margin-top:10px"><button class="sec" id="mictest">🎤 ${tr("Test microphone","Tester le micro")}</button></div><p id="mictest-out" class="mut" style="margin:8px 0 0"></p></div>
  <div style="height:160px"></div><div class="dock" id="stopcard"></div>`;
  app.querySelectorAll(".node").forEach(g=>g.onclick=()=>openStop(+g.dataset.s));
  $("#pr").onclick=runPractice;$("#al").onclick=album;if($("#ce"))$("#ce").onclick=()=>cert();
  $("#st").onchange=e=>{S.strict=e.target.checked;save()};
  $("#rs").onclick=()=>{if(confirm(tr("Reset all progress?","Tout réinitialiser ?"))){localStorage.removeItem(KEY);S=load();home()}};
+ $("#mictest").onclick=()=>{const out=$("#mictest-out");if(out)out.textContent=L("listening");beginListen("bonjour",(heard)=>{if($("#mictest-out"))$("#mictest-out").textContent=`${L("heard")}: « ${heard||""} »`},err=>{if($("#mictest-out"))$("#mictest-out").textContent=micLine(err)})};
  const focus=selStop!=null?selStop:cur;if(focus>1){const el=app.querySelector(`.node[data-s="${focus}"]`);if(el)el.scrollIntoView({behavior:RM?"auto":"smooth",block:"center"})}
  openStop(focus,true);if(S.mapPos!==cur){S.mapPos=cur;save()}}
 function openStop(i,quiet){selStop=i;document.querySelectorAll(".node").forEach(g=>g.classList.toggle("sel",+g.dataset.s===i));const lv=LEVELS[i],lock=i>S.unlocked,b=S.best[i]||0,st=STOPS[i];
@@ -395,14 +443,14 @@ function show(q,prog,endless,cb){window.__q=q;const fr=q.it[0],en=q.it[1];let bo
  else if(q.type==="fr2en"){kind=L("translate");body=`<p class="q">${esc(fr)} <button ${sb} id="pl">🔊</button></p><input type="text" id="in" placeholder="${L("typeEn")}" autocapitalize="off" autocomplete="off" autocorrect="off" spellcheck="false">`}
  else if(q.type==="en2fr"){kind=L("translate");body=`<p class="q">${esc(en)}</p><input type="text" id="in" placeholder="${L("typeFr")}" lang="fr" autocapitalize="off" autocomplete="off" autocorrect="off" spellcheck="false">`}
  else if(q.type==="listen"){kind=L("listen");body=`<div class="row" style="margin:10px 0"><button id="pl">${L("play")}</button><button class="sec" id="sl">${L("slow")}</button></div><input type="text" id="in" placeholder="${L("typeFr")}" lang="fr" autocapitalize="off" autocomplete="off" autocorrect="off" spellcheck="false">`}
- else{kind=L("speak");const live=SR&&!srBlocked;body=`<p class="q">${esc(fr)}</p><p class="mut">${esc(en)}</p><div class="row"><button class="sec" id="pl">🔊</button>${live?`<button id="mic">${L("mic")}</button>`:`<button id="said">🗣️ ${tr("I said it","Je l'ai dit")}</button>`}<button class="sec" id="typ">⌨️ ${tr("Type it instead","Je l'écris")}</button></div><div id="tbox"></div>${live?"":`<div class="fb bad">${SR?tr("The mic isn't available in this viewer, so say it aloud and tap “I said it” (no penalty), or type it.","Le micro n'est pas disponible ici : dis-le à voix haute puis « Je l'ai dit » (sans pénalité), ou écris-le."):L("nosr")}</div>`}`}
+ else{kind=L("speak");const live=!!speechCtor();body=`<p class="q">${esc(fr)}</p><p class="mut">${esc(en)}</p><div class="row"><button class="sec" id="pl">🔊</button>${live?`<button id="mic">${L("mic")}</button>`:""}<button id="said">🗣️ ${tr("I said it","Je l'ai dit")}</button><button class="sec" id="typ">⌨️ ${tr("Type it instead","Je l'écris")}</button></div><p id="heard" class="mut"></p><div id="tbox"></div>${live?"":`<div class="fb bad">${L("nosr")}</div>`}`}
  const qpct=(!endless&&String(prog).includes("/"))?(()=>{const[a,b]=String(prog).split("/").map(Number);return Math.max(0,Math.min(100,Math.round(100*(a-1)/Math.max(1,b))))})():0;
  app.innerHTML=`<div class="card" id="qc"><div class="row" style="justify-content:space-between"><span class="mut">${endless?"∞ #"+prog:prog} · ${tr("Level","Niveau")} ${q.lv}</span><span class="combo" id="combo">${combo>=2?"🔥 x"+combo:""}</span><button ${sb} id="quit">✕</button></div>
  ${endless?"":`<div class="bar thick qbar"><i style="width:${qpct}%"></i></div>`}
  ${mascotBlock(pick(IDLE),"idle","sm")}<span class="tag${q.qc?" qc":""}">${kind}</span>${body}<div id="fb"></div><div class="row" style="margin-top:12px" id="act">${["fr2en","en2fr","listen"].includes(q.type)?`<button id="ck">${L("check")}</button>`:""}<button class="sec" id="sk">${L("skip")}</button></div></div>`;
  $("#quit").onclick=()=>{stopRec();home()};
  let answered=false,src=null;
- const fin=(ok,extra="")=>{if(answered)return;answered=true;stopRec();
+  const fin=(ok,extra="")=>{if(answered)return;answered=true;stopRec();const micBtn=$("#mic");if(micBtn)micBtn.disabled=true;
   if(ok){combo++;S.correct++;S.bestCombo=Math.max(S.bestCombo,combo);chime(combo);sparkleAt(src||$("#fb"));mood("happy",pick(PRAISE));ach("first");if(combo===5)ach("combo5");if(combo===10)ach("combo10");if(combo>=5&&combo%5===0)hearts(14);if(S.correct>=100)ach("c100");if(S.correct>=500)ach("c500");const hr=new Date().getHours();if(hr>=22||hr<4)ach("night")}
   else{combo=0;wrongTone();const c=$("#qc");c.classList.remove("shake");void c.offsetWidth;c.classList.add("shake");mood("sad",pick(SAD))}
   setGlow(combo);const ce=$("#combo");ce.textContent=combo>=2?"🔥 x"+combo:"";ce.classList.remove("pop");void ce.offsetWidth;ce.classList.add("pop");
@@ -420,10 +468,9 @@ function show(q,prog,endless,cb){window.__q=q;const fr=q.it[0],en=q.it[1];let bo
   const typeIt=()=>{stopRec();$("#tbox").innerHTML=`<input type="text" id="in2" style="margin-top:10px" placeholder="${L("typeFr")}" lang="fr" autocapitalize="off" autocomplete="off" autocorrect="off" spellcheck="false">`;$("#act").innerHTML=`<button id="ck2">${L("check")}</button><button class="sec" id="sk">${L("skip")}</button>`;$("#sk").onclick=()=>{stopRec();noteAnswer(null);award(q,null);cb(null)};const i2=$("#in2");i2.focus({preventScroll:true});const ck=()=>{if(!i2.value.trim()||answered)return;src=i2;fin(typedOk(i2.value,fr,S.strict))};$("#ck2").onclick=ck;i2.onkeydown=e=>{if(e.key==="Enter"){e.preventDefault();answered?$("#nx").click():ck()}};$("#typ")&&($("#typ").disabled=true)};
   $("#typ").onclick=typeIt;
   if($("#said"))$("#said").onclick=()=>{if(answered)return;answered=true;stopRec();noteAnswer(null);award(q,null);softChime();sparkleAt($("#said"));mood("happy",["Bravo, {n} ! Bien dit !","Well said, {n}!"]);$("#fb").innerHTML=`<div class="fb ok">🗣️ ${tr("Nice! Self-checked, no score change.","Bien ! Auto-évalué, sans effet sur le score.")}</div>`;speak(fr);$("#act").innerHTML=`<button id="nx">${L("next")} →</button>`;$("#nx").onclick=()=>cb(null)};
-  if($("#mic"))$("#mic").onclick=()=>startRec(fr,(heard,score)=>{const pct=Math.round(score*100);if(score>=.75){ach("speak");src=$("#mic");fin(true,`<div>${L("heard")}: « ${esc(heard)} » · ${L("sim")} ${pct}%</div>`)}else{$("#fb").innerHTML=`<div class="fb bad">${L("heard")}: « ${esc(heard)} » · ${L("sim")} ${pct}% (75% ${tr("needed","requis")}). ${tr("Try again, type it, or skip.","Réessaie, écris-le ou passe.")}</div>`;mood("sad",["Encore une fois !","One more time!"])}},
-   err=>{if(answered)return;if(err==="service-not-allowed"||err==="not-allowed")srBlocked=true;const msg=MICMSG[err]||["Oups, le micro a un souci.","Oops, the mic had a hiccup."];mood("sad",msg);
-    $("#fb").innerHTML=`<div class="fb bad">🦉 ${esc(N(msg[S.ui==="fr"?0:1]))}${srBlocked?"<br><small>"+tr("Next speaking exercises will use say-it-aloud mode.","Les prochains exercices oraux passeront en mode « à voix haute ».")+"</small>":""}</div>`;
-    if(srBlocked){const m=$("#mic");if(m)m.remove()}})}}
+  if($("#mic"))$("#mic").onclick=()=>beginListen(fr,(heard,score)=>{const pct=Math.round(score*100);if(score>=.75){ach("speak");src=$("#mic");fin(true,`<div>${L("heard")}: « ${esc(heard)} » · ${L("sim")} ${pct}%</div>`)}else{$("#fb").innerHTML=`<div class="fb bad">${L("heard")}: « ${esc(heard)} » · ${L("sim")} ${pct}% (75% ${tr("needed","requis")}). ${tr("Try again, type it, or skip.","Réessaie, écris-le ou passe.")}</div>`;mood("sad",["Encore une fois !","One more time!"])}},
+   err=>{if(answered)return;mood("sad",[MICMSG[err]?MICMSG[err][0]:micLine(err),micLine(err)]);
+    $("#fb").innerHTML=`<div class="fb bad">🦉 ${esc(micLine(err))}</div>`;resetMicUi()})}}
 
 /* ---------- level-up sequence ---------- */
 function pass(lv,p){S.best[lv]=Math.max(S.best[lv]||0,p);S.passed[lv]=true;if(lv<10)S.unlocked=Math.max(S.unlocked,lv+1);if(lv===10&&!S.doneDate)S.doneDate=Date.now();S.xp+=50;save();
@@ -463,4 +510,5 @@ $("#lang").onclick=()=>{S.ui=S.ui==="en"?"fr":"en";save();home()};$("#home").onc
 $("#mute").onclick=()=>{S.muted=!S.muted;save();hdr();if(!S.muted)chime(1)};
 function route(){const h=location.hash;if(h==="#debug-pass"){history.replaceState(null,"",location.pathname+location.search);pass(Math.min(S.unlocked,10),100)}else if(h==="#album")album();else if(h==="#cert")cert(true);else home()}
 addEventListener("hashchange",route);hdr();route();
+if(inAppBrowser()&&!$("#inapp")){const b=document.createElement("div");b.id="inapp";b.className="inapp";b.innerHTML=`🎤 ${tr("This in-app browser can't use the microphone. Tap the menu and choose Open in Safari.","Ce navigateur intégré ne peut pas utiliser le micro. Ouvre le menu et choisis Ouvrir dans Safari.")}`;document.body.prepend(b)}
 </script></body></html>
