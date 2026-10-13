@@ -288,9 +288,14 @@ const TALK={
 const NLV=LEVELS.length,LAST=NLV-1;
 const QC_BONUS=8;
 const KEY="frcourse_v1";
+// Public, no-account JSON store (crudcrud.com). The id is the access key.
+// Timestamps are unix seconds: the store rejects integers above 2^31-1.
+const SYNC_ID="80a33441d3e544ce97cdf3faa614387a";
+const DEVKEY="frcourse_device";
+const DIRTY="frcourse_sync_dirty";
 const DEF=()=>({xp:0,streak:0,last:null,best:{},unlocked:0,ui:"en",strict:false,srs:{},muted:false,passed:{},correct:0,ach:{},mapPos:0,bestCombo:0,doneDate:null,qc:0,resume:null,log:[],secs:0,talk:{}});
 let S=load();function load(){try{const s=Object.assign(DEF(),JSON.parse(localStorage.getItem(KEY)||"{}"));if(!Array.isArray(s.log))s.log=[];if(typeof s.secs!=="number"||!isFinite(s.secs))s.secs=0;if(!s.talk||typeof s.talk!=="object"||Array.isArray(s.talk))s.talk={};if(s.passed&&s.passed[10]&&(s.unlocked|0)<11)s.unlocked=11;return s}catch(e){return DEF()}}
-function save(){try{localStorage.setItem(KEY,JSON.stringify(S))}catch(e){}}
+function save(){try{localStorage.setItem(KEY,JSON.stringify(S))}catch(e){}scheduleSync()}
 const RM=window.matchMedia&&matchMedia("(prefers-reduced-motion: reduce)").matches;
 const L=k=>UI[S.ui][k];const $=s=>document.querySelector(s);const app=$("#app");
 let vtOn=false,vtSync=false,vtBusy=false,shownXp=null,qT0=0;
@@ -693,6 +698,35 @@ function cert(force){stopRec();hdr();scrollTo(0,0);if(!S.passed[LAST]&&!force){h
  <div class="row noprint" style="margin-top:16px;justify-content:center"><button id="pt">🖨️ ${tr("Print","Imprimer")}</button><button class="sec" id="bk">📍 ${tr("Path","Parcours")}</button></div>`;
  $("#pt").onclick=()=>print();$("#bk").onclick=home;if(!force||S.passed[LAST]){confetti(60);hearts(12)}}
 
+/* ---------- cloud copy for the read-only viewer (localStorage stays the source of truth) ---------- */
+let syncTimer=0,syncing=false,syncAgain=false;
+function deviceId(){try{let id=localStorage.getItem(DEVKEY);if(!id){id=(crypto.randomUUID&&crypto.randomUUID())||(Date.now().toString(36)+Math.random().toString(36).slice(2));localStorage.setItem(DEVKEY,id)}return id}catch(e){return "local"}}
+function cloudTime(t){t=+t||0;if(t>1e11)t=Math.round(t/1000);return t|0}
+function richness(p){if(!p)return 0;const passed=p.passed&&typeof p.passed==="object"?Object.keys(p.passed).filter(k=>p.passed[k]).length:0;const talks=Array.isArray(p.talks)?p.talks.length:Object.keys(p.talk||{}).length;return passed*1000000+(p.correct|0)*100+((p.log&&p.log.length)|0)+(p.xp|0)+talks}
+function progressWorthSync(){return richness({passed:S.passed,correct:S.correct,log:S.log,xp:S.xp,talks:Object.keys(S.talk||{}).filter(k=>S.talk[k])})>0||(S.secs|0)>0}
+function syncSnapshot(){const cur=Math.min(S.unlocked|0,LAST);const passed={};Object.keys(S.passed||{}).forEach(k=>{if(S.passed[k])passed[k]=true});const best={};Object.keys(S.best||{}).forEach(k=>{if(S.best[k])best[k]=S.best[k]|0});
+ return {slot:"carolina",v:1,owner:deviceId(),activeAt:cloudTime(Date.now()),name:CONFIG.name,xp:S.xp|0,streak:S.streak|0,last:S.last||null,unlocked:S.unlocked|0,current:cur,currentStop:STOPS[cur]?STOPS[cur].n:"",passed,best,correct:S.correct|0,secs:S.secs|0,qc:S.qc|0,
+  journey:STOPS.map((s,i)=>({n:s.n,e:s.e,passed:!!passed[i],best:best[i]||0,current:i===cur})),
+  badges:ACH.filter(a=>S.ach&&S.ach[a.id]).map(a=>({id:a.id,e:a.e,en:a.t[0],fr:a.t[1],at:cloudTime(S.ach[a.id])})),
+  talks:Object.keys(S.talk||{}).filter(k=>S.talk[k]&&TALK[k]).map(k=>({lv:+k,city:STOPS[k]?STOPS[k].n:"",en:TALK[k].title[0],fr:TALK[k].title[1],at:cloudTime(S.talk[k])})),
+  log:(S.log||[]).slice(-180).map(r=>({c:r.c||"",ok:r.ok?1:0,t:cloudTime(r.t),x:r.x|0,bonus:r.bonus?1:0}))}}
+function scheduleSync(){if(!progressWorthSync())return;try{localStorage.setItem(DIRTY,"1")}catch(e){}clearTimeout(syncTimer);syncTimer=setTimeout(runSync,1000)}
+async function runSync(){if(syncing){syncAgain=true;return}if(!progressWorthSync())return;syncing=true;try{
+ const base="https://crudcrud.com/api/"+SYNC_ID+"/progress";
+ const snap=syncSnapshot();
+ const res=await fetch(base,{cache:"no-store"});
+ if(!res.ok)throw new Error("sync");
+ const list=await res.json();
+ const rows=Array.isArray(list)?list.filter(x=>x&&x.slot==="carolina"):[];
+ const owned=rows.find(x=>x.owner===snap.owner);
+ const target=owned||rows[0]||null;
+ if(target&&target.owner&&target.owner!==snap.owner&&richness(target)>richness(snap)){try{localStorage.removeItem(DIRTY)}catch(e){}return}
+ let id=target&&target._id;
+ if(!id){const created=await fetch(base,{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify(snap)});if(!created.ok)throw new Error("sync");const body=await created.json();id=body&&body._id}else{const updated=await fetch(base+"/"+id,{method:"PUT",headers:{"Content-Type":"application/json"},body:JSON.stringify(snap)});if(!updated.ok)throw new Error("sync")}
+ rows.forEach(x=>{if(x._id&&x._id!==id)fetch(base+"/"+x._id,{method:"DELETE"}).catch(()=>{})});
+ try{localStorage.removeItem(DIRTY)}catch(e){}
+}catch(e){syncAgain=true}finally{syncing=false;if(syncAgain){syncAgain=false;clearTimeout(syncTimer);syncTimer=setTimeout(runSync,8000)}}}
+
 /* ---------- boot & routes (#debug-pass triggers the level-up sequence for the current level) ---------- */
 $("#lang").onclick=()=>{S.ui=S.ui==="en"?"fr":"en";save();home()};$("#home").onclick=home;
 $("#mute").onclick=()=>{S.muted=!S.muted;save();hdr();if(!S.muted)chime(1)};
@@ -701,4 +735,7 @@ addEventListener("hashchange",route);hdr();route();
 if(typeof document.startViewTransition==="function"){let ran=false;try{document.startViewTransition(()=>{ran=true})}catch(e){}vtSync=ran}
 vtOn=true;
 if(inAppBrowser()&&!$("#inapp")){const b=document.createElement("div");b.id="inapp";b.className="inapp";b.innerHTML=`🎤 ${tr("This in-app browser can't use the microphone. Tap the menu and choose Open in Safari.","Ce navigateur intégré ne peut pas utiliser le micro. Ouvre le menu et choisis Ouvrir dans Safari.")}`;document.body.prepend(b)}
+addEventListener("online",()=>{try{if(localStorage.getItem(DIRTY)==="1")scheduleSync()}catch(e){}});
+document.addEventListener("visibilitychange",()=>{try{if(document.visibilityState==="visible"&&localStorage.getItem(DIRTY)==="1")scheduleSync()}catch(e){}});
+scheduleSync();
 </script></body></html>

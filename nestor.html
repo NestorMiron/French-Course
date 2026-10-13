@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="fr"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="robots" content="noindex">
+<meta name="theme-color" content="#5c3d32">
+<title>Progrès de Carolina</title>
+<style>
+:root{--bg1:#f4ead8;--ink:#3c2a22;--mut:#8b7364;--ease:cubic-bezier(.2,.8,.2,1)}
+*{box-sizing:border-box}
+html{background:var(--bg1)}
+body{margin:0;min-height:100vh;font-family:Palatino,"Palatino Linotype",Georgia,serif;color:var(--ink);background-color:var(--bg1);background-image:linear-gradient(90deg,transparent 16px,rgba(176,92,92,.32) 17px,rgba(176,92,92,.32) 19px,transparent 20px),repeating-linear-gradient(var(--bg1) 0 31px,rgba(176,140,100,.28) 31px 32px);background-attachment:fixed}
+header{position:sticky;top:0;z-index:2;display:flex;align-items:center;gap:8px;padding:calc(10px + env(safe-area-inset-top)) 12px 10px;background:rgba(244,234,216,.94);border-bottom:1px solid #e0d0bc}
+header h1{font-size:18px;margin:0;flex:1}
+header button{font:inherit;background:transparent;color:var(--ink);border:1px solid #d9cbb6;border-radius:20px;min-height:32px;padding:4px 10px}
+main{max-width:640px;margin:0 auto;padding:14px 14px 28px}
+.card{background:#fffaf2;border:1px solid #eadcc8;border-radius:2px 16px 14px 3px;padding:16px;margin-bottom:12px;box-shadow:0 1px 0 rgba(92,61,50,.08)}
+h2{font-family:Georgia,serif;font-size:26px;margin:0 0 6px;color:#5c3d32}
+.mut{color:var(--mut);font-size:14px}
+.hero{display:flex;gap:12px;align-items:center}
+.orb{width:64px;height:64px;border-radius:50%;display:grid;place-items:center;font-size:28px;background:#7a3e3a;color:#fffaf2;flex:none}
+.now{animation:pulse 1.8s var(--ease) infinite}
+@keyframes pulse{50%{transform:scale(1.05)}}
+.row{display:flex;gap:8px;flex-wrap:wrap}
+.pill{background:#fffdf8;border:1px solid #eadfce;border-radius:2px 10px 8px 2px;padding:8px 10px;min-width:72px}
+.pill b{display:block;font-family:Georgia,serif;font-size:22px;line-height:1.1}
+.skills{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.skill{border:1px solid #eadfce;border-radius:2px 12px 10px 2px;padding:8px;background:#fffdf8}
+.skill b{display:block}
+.bar{height:8px;background:#eadfce;border-radius:999px;overflow:hidden;margin-top:6px}
+.bar i{display:block;height:100%;background:#5c3d32;transform-origin:left center;transform:scaleX(var(--p,0))}
+.week{display:grid;grid-template-columns:repeat(7,1fr);gap:4px;align-items:end;height:96px}
+.week div{display:flex;flex-direction:column;align-items:center;justify-content:flex-end;height:100%;font-size:10px;color:var(--mut)}
+.week span{display:block;width:100%;background:#c4a574;border-radius:3px 3px 0 0;min-height:2px}
+.stops{display:flex;flex-direction:column;gap:6px}
+.stop{display:flex;gap:8px;align-items:center;padding:6px 8px;border-radius:2px 10px 8px 2px;background:#fffdf8;border:1px solid #eadfce}
+.stop.current{border-color:#7a3e3a;background:#fff8ef}
+.stop .em{width:28px;text-align:center}
+.stop.lock{opacity:.45}
+.item{padding:6px 0;border-top:1px solid #f0e6da}
+.item:first-child{border-top:0}
+@media (prefers-reduced-motion:reduce){*,*:before,*:after{animation:none!important;transition:none!important}.bar i{transform:scaleX(var(--p,0))}}
+</style></head><body>
+<header><h1 id="title">Progrès de Carolina</h1><button type="button" id="lang">EN</button></header>
+<main id="app"></main>
+<script>
+"use strict";
+const CATS=[
+ {id:"vocab",e:"📖",fr:"Vocabulaire",en:"Vocabulary"},
+ {id:"listen",e:"👂",fr:"Écoute",en:"Listening"},
+ {id:"speak",e:"🗣️",fr:"Oral",en:"Speaking"},
+ {id:"grammar",e:"✏️",fr:"Grammaire",en:"Grammar"},
+ {id:"write",e:"✍️",fr:"Écrit",en:"Writing"},
+ {id:"qc",e:"🍁",fr:"Expressions québécoises",en:"Quebec expressions"}
+];
+let ui=localStorage.getItem("frcourse_view_ui")==="en"?"en":"fr";
+let last=null,shown=false;
+const tr=(fr,en)=>ui==="en"?en:fr;
+const esc=s=>String(s==null?"":s).replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
+function key(){const m=(location.hash||"").match(/k=([a-f0-9]{32})/i);return m?m[1]:""}
+function ms(t){t=+t||0;return t>1e11?t:t*1000}
+function dayKey(t){const d=new Date(ms(t));return d.getFullYear()+"-"+(d.getMonth()+1)+"-"+d.getDate()}
+function weighted(rows){if(!rows.length)return null;let wsum=0,okw=0;rows.forEach((r,i)=>{const w=Math.pow(.85,rows.length-1-i);wsum+=w;okw+=w*(r.ok?1:0)});return Math.round(100*okw/Math.max(wsum,1e-9))}
+function when(t){if(!t)return "—";try{return new Date(ms(t)).toLocaleString(ui==="fr"?"fr-CA":"en-CA",{dateStyle:"medium",timeStyle:"short"})}catch(e){return "—"}}
+function fmt(sec){sec=Math.max(0,Math.round(sec||0));if(sec<60)return sec+" s";const m=Math.round(sec/60);if(m<60)return m+" min";const h=Math.floor(m/60),rm=m%60;return h+" h"+(rm?" "+rm+" min":"")}
+function richness(p){if(!p)return 0;const n=p.passed&&typeof p.passed==="object"?Object.keys(p.passed).filter(k=>p.passed[k]).length:0;return n*1000000+(p.correct|0)*100+((p.log&&p.log.length)|0)+(p.xp|0)}
+function pick(list){const rows=(Array.isArray(list)?list:[]).filter(x=>x&&x.slot==="carolina");rows.sort((a,b)=>richness(b)-richness(a)||(b.activeAt|0)-(a.activeAt|0));return rows[0]||null}
+function render(p){
+ const app=document.querySelector("#app");
+ document.querySelector("#title").textContent=tr("Progrès de Carolina","Carolina's progress");
+ document.querySelector("#lang").textContent=ui==="fr"?"EN":"FR";
+ if(!p){app.innerHTML=`<div class="card"><h2>${tr("En attente","Waiting")}</h2><p>${tr("Le progrès de Carolina apparaîtra ici dès qu'elle ouvrira le cours.","Carolina's progress will show up here the next time she opens the course.")}</p></div>`;return}
+ const all=(p.log||[]).filter(r=>r);
+ const log=all.filter(r=>r.c);
+ const passedN=p.journey?p.journey.filter(s=>s.passed).length:Object.keys(p.passed||{}).filter(k=>p.passed[k]).length;
+ const total=(p.journey&&p.journey.length)||22;
+ const skills=CATS.map(c=>{const rows=log.filter(r=>r.c===c.id);const pct=weighted(rows);return `<div class="skill"><b>${c.e} ${esc(ui==="fr"?c.fr:c.en)}</b><span class="mut">${pct==null?"—":pct+"%"}</span><div class="bar"><i style="--p:${pct==null?0:(pct/100).toFixed(4)}"></i></div></div>`}).join("");
+ const days=[];
+ for(let i=6;i>=0;i--){const d=new Date();d.setHours(12,0,0,0);d.setDate(d.getDate()-i);const k=dayKey(d);const rows=all.filter(r=>r.t&&dayKey(r.t)===k);const xp=rows.reduce((a,r)=>a+(+r.x||0),0);days.push({xp,label:d.toLocaleDateString(ui==="fr"?"fr-CA":"en-CA",{weekday:"short"}).replace(/\.$/,"")})}
+ const maxX=Math.max(8,...days.map(d=>d.xp));
+ const week=days.map(d=>`<div><span style="height:${d.xp?Math.max(8,Math.round(70*d.xp/maxX)):2}px"></span>${esc(d.label)}</div>`).join("");
+ const talks=(p.talks||[]).map(t=>`<div class="item"><b>${esc(ui==="fr"?t.fr:t.en)}</b><div class="mut">${esc(t.city)} · ${esc(when(t.at))}</div></div>`).join("")||`<p class="mut">${tr("Pas encore.","None yet.")}</p>`;
+ const badges=(p.badges||[]).map(b=>`<div class="item">${esc(b.e)} <b>${esc(ui==="fr"?b.fr:b.en)}</b></div>`).join("")||`<p class="mut">${tr("Pas encore.","None yet.")}</p>`;
+ const recent=log.slice(-8).reverse().map(r=>{const c=CATS.find(x=>x.id===r.c);return `<div class="item">${r.ok?"✓":"·"} ${esc(c?(ui==="fr"?c.fr:c.en):r.c)} <span class="mut">${esc(when(r.t))}</span></div>`}).join("")||`<p class="mut">${tr("Pas encore.","None yet.")}</p>`;
+ const stops=(p.journey||[]).map(s=>`<div class="stop${s.current?" current":""}${s.passed?"":" lock"}"><span class="em">${s.passed?"★":esc(s.e)}</span><b>${esc(s.n)}</b></div>`).join("");
+ const cur=p.journey&&p.journey.find(s=>s.current);
+ app.innerHTML=`<p class="mut" style="margin-top:0">${tr("Lecture seule","Read only")} · ${tr("Dernière activité","Last active")} · ${esc(when(p.activeAt))}</p>
+ <div class="card hero"><div class="orb${cur?" now":""}">${cur?esc(cur.e):"🦉"}</div><div><div class="mut">${tr("Niveau","Level")} ${p.current|0} / ${total-1}</div><h2 style="margin:0">${esc(p.currentStop||"—")}</h2><div class="mut">${passedN}/${total} ${tr("escales","stops")}</div></div></div>
+ <div class="row">
+  <div class="pill"><span class="mut">XP</span><b>${p.xp|0}</b></div>
+  <div class="pill"><span class="mut">${tr("Série","Streak")}</span><b>${p.streak|0}</b></div>
+  <div class="pill"><span class="mut">${tr("Réponses","Answers")}</span><b>${p.correct|0}</b></div>
+  <div class="pill"><span class="mut">${tr("Temps","Time")}</span><b>${esc(fmt(p.secs))}</b></div>
+ </div>
+ <div class="card"><h2>${tr("Compétences","Skills")}</h2><div class="skills">${skills}</div></div>
+ <div class="card"><h2>${tr("Cette semaine","This week")}</h2><div class="week">${week}</div></div>
+ <div class="card"><h2>Parle avec Nestor</h2>${talks}</div>
+ <div class="card"><h2>${tr("Badges","Badges")}</h2>${badges}</div>
+ <div class="card"><h2>${tr("Activité récente","Recent activity")}</h2>${recent}</div>
+ <div class="card"><h2>${tr("Parcours","Path")}</h2><div class="stops">${stops}</div></div>`;
+}
+async function load(){
+ const k=key();
+ if(!k){render(null);document.querySelector("#app").innerHTML=`<div class="card"><h2>${tr("Lien privé","Private link")}</h2><p>${tr("Ouvre le lien complet pour voir le progrès.","Open the full private link to see progress.")}</p></div>`;return}
+ try{
+  const res=await fetch("https://crudcrud.com/api/"+k+"/progress",{cache:"no-store"});
+  if(!res.ok)throw new Error("load");
+  const row=pick(await res.json());
+  last=row;shown=true;render(row);
+ }catch(e){if(!shown)render(null)}
+}
+document.querySelector("#lang").onclick=()=>{ui=ui==="fr"?"en":"fr";try{localStorage.setItem("frcourse_view_ui",ui)}catch(e){}if(shown)render(last);else load()};
+load();
+setInterval(load,12000);
+document.addEventListener("visibilitychange",()=>{if(document.visibilityState==="visible")load()});
+</script></body></html>
