@@ -2,7 +2,7 @@
 <html lang="en"><head><meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <meta name="theme-color" content="#5c3d32">
-<title>Le voyage de Carolina · Français 0→10</title>
+<title>Le voyage de Carolina · Français 0→21</title>
 <style>
 :root{--bg1:#f4ead8;--bg2:#efe2cc;--card:#fffaf2;--ink:#3c2a22;--mut:#8b7364;--pri:#7a3e3a;--pri2:#5c3d32;--ok:#2f6b4f;--bad:#8d3a3a;--gold:#a67c4e;--lock:#d5cdc4;--g:0;--ease:cubic-bezier(.2,.8,.2,1)}
 *{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
@@ -75,7 +75,9 @@ h2.title{font-family:Georgia,"Times New Roman",serif;font-size:30px;margin:2px 0
 .path:before{content:"";position:absolute;left:45px;top:46px;bottom:46px;width:12px;border-radius:8px;background:#e7d8c4;z-index:0}
 .path:after{content:"";position:absolute;left:45px;top:46px;width:12px;height:calc((100% - 92px) * var(--fill,0) / 100);border-radius:8px;background:#5c3d32;z-index:0}
 button.node{position:relative;z-index:1;display:flex;align-items:center;gap:14px;width:100%;text-align:left;background:#fffaf2;color:var(--ink);border:1px solid #eadcc8;box-shadow:0 1px 0 #eadcc8;border-radius:2px 18px 16px 3px;min-height:92px;padding:10px 12px;font-weight:650;animation:rise .4s var(--ease) both}
-.path .node:nth-child(1){animation-delay:.03s}.path .node:nth-child(2){animation-delay:.06s}.path .node:nth-child(3){animation-delay:.09s}.path .node:nth-child(4){animation-delay:.12s}.path .node:nth-child(5){animation-delay:.15s}.path .node:nth-child(6){animation-delay:.18s}.path .node:nth-child(7){animation-delay:.21s}.path .node:nth-child(8){animation-delay:.24s}.path .node:nth-child(9){animation-delay:.27s}.path .node:nth-child(10){animation-delay:.3s}.path .node:nth-child(11){animation-delay:.33s}
+.path .node{animation-delay:calc(.03s * var(--i,0))}
+.talk .starters{margin:0 0 14px;padding-left:18px;text-align:left}
+.talk .starters li{margin:6px 0;font-size:17px;line-height:1.35}
 button.node:active{transform:scale(.985);box-shadow:none}
 button.node.sel{border-color:#7a3e3a}
 button.node .orb{width:72px;height:72px;flex:none;border-radius:50%;display:grid;place-items:center;font-size:28px;background:#fffaf2;color:var(--ink);border:2px solid #5c3d32;box-shadow:none}
@@ -192,7 +194,29 @@ items:[["je le vois","I see him"],["je lui parle","I am talking to him"],["je le
 {t:["Subjunctive & complex sentences","Le subjonctif"],intro:"The <b>subjonctif</b> follows expressions of necessity, wish, emotion and doubt + <b>que</b>: <b>il faut que</b>, <b>je veux que</b>, <b>bien que</b>, <b>avant que</b>. Irregulars: être → que je sois, avoir → que j'aie, faire → que je fasse, aller → que j'aille, pouvoir → que je puisse.",
 items:[["il faut que tu partes","you have to leave"],["je veux que tu viennes","I want you to come"],["bien qu'il soit fatigué","although he is tired"],["avant que nous partions","before we leave"],["je suis contente que tu sois là","I am happy that you are here"],["il faut que je fasse mes devoirs","I have to do my homework"],["je doute qu'il puisse venir","I doubt he can come"],["pour que tu comprennes","so that you understand"],["il est important que vous sachiez","it is important that you know"],["j'ai peur qu'il pleuve","I am afraid it will rain"],["à moins qu'elle ait raison","unless she is right"],["je ne pense pas qu'il ait fini","I don't think he has finished"],["si j'avais su, je serais venue","if I had known, I would have come"],["le livre dont je parle","the book I am talking about"],["la ville où je suis née","the city where I was born"],["ce qui compte, c'est la santé","what matters is health"]]},
 {t:["Idioms, Québécois & reading","Expressions, québécois et lecture"],intro:"Quebec French has its own vocabulary: <b>char</b> (car), <b>blonde/chum</b> (girlfriend/boyfriend), <b>dépanneur</b> (corner store), <b>c'est plate</b> (it's boring), <b>avoir de la misère</b> (to have trouble), <b>tiguidou</b> (great/OK). General idioms: <b>poser un lapin</b> (stand someone up), <b>avoir le cafard</b> (feel down).<br><br><i>Lecture :</i> « Samedi matin, Julie est allée au dépanneur acheter du lait. Il faisait frette, mais elle avait hâte de faire du ski avec son chum. Malheureusement, il lui a posé un lapin. Elle a trouvé ça plate, mais elle est allée skier toute seule et elle a eu ben du fun. »",
-items:[["mon char est brisé","my car is broken"],["ma blonde","my girlfriend"],["mon chum","my boyfriend"],["je vais au dépanneur","I am going to the corner store"],["c'est plate","it is boring"],["il fait frette","it is freezing cold"],["j'ai de la misère","I am having trouble"],["avoir hâte","to look forward"],["c'est tiguidou","it is all good"],["il m'a posé un lapin","he stood me up"],["j'ai le cafard","I feel down"],["coûter les yeux de la tête","to cost an arm and a leg"],["avoir du fun","to have fun"],["être dans la lune","to be daydreaming"],["Julie est allée au dépanneur","Julie went to the corner store"],["il lui a posé un lapin","he stood her up"]]}
+items:[["mon char est brisé","my car is broken"],["ma blonde","my girlfriend"],["mon chum","my boyfriend"],["je vais au dépanneur","I am going to the corner store"],["c'est plate","it is boring"],["il fait frette","it is freezing cold"],["j'ai de la misère","I am having trouble"],["avoir hâte","to look forward"],["c'est tiguidou","it is all good"],["il m'a posé un lapin","he stood me up"],["j'ai le cafard","I feel down"],["coûter les yeux de la tête","to cost an arm and a leg"],["avoir du fun","to have fun"],["être dans la lune","to be daydreaming"],["Julie est allée au dépanneur","Julie went to the corner store"],["il lui a posé un lapin","he stood her up"]]},
+{t:["Small talk & her day","La journée et le small talk"],intro:"A real chat starts with the day. Say what you did, then ask back. In Quebec, <b>pas pire</b> means not bad, and <b>correct</b> means fine.<br><br><i>Nestor :</i> Salut Carolincik, comment était ta journée ?<br><i>Carolina :</i> Pas pire ! Je me suis levée tard, j'ai étudié, pis j'ai marché. Je suis contente.",
+items:[["comment était ta journée","how was your day"],["pas pire merci","not bad thanks"],["je me suis levée tard","I got up late"],["j'ai étudié le français","I studied French"],["j'ai marché au soleil","I walked in the sunshine"],["je suis contente aujourd'hui","I am happy today"],["ce matin j'ai pris un café","this morning I had a coffee"],["cet après-midi j'ai lu","this afternoon I read"],["ce soir je suis fatiguée","tonight I am tired"],["qu'est-ce que tu as fait","what did you do"],["la journée a bien passé","the day went well"],["je rentre à la maison","I am heading home"],["bonne fin de journée","have a good rest of the day"],["j'ai parlé un peu","I talked a little"],["on se voit plus tard","see you later"],["Carolincik est contente","Carolincik is happy"]]},
+{t:["Asking questions","Poser des questions"],intro:"Three everyday patterns: <b>Est-ce que tu viens ?</b>, inversion <b>Viens-tu ?</b>, and rising intonation <b>Tu viens ?</b> In Quebec you will also hear <b>tu</b> doubled: <b>Tu viens-tu ?</b> Question words: où, quand, pourquoi, comment, qui, combien, qu'est-ce que.",
+items:[["est-ce que tu viens","are you coming"],["viens-tu ce soir","are you coming tonight"],["tu viens-tu","you coming"],["où est-ce que tu habites","where do you live"],["quand est-ce que tu arrives","when do you arrive"],["pourquoi tu ris","why are you laughing"],["comment tu t'appelles","what is your name"],["qu'est-ce que tu regardes","what are you watching"],["qui est à la porte","who is at the door"],["tu veux-tu un café","do you want a coffee"],["depuis quand tu parles français","how long have you spoken French"],["à quelle heure on se voit","what time are we meeting"],["c'est quoi ton plan","what is your plan"],["tu as compris","did you understand"],["est-ce qu'il fait beau","is the weather nice"],["qu'est-ce que Carolina fait","what is Carolina doing"]]},
+{t:["Childhood memories","Souvenirs d'enfance"],intro:"The <b>passé composé</b> tells what happened: avoir or être + past participle. Movement and reflexives take être and agree: <b>je suis restée</b>, <b>elle s'est souvenue</b>.<br><br><i>Lecture :</i> « Carolina a rencontré Nestor à l'école, en Moldavie, à neuf ans. Ils ont joué dans la cour. À quatorze ans, Nestor est parti au Canada. Carolina est restée. Elle a gardé une photo. »",
+items:[["j'ai rencontré Nestor à l'école","I met Nestor at school"],["on s'est rencontrés à neuf ans","we met at age nine"],["j'ai grandi en Moldavie","I grew up in Moldova"],["il est parti au Canada","he left for Canada"],["il est parti à quatorze ans","he left at fourteen"],["je suis restée en Moldavie","I stayed in Moldova"],["on a joué dans la cour","we played in the schoolyard"],["j'ai appris son prénom","I learned his name"],["je suis née en Moldavie","I was born in Moldova"],["ils ont déménagé au Canada","they moved to Canada"],["j'ai gardé une photo","I kept a photo"],["je ne t'ai pas oublié","I did not forget you"],["on a été amis","we were friends"],["elle s'est souvenue de l'école","she remembered school"],["j'ai écrit son nom","I wrote his name"],["ça s'est passé en Moldavie","it happened in Moldova"]]},
+{t:["The reunion","Les retrouvailles"],intro:"Use the <b>imparfait</b> for the background (weather, age, what was already going on) and the <b>passé composé</b> for the event that cuts in. Imparfait endings: -ais, -ais, -ait, -ions, -iez, -aient.<br><br><i>Nestor :</i> Carolincik, tu te souviens du lac de Garde ?<br><i>Carolina :</i> Il faisait beau. J'avais vingt-neuf ans. Je marchais près de l'eau quand je t'ai vu.",
+items:[["il faisait beau au lac","the weather was nice at the lake"],["j'avais vingt-neuf ans","I was twenty-nine"],["je marchais près de l'eau","I was walking near the water"],["je l'ai vu près du lac","I saw him near the lake"],["j'étais surprise","I was surprised"],["on a parlé pendant des heures","we talked for hours"],["quand j'étais petite en Moldavie","when I was little in Moldova"],["il habitait au Canada","he was living in Canada"],["je suis arrivée en Italie","I arrived in Italy"],["le lac était calme","the lake was calm"],["soudain je l'ai reconnu","suddenly I recognized him"],["nous nous sommes retrouvés","we found each other again"],["elle souriait quand il est arrivé","she was smiling when he arrived"],["ce jour-là tout a changé","that day everything changed"],["je me souviens du soleil","I remember the sunshine"],["on s'est revus au lac de Garde","we saw each other again at Lake Garda"]]},
+{t:["Plans & the future","Projets et futur"],intro:"The near future is <b>aller + infinitive</b>: <b>je vais regarder</b>. The simple future adds endings to the infinitive (or an irregular stem): je parlerai, tu pourras, il fera, nous irons, j'aurai. Use it for plans, promises, and the weather tomorrow.",
+items:[["je vais regarder une série","I am going to watch a series"],["on va se voir demain","we are going to see each other tomorrow"],["demain je parlerai français","tomorrow I will speak French"],["nous irons au dépanneur","we will go to the corner store"],["il fera froid à Gaspé","it will be cold in Gaspé"],["j'aurai le temps ce soir","I will have time tonight"],["tu pourras venir","you will be able to come"],["je vais texter un ami","I am going to text a friend"],["ce week-end je vais me reposer","this weekend I am going to rest"],["un jour j'irai en Italie","one day I will go to Italy"],["on se reparlera bientôt","we will talk again soon"],["je vais finir ma leçon","I am going to finish my lesson"],["elle sera contente","she will be happy"],["qu'est-ce que tu vas faire","what are you going to do"],["je vais cuisiner ce soir","I am going to cook tonight"],["Carolina va pratiquer demain","Carolina is going to practice tomorrow"]]},
+{t:["Opinions & series","Avis et séries"],intro:"To give an opinion: <b>j'aime</b>, <b>je préfère</b>, <b>à mon avis</b>, <b>je trouve que</b>, <b>je suis d'accord</b>. Describe people with être: <b>elle est courageuse</b>, <b>il est mystérieux</b>.<br><br><i>Carolina :</i> J'aime les séries turques, et j'ai beaucoup regardé Vampire Diaries. Carolincik est difficile, mais ce personnage est courageux.",
+items:[["j'aime les séries turques","I like Turkish series"],["j'ai beaucoup regardé Vampire Diaries","I watched The Vampire Diaries a lot"],["c'est mon émission préférée","it is my favourite show"],["je trouve ça captivant","I find it gripping"],["à mon avis c'est triste","in my opinion it is sad"],["je préfère les personnages forts","I prefer strong characters"],["elle est courageuse","she is brave"],["il est mystérieux","he is mysterious"],["je n'aime pas cette fin","I do not like this ending"],["ça me fait pleurer","it makes me cry"],["tu en penses quoi","what do you think"],["je suis d'accord avec toi","I agree with you"],["je ne suis pas d'accord","I do not agree"],["c'est trop intense pour moi","it is too intense for me"],["je te le recommande","I recommend it"],["Carolincik adore cette série","Carolincik loves this series"]]},
+{t:["Quebec chat","Jaser au Québec"],intro:"With friends in Quebec, use <b>tu</b>, not vous. Vous stays for shops, strangers, and anyone you want to keep formal. Spoken French shrinks: <b>chu</b> = je suis, <b>pis</b> = puis, <b>jaser</b> = to chat. Ask people to slow down. That is a real conversation skill.",
+items:[["on se tutoie","let's use tu"],["vous est plus formel","vous is more formal"],["salut ça va","hi how's it going"],["chu contente de te voir","I'm happy to see you"],["pis toi ça va","and you how's it going"],["veux-tu jaser","do you want to chat"],["parle plus lentement","speak more slowly"],["c'est correct prends ton temps","it's fine take your time"],["en français s'il te plaît","in French please"],["je mélange encore un peu","I still mix it up a little"],["répète s'il te plaît","please repeat"],["ah ok je vois","oh ok I see"],["avec les amis on dit tu","with friends we say tu"],["je te comprends bien","I understand you"],["tu parles vite","you speak fast"],["merci c'est gentil","thanks that's kind"]]},
+{t:["Errands in Quebec","Commissions au Québec"],intro:"At a shop, <b>vous</b> is polite. <b>Je voudrais…</b> and <b>je vais prendre…</b> order things. A <b>dépanneur</b> is the corner store, a <b>pinte</b> is a carton of milk, and a <b>liqueur</b> is a soft drink. Ask <b>c'est combien</b> before you pay.",
+items:[["je vais au dépanneur","I am going to the corner store"],["je voudrais du lait","I would like some milk"],["une pinte de lait s'il vous plaît","a carton of milk please"],["est-ce que vous avez du pain","do you have any bread"],["je vais prendre ça","I will take this"],["c'est combien","how much is it"],["je paie par carte","I am paying by card"],["est-ce que je peux avoir un sac","can I have a bag"],["je cherche la pharmacie","I am looking for the pharmacy"],["tout droit puis à gauche","straight ahead then left"],["c'est ouvert le dimanche","it is open on Sunday"],["je reviens tout de suite","I will be right back"],["je vais à l'épicerie","I am going to the grocery store"],["Carolina a acheté des pommes","Carolina bought some apples"],["vous avez de la monnaie","do you have change"],["je prends aussi une liqueur","I'll also take a soda"]]},
+{t:["Polite requests","Demandes polies"],intro:"The <b>conditionnel</b> softens a request. It uses the future stem and imparfait endings: <b>je voudrais, j'aimerais, tu pourrais, ce serait</b>. <b>Est-ce que tu pourrais… ?</b> and <b>ça te dérange si… ?</b> are the phrases you will actually say.",
+items:[["est-ce que tu pourrais m'aider","could you help me"],["j'aimerais réserver une table","I would like to reserve a table"],["ça te dérange si je m'assois","do you mind if I sit"],["pourriez-vous répéter","could you repeat"],["je prendrais le plat du jour","I would have the daily special"],["on pourrait marcher un peu","we could walk a bit"],["tu aurais une minute","would you have a minute"],["j'aimerais mieux demain","I would rather tomorrow"],["ce serait possible","would that be possible"],["je devrais partir bientôt","I should leave soon"],["à ta place je demanderais","in your place I would ask"],["ce serait gentil de m'aider","it would be kind to help me"],["on pourrait se voir à Québec","we could meet in Quebec City"],["je ne saurais pas quoi dire","I would not know what to say"],["Carolina aimerait pratiquer","Carolina would like to practice"],["je voudrais de l'eau plate","I would like still water"]]},
+{t:["Tell a story","Raconter et réagir"],intro:"Long stories need glue and little reactions. Connectors: <b>pis</b>, <b>ensuite</b>, <b>fait que</b>, <b>pour finir</b>. Fillers you will hear constantly: <b>ben</b> (well), <b>genre</b> (like), <b>tsé</b> (you know). React with <b>ah bon</b>, <b>ouais exactement</b>, <b>non sérieux</b>.",
+items:[["ben figure-toi que","well imagine this"],["tsé c'était bizarre","you know it was weird"],["genre à la dernière minute","like at the last minute"],["pis là il est arrivé","and then he arrived"],["fait que j'ai ri","so I laughed"],["en tout cas c'était beau","anyway it was beautiful"],["tu vois ce que je veux dire","you see what I mean"],["attends je continue","wait I will go on"],["non sérieux","no seriously"],["ouais exactement","yeah exactly"],["moi j'étais surprise","I for one was surprised"],["pour finir on a pris un café","to finish we had a coffee"],["bref quelle journée","in short what a day"],["je te jure c'est vrai","I swear it is true"],["ensuite on est restés","then we stayed"],["Carolina raconte bien","Carolina tells a story well"]]},
+{t:["A real conversation","Une vraie conversation"],intro:"This stop mixes the day, a memory, an opinion, a polite phrase, and Quebec speech. Listen, answer, then ask something back.<br><br><i>Lecture :</i> « Carolincik : Ben, tsé, aujourd'hui j'ai étudié, pis je suis contente. Nestor : Tu te souviens de l'école en Moldavie ? Carolincik : Oui. On avait neuf ans. Au lac de Garde, je t'ai revu. Là, je vais regarder une série turque. Tu viens-tu jaser ? »",
+items:[["salut pas pire et toi","hi not bad and you"],["aujourd'hui j'ai étudié le français","today I studied French"],["je me souviens de la Moldavie","I remember Moldova"],["on s'est revus en Italie","we saw each other again in Italy"],["j'aime parler de séries","I like talking about series"],["tu viens-tu jaser","wanna chat"],["je voudrais te raconter ça","I would like to tell you about it"],["ben c'était une belle journée","well it was a lovely day"],["fait que on se voit demain","so see you tomorrow"],["je suis fière de mon français","I am proud of my French"],["est-ce que tu peux répéter","can you repeat"],["à la prochaine","until next time"],["je vais continuer à pratiquer","I am going to keep practicing"],["c'était le fun de jaser","it was fun to chat"],["merci pour la conversation","thank you for the conversation"],["Carolina peut tenir une conversation","Carolina can hold a conversation"]]}
 ];
 // fill-in-the-blank uses the longest word of the French phrase (needs 2+ words)
 const TYPES=["mc","fr2en","fill","listen","en2fr","speak"];
@@ -203,7 +227,13 @@ const STOPS=[
  {n:"Lévis",e:"⛴️",c:["#7ec8e3","#3b6fb6"]},{n:"Québec",e:"🏰",c:["#f6a6b2","#8e5bb5"]},{n:"Île d'Orléans",e:"🍓",c:["#ffb07c","#e2587e"]},
  {n:"Charlevoix",e:"⛰️",c:["#9bd3a8","#3c7d6b"]},{n:"Tadoussac",e:"🐋",c:["#8fd3fe","#2b4c8c"]},{n:"Saguenay",e:"🛶",c:["#a1c4fd","#4a6b8a"]},
  {n:"Trois-Rivières",e:"🌉",c:["#fbc2eb","#7a6fd6"]},{n:"Montréal",e:"🥯",c:["#f7b267","#c0392b"]},{n:"Mont-Tremblant",e:"🎿",c:["#e0eafc","#6d8fc7"]},
- {n:"Percé",e:"🪨",c:["#ffcf9f","#d35d6e"]},{n:"Îles-de-la-Madeleine",e:"🏖️",c:["#fddb92","#4fb3bf"]}];
+ {n:"Percé",e:"🪨",c:["#ffcf9f","#d35d6e"]},{n:"Îles-de-la-Madeleine",e:"🏖️",c:["#fddb92","#4fb3bf"]},
+ {n:"Gaspé",e:"🐟",c:["#7dcea0","#1a5276"]},{n:"Rimouski",e:"🚢",c:["#85c1e9","#1a5276"]},
+ {n:"Kamouraska",e:"🌾",c:["#f9e79f","#b9770e"]},{n:"Montmagny",e:"🦢",c:["#d5f5e3","#1e8449"]},
+ {n:"Magog",e:"⛵",c:["#aed6f1","#2e86ab"]},{n:"Sherbrooke",e:"🍂",c:["#f5cba7","#a04000"]},
+ {n:"Knowlton",e:"🧀",c:["#f5b7b1","#922b21"]},{n:"Gatineau",e:"🏛️",c:["#d2b4de","#6c3483"]},
+ {n:"Val-d'Or",e:"⭐",c:["#f7dc6f","#b7950b"]},{n:"Baie-Comeau",e:"🌌",c:["#5d6d7e","#1b2631"]},
+ {n:"Vieux-Québec",e:"👑",c:["#f1948a","#7b241c"]}];
 const PRAISE=[["Bravo, {n} !","Well done, {n}!"],["Super !","Great!"],["Tu es géniale !","You're amazing!"],["Excellent !","Excellent!"],["Wow, {n} !","Wow, {n}!"],["Parfait !","Perfect!"],["Je suis fier de toi !","I'm proud of you!"],["Magnifique !","Beautiful!"]];
 const SAD=[["Presque !","Almost!"],["Pas grave, {n} !","No worries, {n}!"],["On continue !","Let's keep going!"],["Courage !","You've got this!"]];
 const IDLE=[["Allez, {n} !","Come on, {n}!"],["Prête ?","Ready?"],["Tu peux le faire !","You can do it!"],["On apprend ensemble !","We learn together!"]];
@@ -219,8 +249,8 @@ const ACH=[
  {id:"c100",e:"💪",t:["Hundred club","Club des 100"],d:["100 correct answers","100 bonnes réponses"]},
  {id:"c500",e:"🏅",t:["Word lover","Amoureuse des mots"],d:["500 correct answers","500 bonnes réponses"]},
  {id:"night",e:"🌙",t:["Night owl","Oiseau de nuit"],d:["Practice after 10 pm","Pratiquer après 22 h"]},
- {id:"half",e:"🧭",t:["Halfway there","À mi-chemin"],d:["6 stops visited","6 escales visitées"]},
- {id:"all",e:"👑",t:["Grand tour","Le grand tour"],d:["All 11 stops","Les 11 escales"]},
+ {id:"half",e:"🧭",t:["Halfway there","À mi-chemin"],d:["11 stops visited","11 escales visitées"]},
+ {id:"all",e:"👑",t:["Grand tour","Le grand tour"],d:["All 22 stops","Les 22 escales"]},
  {id:"qc",e:"🍁",t:["Quebec ear","Oreille québécoise"],d:["First Québec bonus","Premier bonus Québec"]},
  {id:"qc11",e:"⚜️",t:["Quebec voice","Voix québécoise"],d:["11 Québec bonus answers","11 réponses bonus Québec"]}];
 const QC=[
@@ -234,12 +264,32 @@ const QC=[
  [["à matin","this morning",["À matin means this morning.","À matin, c'est ce matin."]],["il fait frette","it is freezing",["Frette is colder than froid.","Frette, c'est très froid."]]],
  [["c'est plate","it is boring",["Plate means boring, not flat.","Plate veut dire ennuyeux."]],["j'ai la langue à terre","I am exhausted",["Langue à terre means wiped out.","La langue à terre, c'est être épuisé."]]],
  [["j'ai de la misère","I am having trouble",["Avoir de la misère means to struggle.","Avoir de la misère, c'est avoir du mal."]],["faque","so",["Faque means so or therefore.","Faque veut dire donc."]]],
- [["c'est tiguidou","it is all good",["Tiguidou means great or all good.","Tiguidou, c'est parfait."]],["enweille","come on",["Enweille means come on, let's go.","Enweille, c'est allez."]]]
+ [["c'est tiguidou","it is all good",["Tiguidou means great or all good.","Tiguidou, c'est parfait."]],["enweille","come on",["Enweille means come on, let's go.","Enweille, c'est allez."]]],
+ [["pas pire","not too bad",["Pas pire means not bad, often pretty good.","Pas pire, c'est pas mal, souvent même bien."]],["mets-en","you bet",["Mets-en means you bet or totally.","Mets-en, c'est tout à fait."]]],
+ [["tu viens-tu","you coming",["The extra tu is the Quebec yes-no question.","Le tu en plus, c'est la question oui-non d'ici."]],["c'est quoi ça","what is that",["C'est quoi is the everyday qu'est-ce que c'est.","C'est quoi, c'est qu'est-ce que c'est au quotidien."]]],
+ [["dans le temps","back in the day",["Dans le temps means back then.","Dans le temps, c'est à cette époque-là."]],["une couple de","a couple of",["Une couple de means a couple of, a few.","Une couple de, c'est deux ou quelques-uns."]]],
+ [["tantôt","in a little while",["Tantôt can mean later or a little earlier.","Tantôt, c'est plus tard ou un peu plus tôt."]],["à soir","this evening",["À soir means tonight.","À soir, c'est ce soir."]]],
+ [["je m'en viens","I'm on my way",["Je m'en viens means I'm coming.","Je m'en viens, c'est j'arrive."]],["texter","to text",["Texter is the Quebec verb for sending a text.","Texter, c'est envoyer un texto."]]],
+ [["c'est malade","that's wild",["Malade can mean awesome or unbelievable.","Malade, ça peut dire génial ou incroyable."]],["j'capote","I'm so into it",["Capoter means to freak out, often in a good way.","Capoter, c'est triper ou perdre la tête."]]],
+ [["chu contente","I'm happy",["Chu is je suis in fast speech.","Chu, c'est je suis quand on parle vite."]],["pis","and then",["Pis is puis: and, or and then.","Pis, c'est puis."]]],
+ [["une liqueur","a soda",["A liqueur in Quebec is a soft drink.","Une liqueur, au Québec, c'est un soda."]],["une pinte de lait","a carton of milk",["A pinte at the dépanneur is a milk carton.","Une pinte, au dépanneur, c'est un contenant de lait."]]],
+ [["être game","to be up for it",["Game means willing or up for it.","Être game, c'est être partant."]],["ça te tente","do you feel like it",["Ça te tente asks if you feel like doing it.","Ça te tente, c'est est-ce que tu as envie."]]],
+ [["tsé","you know",["Tsé is tu sais, the little you-know.","Tsé, c'est tu sais."]],["fait que","so then",["Fait que means so, like faque.","Fait que, c'est donc."]]],
+ [["c'est beau","all set",["C'est beau means we're good, all set.","C'est beau, c'est parfait, c'est réglé."]],["laisse faire","never mind",["Laisse faire means drop it or never mind.","Laisse faire, c'est oublie ça."]]]
 ];
+const TALK={
+ 11:{title:["Your day, out loud","Ta journée, à voix haute"],prompt:["Tell Nestor about your day in French, in three sentences or more.","Raconte ta journée à Nestor en français, en trois phrases ou plus."],starters:["Aujourd'hui, je me suis levée…","Ce matin, j'ai…","Ce soir, je suis contente parce que…"]},
+ 12:{title:["Three little questions","Trois petites questions"],prompt:["Ask Nestor three simple questions in French, then listen to his answers.","Pose trois questions simples à Nestor en français, puis écoute ses réponses."],starters:["Est-ce que tu… ?","Tu viens-tu… ?","Qu'est-ce que tu… ?"]},
+ 14:{title:["The lake story","L'histoire du lac"],prompt:["Tell Nestor the Lake Garda story: the weather, your age, and the moment you saw him.","Raconte à Nestor l'histoire du lac de Garde : le temps, ton âge, et le moment où tu l'as vu."],starters:["Il faisait beau…","J'avais vingt-neuf ans…","Soudain, je t'ai vu…"]},
+ 16:{title:["Your favourite character","Ton personnage préféré"],prompt:["Describe your favourite Vampire Diaries character to Nestor, and say why you like them.","Décris ton personnage préféré de Vampire Diaries à Nestor, et dis pourquoi tu l'aimes."],starters:["Mon personnage préféré, c'est…","Elle est courageuse parce que…","J'aime aussi les séries turques parce que…"]},
+ 18:{title:["The corner-store run","La course au dépanneur"],prompt:["At the dépanneur, order two things in French and ask Nestor the price.","Au dépanneur, commande deux choses en français et demande le prix à Nestor."],starters:["Je voudrais…","Je vais prendre…","C'est combien ?"]},
+ 21:{title:["A real chat","Une vraie jasette"],prompt:["Hold a short conversation: your day, one memory, and a series you like. React to what Nestor says.","Tiens une courte conversation : ta journée, un souvenir, et une série que tu aimes. Réagis à ce que Nestor dit."],starters:["Ben, aujourd'hui…","Tsé, je me souviens…","Pis toi, t'en penses quoi ?"]}
+};
+const NLV=LEVELS.length,LAST=NLV-1;
 const QC_BONUS=8;
 const KEY="frcourse_v1";
-const DEF=()=>({xp:0,streak:0,last:null,best:{},unlocked:0,ui:"en",strict:false,srs:{},muted:false,passed:{},correct:0,ach:{},mapPos:0,bestCombo:0,doneDate:null,qc:0,resume:null,log:[],secs:0});
-let S=load();function load(){try{const s=Object.assign(DEF(),JSON.parse(localStorage.getItem(KEY)||"{}"));if(!Array.isArray(s.log))s.log=[];if(typeof s.secs!=="number"||!isFinite(s.secs))s.secs=0;return s}catch(e){return DEF()}}
+const DEF=()=>({xp:0,streak:0,last:null,best:{},unlocked:0,ui:"en",strict:false,srs:{},muted:false,passed:{},correct:0,ach:{},mapPos:0,bestCombo:0,doneDate:null,qc:0,resume:null,log:[],secs:0,talk:{}});
+let S=load();function load(){try{const s=Object.assign(DEF(),JSON.parse(localStorage.getItem(KEY)||"{}"));if(!Array.isArray(s.log))s.log=[];if(typeof s.secs!=="number"||!isFinite(s.secs))s.secs=0;if(!s.talk||typeof s.talk!=="object"||Array.isArray(s.talk))s.talk={};if(s.passed&&s.passed[10]&&(s.unlocked|0)<11)s.unlocked=11;return s}catch(e){return DEF()}}
 function save(){try{localStorage.setItem(KEY,JSON.stringify(S))}catch(e){}}
 const RM=window.matchMedia&&matchMedia("(prefers-reduced-motion: reduce)").matches;
 const L=k=>UI[S.ui][k];const $=s=>document.querySelector(s);const app=$("#app");
@@ -341,7 +391,7 @@ const CATS=[
  {id:"write",e:"✍️",en:"Writing",fr:"Écrit"},
  {id:"qc",e:"🍁",en:"Quebec expressions",fr:"Expressions québécoises"}
 ];
-const GRAMMAR_LV={2:1,4:1,5:1,6:1,7:1,8:1,9:1};
+const GRAMMAR_LV={2:1,4:1,5:1,6:1,7:1,8:1,9:1,12:1,13:1,14:1,15:1,19:1,20:1};
 function qCategory(q){if(!q)return"vocab";if(q.qc)return"qc";if(q.type==="listen")return"listen";if(q.type==="speak")return"speak";if(q.type==="fr2en"||q.type==="en2fr"||q.type==="fill")return"write";return GRAMMAR_LV[q.lv]?"grammar":"vocab"}
 function catRows(id){return(S.log||[]).filter(r=>r&&r.c===id)}
 function weighted(rows){if(!rows||!rows.length)return null;let wsum=0,okw=0;const n=rows.length;rows.forEach((r,i)=>{const w=Math.pow(.85,n-1-i);wsum+=w;okw+=w*(r.ok?1:0)});return Math.round(100*okw/Math.max(wsum,1e-9))}
@@ -426,20 +476,20 @@ function sugLine(c,n){
  return fr?`« Tes expressions québécoises sont à ${n} %, on pratique ? »`:`Your Quebec expressions are at ${n}%. Shall we practice?`;
 }
 function canFocus(cat){
- const maxLv=Math.min(S.unlocked,10);
+ const maxLv=Math.min(S.unlocked,LAST);
  if(cat==="qc")return QC.slice(0,maxLv+1).some(a=>a&&a.length);
- if(cat==="grammar")return [2,4,5,6,7,8,9].some(l=>l<=maxLv);
- if(cat==="vocab")return [0,1,3,10].some(l=>l<=maxLv);
+ if(cat==="grammar")return Object.keys(GRAMMAR_LV).some(l=>+l<=maxLv);
+ if(cat==="vocab")return LEVELS.some((_,l)=>l<=maxLv&&!GRAMMAR_LV[l]);
  return maxLv>=0;
 }
 function nextFocus(cat){
- const maxLv=Math.min(S.unlocked,10);
+ const maxLv=Math.min(S.unlocked,LAST);
  if(cat==="qc"){const pool=[];for(let l=0;l<=maxLv;l++)pool.push(...qcSet(l));return pool.length?pick(pool):null}
  const types=cat==="listen"?["listen"]:cat==="speak"?["speak"]:cat==="write"?["fr2en","en2fr","fill"]:["mc"];
  for(let n=0;n<40;n++){
   let ls;
-  if(cat==="grammar")ls=[2,4,5,6,7,8,9].filter(l=>l<=maxLv);
-  else if(cat==="vocab")ls=[0,1,3,10].filter(l=>l<=maxLv);
+  if(cat==="grammar")ls=Object.keys(GRAMMAR_LV).map(Number).filter(l=>l<=maxLv);
+  else if(cat==="vocab")ls=LEVELS.map((_,l)=>l).filter(l=>l<=maxLv&&!GRAMMAR_LV[l]);
   else ls=Array.from({length:maxLv+1},(_,i)=>i);
   if(!ls.length)return null;
   const l=pick(ls),i=Math.random()*LEVELS[l].items.length|0,q=mkEx(l,i,pick(types));
@@ -510,7 +560,7 @@ function dashboard(){
  <div class="statbox"><span class="mut">${tr("Answers","Réponses")}</span><b class="cnt" data-n="${S.correct||0}">0</b></div>
  <div class="statbox"><span class="mut">${tr("Streak","Série")}</span><b>${S.streak||0}</b></div>
  <div class="statbox"><span class="mut">${tr("Time practiced","Temps de pratique")}</span><b>${esc(fmtTime(S.secs))}</b></div>
- <div class="statbox"><span class="mut">${tr("Levels passed","Niveaux réussis")}</span><b>${passed}/11</b></div>
+ <div class="statbox"><span class="mut">${tr("Levels passed","Niveaux réussis")}</span><b>${passed}/${NLV}</b></div>
  </div></div>`;
  $("#bk").onclick=home;
  $("#gopr").onclick=()=>{if(focus&&ready)runFocus(focus.id);else home()};
@@ -518,16 +568,17 @@ function dashboard(){
 }
 /* ---------- home = vertical lesson path ---------- */
 let selStop=null;
-function home(){stopRec();if(location.hash)history.pushState(null,"",location.pathname+location.search);setGlow(0);hdr();const h=new Date().getHours();const cur=Math.min(S.unlocked,10);
+function levelMid(i){const k=S.resume&&S.resume.key;return k==="lv:"+i||k==="lv:"+i+":qc"||k==="lv:"+i+":talk"}
+function home(){stopRec();if(location.hash)history.pushState(null,"",location.pathname+location.search);setGlow(0);hdr();const h=new Date().getHours();const cur=Math.min(S.unlocked,LAST);
  const greet=[`${h>=18||h<4?"Bonsoir":"Bonjour"} {n} !`,`${h>=18||h<4?"Good evening":"Hello"} {n}!`];
- const done=Object.keys(S.passed).length,pct=Math.round(100*done/11);
- const fill=S.passed[10]?100:Math.round(100*cur/10);
+ const done=Object.keys(S.passed).length,pct=Math.round(100*done/NLV);
+ const fill=S.passed[LAST]?100:Math.round(100*cur/LAST);
  const nodes=STOPS.map((st,i)=>{const lock=i>S.unlocked,passed=!!S.passed[i],state=lock?"locked":passed?"done":i===cur?"current":"open";const best=S.best[i]||0;
-  const mid=S.resume&&(S.resume.key==="lv:"+i||S.resume.key==="lv:"+i+":qc");
-  return `<button type="button" class="node ${state}" data-s="${i}" ${i===cur?'aria-current="step"':""}><span class="orb">${passed?"★":lock?"🔒":st.e}</span><span class="nmeta"><span class="ntag">${tr("Level","Niveau")} ${i}${passed?" · "+best+"%":""}</span><b>${esc(st.n)}</b><span class="mut">${esc(LEVELS[i].t[S.ui==="en"?0:1])}</span></span>${i===cur?`<span class="go-pill">${mid?tr("Continue","Continuer"):passed?tr("Again","Encore"):L("start")}</span>`:""}</button>`}).join("");
- app.innerHTML=`<div class="card pathhead"><h2 class="title">${esc(N(greet[0]))}${S.passed[10]?" 👑":""}</h2><p class="mut" style="margin:0 0 8px">${esc(N(greet[1]))} · ${tr("Next stop","Prochaine escale")}: ${esc(STOPS[cur].n)} · ${S.correct} ${tr("answers saved","réponses enregistrées")}</p>
- <div class="row" style="justify-content:space-between"><b>${done}/11</b><span class="mut">${pct}%</span></div><div class="bar"><i style="--p:${(pct/100).toFixed(4)}"></i></div>
- <div class="row" style="margin-top:12px"><button id="pr">∞ ${L("practice")}</button><button class="sec" id="al">📮 ${tr("Album","Album")}</button><button class="sec" id="dash">📊 ${tr("Progress","Progrès")}</button>${S.passed[10]?`<button class="sec" id="ce">🎓 ${tr("Certificate","Certificat")}</button>`:""}</div></div>
+  const mid=levelMid(i);
+  return `<button type="button" class="node ${state}" data-s="${i}" style="--i:${i}" ${i===cur?'aria-current="step"':""}><span class="orb">${passed?"★":lock?"🔒":st.e}</span><span class="nmeta"><span class="ntag">${tr("Level","Niveau")} ${i}${passed?" · "+best+"%":""}</span><b>${esc(st.n)}</b><span class="mut">${esc(LEVELS[i].t[S.ui==="en"?0:1])}</span></span>${i===cur?`<span class="go-pill">${mid?tr("Continue","Continuer"):passed?tr("Again","Encore"):L("start")}</span>`:""}</button>`}).join("");
+ app.innerHTML=`<div class="card pathhead"><h2 class="title">${esc(N(greet[0]))}${S.passed[LAST]?" 👑":""}</h2><p class="mut" style="margin:0 0 8px">${esc(N(greet[1]))} · ${tr("Next stop","Prochaine escale")}: ${esc(STOPS[cur].n)} · ${S.correct} ${tr("answers saved","réponses enregistrées")}</p>
+ <div class="row" style="justify-content:space-between"><b>${done}/${NLV}</b><span class="mut">${pct}%</span></div><div class="bar"><i style="--p:${(pct/100).toFixed(4)}"></i></div>
+ <div class="row" style="margin-top:12px"><button id="pr">∞ ${L("practice")}</button><button class="sec" id="al">📮 ${tr("Album","Album")}</button><button class="sec" id="dash">📊 ${tr("Progress","Progrès")}</button>${S.passed[LAST]?`<button class="sec" id="ce">🎓 ${tr("Certificate","Certificat")}</button>`:""}</div></div>
  <div class="path" id="path" style="--fill:${fill}">${nodes}</div>
  <p class="mut center">${tr("Tap a stop, then the button at the bottom.","Touche une escale, puis le bouton en bas.")}</p>
  <div class="card"><div class="row"><label><input type="checkbox" id="st" ${S.strict?"checked":""}> ${L("strict")}</label><span style="flex:1"></span><button class="sec" id="rs" style="min-height:44px;padding:8px 12px">${L("reset")}</button></div><div class="row" style="margin-top:10px"><button class="sec" id="mictest">🎤 ${tr("Test microphone","Tester le micro")}</button></div><p id="mictest-out" class="mut" style="margin:8px 0 0"></p></div>
@@ -540,26 +591,37 @@ function home(){stopRec();if(location.hash)history.pushState(null,"",location.pa
  const focus=selStop!=null?selStop:cur;if(focus>1){const el=app.querySelector(`.node[data-s="${focus}"]`);if(el)el.scrollIntoView({behavior:RM?"auto":"smooth",block:"center"})}
  openStop(focus,true);if(S.mapPos!==cur){S.mapPos=cur;save()}}
 function openStop(i,quiet){selStop=i;document.querySelectorAll(".node").forEach(g=>g.classList.toggle("sel",+g.dataset.s===i));const lv=LEVELS[i],lock=i>S.unlocked,b=S.best[i]||0,st=STOPS[i];
- const mid=S.resume&&(S.resume.key==="lv:"+i||S.resume.key==="lv:"+i+":qc")?S.resume:null;
- $("#stopcard").innerHTML=`<div class="card"><span style="font-size:32px">${st.e}</span><div style="flex:1;min-width:0"><span class="tag">${tr("Level","Niveau")} ${i}</span><div style="font-weight:800">${esc(st.n)}</div><div class="mut">${lock?L("locked"):mid?tr("Continue","Continuer")+" · "+Math.min(mid.k,mid.n)+"/"+mid.n:S.passed[i]?tr("Visited","Visitée")+" · "+b+"%":esc(lv.t[S.ui==="en"?0:1])}</div></div>${lock?`<button id="to">${L("testout")}</button>`:`<button id="gl">${mid?tr("Continue","Continuer"):S.passed[i]?tr("Again","Encore"):L("start")}</button>`}</div>`;
+ const mid=levelMid(i)?S.resume:null;const talkMid=mid&&mid.key==="lv:"+i+":talk";
+ $("#stopcard").innerHTML=`<div class="card"><span style="font-size:32px">${st.e}</span><div style="flex:1;min-width:0"><span class="tag">${tr("Level","Niveau")} ${i}</span><div style="font-weight:800">${esc(st.n)}</div><div class="mut">${lock?L("locked"):talkMid?tr("Talk with Nestor","Parle avec Nestor"):mid?tr("Continue","Continuer")+" · "+Math.min(mid.k,mid.n)+"/"+mid.n:S.passed[i]?tr("Visited","Visitée")+" · "+b+"%":esc(lv.t[S.ui==="en"?0:1])}</div></div>${lock?`<button id="to">${L("testout")}</button>`:`<button id="gl">${talkMid?tr("Talk with Nestor","Parle avec Nestor"):mid?tr("Continue","Continuer"):S.passed[i]?tr("Again","Encore"):L("start")}</button>`}</div>`;
  if($("#to"))$("#to").onclick=()=>testOut(i);if($("#gl"))$("#gl").onclick=()=>lesson(i);
  if(!quiet){const el=document.querySelector(`.node[data-s="${i}"]`);if(el)el.scrollIntoView({behavior:RM?"auto":"smooth",block:"center"})}}
 
 /* ---------- lessons & exercise flow ---------- */
 let combo=0;
-function lesson(lv){const l=LEVELS[lv];const rs=S.resume&&(S.resume.key==="lv:"+lv||S.resume.key==="lv:"+lv+":qc")?S.resume:null;
- app.innerHTML=`<div class="card">${mascotBlock([`Leçon ${lv} : ${STOPS[lv].n} !`,`Lesson ${lv}: off to ${STOPS[lv].n}!`])}<span class="tag">${L("lesson")} ${lv}</span><h2 class="title">${esc(l.t[S.ui==="en"?0:1])}</h2><p style="line-height:1.55">${l.intro}</p><p class="mut">🍁 ${tr("Two Québec questions at the end. They give bonus points and do not change your score.","Deux questions québécoises à la fin. Elles donnent des points bonus et ne changent pas ta note.")}</p><div class="row"><button id="go">${rs?tr("Continue","Continuer")+" · "+Math.min(rs.k,rs.n)+"/"+rs.n:L("start")}</button><button class="sec" id="bk">${L("back")}</button></div></div>`;$("#go").onclick=()=>startLevel(lv);$("#bk").onclick=home;scrollTo(0,0)}
-function startLevel(lv){const coreKey="lv:"+lv,qcKey=coreKey+":qc";
+function lesson(lv){const l=LEVELS[lv];const rs=levelMid(lv)?S.resume:null;
+ const talkNote=TALK[lv]?`<p class="mut">🗣️ ${tr("Live challenge with Nestor at the end.","Défi en personne avec Nestor à la fin.")}</p>`:"";
+ const talkReady=TALK[lv]&&S.passed[lv]&&!(S.talk&&S.talk[lv]);
+ app.innerHTML=`<div class="card">${mascotBlock([`Leçon ${lv} : ${STOPS[lv].n} !`,`Lesson ${lv}: off to ${STOPS[lv].n}!`])}<span class="tag">${L("lesson")} ${lv}</span><h2 class="title">${esc(l.t[S.ui==="en"?0:1])}</h2><p style="line-height:1.55">${l.intro}</p>${talkNote}<p class="mut">🍁 ${tr("Two Québec questions at the end. They give bonus points and do not change your score.","Deux questions québécoises à la fin. Elles donnent des points bonus et ne changent pas ta note.")}</p><div class="row"><button id="go">${rs&&rs.key==="lv:"+lv+":talk"?tr("Talk with Nestor","Parle avec Nestor"):rs?tr("Continue","Continuer")+" · "+Math.min(rs.k,rs.n)+"/"+rs.n:L("start")}</button>${talkReady?`<button class="sec" id="talk">🗣️ ${tr("Talk with Nestor","Parle avec Nestor")}</button>`:""}<button class="sec" id="bk">${L("back")}</button></div></div>`;$("#go").onclick=()=>startLevel(lv);if($("#talk"))$("#talk").onclick=()=>talkCard(lv,null,{stay:true});$("#bk").onclick=home;scrollTo(0,0)}
+function startLevel(lv){const coreKey="lv:"+lv,qcKey=coreKey+":qc",talkKey=coreKey+":talk";
+ if(S.resume&&S.resume.key===talkKey)return talkCard(lv,{ok:S.resume.coreOk,n:S.resume.coreN});
  if(S.resume&&S.resume.key===coreKey&&S.resume.done)return runQc(lv,{ok:S.resume.ok,n:S.resume.n});
- if(S.resume&&S.resume.key===qcKey&&S.resume.done)return finishLevel(lv,{ok:S.resume.coreOk,n:S.resume.coreN});
+ if(S.resume&&S.resume.key===qcKey&&S.resume.done)return afterSet(lv,{ok:S.resume.coreOk,n:S.resume.coreN});
  if(S.resume&&S.resume.key===qcKey)return runQc(lv,{ok:S.resume.coreOk,n:S.resume.coreN});
  runSet(levelSet(lv),r=>runQc(lv,r),{key:coreKey})}
-function runQc(lv,core){const qs=qcSet(lv);if(!qs.length)return finishLevel(lv,core);runSet(qs,()=>finishLevel(lv,core),{key:"lv:"+lv+":qc",coreOk:core.ok,coreN:core.n})}
+function runQc(lv,core){const qs=qcSet(lv);if(!qs.length)return afterSet(lv,core);runSet(qs,()=>afterSet(lv,core),{key:"lv:"+lv+":qc",coreOk:core.ok,coreN:core.n})}
+function afterSet(lv,core){if(TALK[lv]&&!(S.talk&&S.talk[lv])){S.resume={key:"lv:"+lv+":talk",k:0,ok:core.ok,n:core.n,coreOk:core.ok,coreN:core.n,done:false};save();return talkCard(lv,core)}finishLevel(lv,core)}
+function markTalk(lv){if(!S.talk||typeof S.talk!=="object")S.talk={};if(S.talk[lv])return false;S.talk[lv]=Date.now();pushLog({c:"speak",ok:1,t:Date.now(),x:15});S.xp+=15;ach("speak");save();hdr();markSaved();return true}
+function talkCard(lv,core,opt={}){stopRec();setGlow(0);hdr();scrollTo(0,0);const t=TALK[lv];
+ const starters=t.starters.map(s=>`<li>${esc(s)}</li>`).join("");
+ const go=()=>opt.stay?home():finishLevel(lv,core);
+ app.innerHTML=`<div class="card talk center" id="talkcard">${mascotBlock(["On jase pour vrai !","This one is live!"],"happy")}<div class="tag">🗣️ ${tr("Talk with Nestor","Parle avec Nestor")}</div><h2 class="title">${esc(tr(t.title[0],t.title[1]))}</h2><p style="font-size:18px;line-height:1.45">${esc(tr(t.prompt[0],t.prompt[1]))}</p><p class="mut" style="text-align:left">${tr("A few starters","Quelques départs")}</p><ul class="starters">${starters}</ul><div class="row" style="justify-content:center"><button id="talked">J'ai parlé avec Nestor ✓</button><button class="sec" id="later">${tr("Later","Plus tard")}</button></div><div id="talked-ok"></div></div>`;
+ $("#later").onclick=go;
+ $("#talked").onclick=()=>{const first=markTalk(lv);$("#talked").disabled=true;$("#later").style.display="none";$("#talked-ok").innerHTML=`<div class="fb ok">${esc(tr("That's real speaking practice. Bravo, Carolina!","C'est du vrai oral. Bravo, Carolina !"))}</div><div class="row" style="justify-content:center;margin-top:12px"><button id="talknext">${opt.stay?tr("Back to the path","Retour au parcours"):tr("See your score","Voir ta note")} →</button></div>`;if(first){softChime();confetti(40);mood("happy",["Bravo, {n} !","Bravo, {n}!"])}$("#talknext").onclick=go}}
 function testOut(lv){const qs=shuffle([...levelSet(lv),...(lv>0?levelSet(lv-1):[])]).slice(0,12);runSet(qs,r=>{const p=Math.round(100*r.ok/Math.max(1,r.n));if(p>=80&&lv>0){for(let l=0;l<lv-1;l++)S.passed[l]=true;pass(lv-1,p)}else failScreen(lv,p,true)},{key:"test:"+lv})}
-function finishLevel(lv,r){const p=Math.round(100*r.ok/Math.max(1,r.n));S.best[lv]=Math.max(S.best[lv]||0,p);if(S.resume&&(S.resume.key==="lv:"+lv||S.resume.key==="lv:"+lv+":qc"))S.resume=null;save();if(p>=80)pass(lv,p);else failScreen(lv,p)}
+function finishLevel(lv,r){const p=Math.round(100*r.ok/Math.max(1,r.n));S.best[lv]=Math.max(S.best[lv]||0,p);if(S.resume&&String(S.resume.key||"").startsWith("lv:"+lv))S.resume=null;save();if(p>=80)pass(lv,p);else failScreen(lv,p)}
 function failScreen(lv,p,test){hdr();setGlow(0);app.innerHTML=`<div class="card center">${mascotBlock(["Tu y es presque, {n} !","So close, {n}! Every try makes you stronger."],"sad")}<p class="q">${L("score")}: ${p}%</p><p>${L("need")}</p><div class="row"><button id="re">${tr("Try again","Réessayer")}</button><button class="sec" id="pr">∞ ${L("practice")}</button><button class="sec" id="bk">📍 ${tr("Path","Parcours")}</button></div></div>`;
  $("#re").onclick=()=>{if(S.resume&&String(S.resume.key).startsWith(test?"test:"+lv:"lv:"+lv))S.resume=null;save();test?testOut(lv):startLevel(lv)};$("#pr").onclick=runPractice;$("#bk").onclick=home}
-function runPractice(){combo=0;const maxLv=Math.min(S.unlocked,10);let count=0;noteAnswer=()=>{};runStream(()=>{count++;if(Math.random()<0.25){const pool=[];for(let l=0;l<=maxLv;l++)pool.push(...qcSet(l));if(pool.length)return pick(pool)}const[l,i]=srsPick(maxLv);return mkEx(l,i,TYPES[Math.random()*TYPES.length|0])},()=>count,true)}
+function runPractice(){combo=0;const maxLv=Math.min(S.unlocked,LAST);let count=0;noteAnswer=()=>{};runStream(()=>{count++;if(Math.random()<0.25){const pool=[];for(let l=0;l<=maxLv;l++)pool.push(...qcSet(l));if(pool.length)return pick(pool)}const[l,i]=srsPick(maxLv);return mkEx(l,i,TYPES[Math.random()*TYPES.length|0])},()=>count,true)}
 function runSet(qs,done,opt={}){combo=0;const key=opt.key||"";let k=0,r={ok:0,n:qs.length};
  if(key&&S.resume&&S.resume.key===key&&!S.resume.done){k=Math.min(Math.max(0,S.resume.k|0),qs.length);r.ok=Math.min(S.resume.ok|0,k);if(S.resume.n)r.n=S.resume.n}
  noteAnswer=ok=>{if(ok)r.ok++;else if(ok===null)r.n=Math.max(0,r.n-1);if(key)S.resume={key,k,ok:r.ok,n:r.n,coreOk:opt.coreOk??null,coreN:opt.coreN??null,done:k>=qs.length}};
@@ -603,8 +665,8 @@ function show(q,prog,endless,cb){window.__q=q;const fr=q.it[0],en=q.it[1];let bo
     $("#fb").innerHTML=`<div class="fb bad">🦉 ${esc(micLine(err))}</div>`;resetMicUi()})}}
 
 /* ---------- level-up sequence ---------- */
-function pass(lv,p){S.best[lv]=Math.max(S.best[lv]||0,p);S.passed[lv]=true;if(lv<10)S.unlocked=Math.max(S.unlocked,lv+1);if(lv===10&&!S.doneDate)S.doneDate=Date.now();S.xp+=50;logXp(50);save();
- ach("lv1");if(p===100)ach("perfect");const n=Object.keys(S.passed).length;if(n>=6)ach("half");if(n>=11)ach("all");celebrate(lv,p)}
+function pass(lv,p){S.best[lv]=Math.max(S.best[lv]||0,p);S.passed[lv]=true;if(lv<LAST)S.unlocked=Math.max(S.unlocked,lv+1);if(lv===LAST)S.doneDate=Date.now();S.xp+=50;logXp(50);save();
+ ach("lv1");if(p===100)ach("perfect");const n=Object.keys(S.passed).length;if(n>=11)ach("half");if(n>=NLV)ach("all");celebrate(lv,p)}
 function celebrate(lv,p){stopRec();setGlow(0);hdr();scrollTo(0,0);
  app.innerHTML=`<div class="card center"><div class="mascot big m-dance" id="masc">${owl()}</div><div class="tag" style="margin-top:10px">📍 ${esc(STOPS[lv].n)}</div><h2 class="title">${tr(`Level ${lv} passed!`,`Niveau ${lv} réussi !`)}</h2>
  <p class="q">${esc(N(pick(["Bravo {n} ! Tu es incroyable !","Félicitations, {n} !","Quelle championne, {n} !"])))}</p><p>${L("score")}: <b>${p}%</b> ${"⭐".repeat(p===100?3:p>=90?2:1)}</p><p class="mut">+50 XP</p>
@@ -612,29 +674,29 @@ function celebrate(lv,p){stopRec();setGlow(0);hdr();scrollTo(0,0);
  fanfare();bigFx();$("#c1").onclick=()=>postcardScreen(lv)}
 function postcardHTML(i,locked){const s=STOPS[i];return `<div class="pcard" data-pc="${i}"><div class="pc${locked?" locked":""}" style="background:linear-gradient(135deg,${s.c[0]},${s.c[1]})"><span class="stamp">N° ${i}</span><span class="em">${s.e}</span><span class="sm">${locked?"":"Bisous de"}</span><span class="nm">${locked?"???":esc(s.n)}</span></div></div>`}
 function postcardScreen(lv){const s=STOPS[lv];app.innerHTML=`<div class="card center"><div class="tag">📮 ${tr("New postcard & badge!","Nouvelle carte postale et badge !")}</div><div class="solo">${postcardHTML(lv,false)}</div><div class="medal" style="background:linear-gradient(135deg,${s.c[0]},${s.c[1]})"><span>${s.e}</span></div><b>${esc(s.n)}</b>
- <div class="row" style="margin-top:12px">${lv===10?`<button id="c4">🎓 ${tr("Your certificate","Ton certificat")}</button>`:`<button id="c4">🗺️ ${tr("Continue the journey","Continuer le voyage")} →</button>`}<button class="sec" id="c5">📮 Album</button></div></div>`;
- softChime();sparkleAt($(".solo"));$("#c4").onclick=()=>lv===10?cert():home();$("#c5").onclick=album}
+ <div class="row" style="margin-top:12px">${lv===LAST?`<button id="c4">🎓 ${tr("Your certificate","Ton certificat")}</button>`:`<button id="c4">🗺️ ${tr("Continue the journey","Continuer le voyage")} →</button>`}<button class="sec" id="c5">📮 Album</button></div></div>`;
+ softChime();sparkleAt($(".solo"));$("#c4").onclick=()=>lv===LAST?cert():home();$("#c5").onclick=album}
 function album(){stopRec();setGlow(0);hdr();scrollTo(0,0);const fl=S.ui==="fr"?1:0;const got=Object.keys(S.passed).length,na=Object.keys(S.ach).length;
- app.innerHTML=`<div class="card">${mascotBlock([`${got}/11 cartes postales !`,`${got}/11 postcards collected!`],"happy","sm")}<h2 class="title">📮 ${tr("Postcards","Cartes postales")}</h2><p class="mut">${tr("The cities on your map.","Les villes de ton parcours.")}</p><div class="pcs">${STOPS.map((_,i)=>postcardHTML(i,!S.passed[i])).join("")}</div></div>
+ app.innerHTML=`<div class="card">${mascotBlock([`${got}/${NLV} cartes postales !`,`${got}/${NLV} postcards collected!`],"happy","sm")}<h2 class="title">📮 ${tr("Postcards","Cartes postales")}</h2><p class="mut">${tr("The cities on your map.","Les villes de ton parcours.")}</p><div class="pcs">${STOPS.map((_,i)=>postcardHTML(i,!S.passed[i])).join("")}</div></div>
  <div class="card"><h2 class="title">🏅 ${tr("City badges","Badges des villes")}</h2><div class="badges">${STOPS.map((s,i)=>`<div><div class="medal ${S.passed[i]?"":"locked"}" style="background:linear-gradient(135deg,${s.c[0]},${s.c[1]})"><span>${s.e}</span></div>${S.passed[i]?esc(s.n):"???"}</div>`).join("")}</div></div>
  <div class="card"><h2 class="title">✨ ${tr("Achievements","Succès")} <small class="mut">${na}/${ACH.length}</small></h2><div class="badges">${ACH.map(a=>`<div><div class="medal ${S.ach[a.id]?"":"locked"}" style="background:#fff4e0"><span>${a.e}</span></div><b>${esc(a.t[fl])}</b><br><span class="mut" style="font-size:10px">${esc(a.d[fl])}</span></div>`).join("")}</div>
  <p class="mut">${tr("Best combo","Meilleur combo")}: ${S.bestCombo} · ${tr("Correct answers","Bonnes réponses")}: ${S.correct} · 🍁 ${S.qc||0}</p></div>
- <div class="row"><button class="sec" id="bk">📍 ${tr("Back to the path","Retour au parcours")}</button>${S.passed[10]?`<button id="ce">🎓 ${tr("Certificate","Certificat")}</button>`:""}</div>`;
+ <div class="row"><button class="sec" id="bk">📍 ${tr("Back to the path","Retour au parcours")}</button>${S.passed[LAST]?`<button id="ce">🎓 ${tr("Certificate","Certificat")}</button>`:""}</div>`;
  $("#bk").onclick=home;if($("#ce"))$("#ce").onclick=()=>cert()}
-function cert(force){stopRec();hdr();scrollTo(0,0);if(!S.passed[10]&&!force){home();return}
+function cert(force){stopRec();hdr();scrollTo(0,0);if(!S.passed[LAST]&&!force){home();return}
  const dt=new Date(S.doneDate||Date.now()).toLocaleDateString("fr-CA",{day:"numeric",month:"long",year:"numeric"});
  app.innerHTML=`<div class="cert"><span class="corner" style="left:18px;top:14px">⚜</span><span class="corner" style="right:18px;top:14px">⚜</span><span class="corner" style="left:18px;bottom:14px">⚜</span><span class="corner" style="right:18px;bottom:14px">⚜</span><div class="b1"><div class="b2">
  <div class="sub">Certificate of Achievement</div><h1>Certificat de réussite</h1><p style="margin:14px 0 0">Ce certificat est fièrement décerné à</p><div class="who script">${esc(CONFIG.name)}</div>
- <p style="line-height:1.5;max-width:460px;margin:8px auto">pour avoir complété les 11 niveaux du parcours <b>Français 0→10</b>, de Lévis aux Îles-de-la-Madeleine, avec courage, talent et beaucoup d'amour.</p>
- <p class="mut" style="font-style:italic">for completing all 11 levels of the French 0→10 journey across Quebec</p><div class="seal">🦉</div>
+ <p style="line-height:1.5;max-width:460px;margin:8px auto">pour avoir complété les 22 niveaux du parcours <b>Français 0→21</b>, de Lévis à Vieux-Québec, avec courage, talent et beaucoup d'amour.</p>
+ <p class="mut" style="font-style:italic">for completing all 22 levels of the French 0→21 journey across Quebec</p><div class="seal">🦉</div>
  <div class="when">${esc(dt)}<span>Date</span></div></div></div></div>
  <div class="row noprint" style="margin-top:16px;justify-content:center"><button id="pt">🖨️ ${tr("Print","Imprimer")}</button><button class="sec" id="bk">📍 ${tr("Path","Parcours")}</button></div>`;
- $("#pt").onclick=()=>print();$("#bk").onclick=home;if(!force||S.passed[10]){confetti(60);hearts(12)}}
+ $("#pt").onclick=()=>print();$("#bk").onclick=home;if(!force||S.passed[LAST]){confetti(60);hearts(12)}}
 
 /* ---------- boot & routes (#debug-pass triggers the level-up sequence for the current level) ---------- */
 $("#lang").onclick=()=>{S.ui=S.ui==="en"?"fr":"en";save();home()};$("#home").onclick=home;
 $("#mute").onclick=()=>{S.muted=!S.muted;save();hdr();if(!S.muted)chime(1)};
-function route(){const h=location.hash;if(h==="#debug-pass"){history.replaceState(null,"",location.pathname+location.search);pass(Math.min(S.unlocked,10),100)}else if(h==="#album")album();else if(h==="#cert")cert(true);else if(h==="#progress")dashboard();else home()}
+function route(){const h=location.hash;if(h==="#debug-pass"){history.replaceState(null,"",location.pathname+location.search);pass(Math.min(S.unlocked,LAST),100)}else if(h==="#album")album();else if(h==="#cert")cert(true);else if(h==="#progress")dashboard();else home()}
 addEventListener("hashchange",route);hdr();route();
 if(typeof document.startViewTransition==="function"){let ran=false;try{document.startViewTransition(()=>{ran=true})}catch(e){}vtSync=ran}
 vtOn=true;
