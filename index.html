@@ -371,6 +371,8 @@ function lev(a,b){const m=a.length,n=b.length;let p=Array.from({length:n+1},(_,j
 function sim(a,b){a=norm(a);b=norm(b);if(!a&&!b)return 1;return 1-lev(a,b)/Math.max(a.length,b.length)}
 function typedOk(ans,target,strict){const a=norm(ans,strict),t=norm(target,strict);if(a===t)return true;if(!strict&&t.length>6&&lev(a,t)<=1)return true;
  const ex=x=>x.replace(/\b(i|you|he|she|it|we|they)'(m|re|s|ll|d)\b/g,(m,p,q)=>p+" "+({m:"am",re:"are",s:"is",ll:"will",d:"would"}[q])).replace(/\b(do|does|did|is|are)n't\b/g,"$1 not").replace(/\bcan't\b/g,"cannot").replace(/\bwon't\b/g,"will not");return ex(a)===ex(t)}
+function conjFold(s,strict){let x=norm(s,strict).replace(/'/g," ");x=x.replace(/\bje (?=[aeiouh])/g,"j ").replace(/\bque (?=[aeiouh])/g,"qu ");x=x.replace(/\bqu (?=[aeiouh])/g,"qu");x=x.replace(/\b([jcdlstn]) (?=[aeiouh])/g,"$1");return x.replace(/\s+/g," ").trim()}
+function conjOk(ans,targets){const list=Array.isArray(targets)?targets:[targets];return list.some(t=>conjFold(ans,S.strict)===conjFold(t,S.strict))}
 let voice=null;function pickVoice(){const v=speechSynthesis.getVoices();voice=v.find(x=>/fr[-_]CA/i.test(x.lang))||v.find(x=>/fr[-_]FR/i.test(x.lang))||v.find(x=>/^fr/i.test(x.lang))||null}
 if("speechSynthesis" in window){pickVoice();speechSynthesis.onvoiceschanged=pickVoice}
 function speak(t,rate=.95){if(!("speechSynthesis" in window))return;speechSynthesis.cancel();const u=new SpeechSynthesisUtterance(t);u.lang=voice?voice.lang:"fr-CA";if(voice)u.voice=voice;u.rate=rate;speechSynthesis.speak(u)}
@@ -385,7 +387,115 @@ function mkEx(lv,i,type){const it=LEVELS[lv].items[i];const id=lv+":"+i;
  if(type==="mc"){const dis=shuffle(LEVELS[lv].items.filter((x,k)=>k!==i)).slice(0,3).map(x=>x[1]);return{id,type,lv,it,opts:shuffle([it[1],...dis]),ans:it[1]}}
  if(type==="fill"){const w=it[0].split(" ");let k=0;w.forEach((x,j)=>{if(x.length>w[k].length)k=j});const ans=w[k];const pool=[...new Set(LEVELS[lv].items.flatMap(x=>x[0].split(" ")).filter(x=>x!==ans&&x.length>2))];w[k]="____";return{id,type,lv,it,text:w.join(" "),ans,opts:shuffle([ans,...shuffle(pool).slice(0,3)])}}
  return{id,type,lv,it,ans:type==="fr2en"?it[1]:it[0]}}
-function levelSet(lv){return LEVELS[lv].items.map((_,i)=>mkEx(lv,i,TYPES[i%TYPES.length]))}
+// Tucked into levels 5–21. Four questions each: type the form, pick it, match the pronoun, write a short sentence.
+const CONJ=[];
+CONJ[5]=[
+ {type:"cfill",verb:"être",tense:["present","présent"],cue:["je + être","je + être"],ans:"suis",reveal:"je suis",en:"I am"},
+ {type:"cpick",verb:"avoir",tense:["present","présent"],cue:["tu + avoir","tu + avoir"],ans:"as",opts:["as","a","ai","avons"],reveal:"tu as",en:"you have"},
+ {type:"cmatch",verb:"être",tense:["present","présent"],cue:["êtes","êtes"],ans:"vous",opts:["je","il","nous","vous"],reveal:"vous êtes",say:"vous êtes",en:"you are"},
+ {type:"cwrite",verb:"être",tense:["present","présent"],cue:["Translate: They have two children.","Traduis : They have two children."],ans:"ils ont deux enfants",accept:["ils ont deux enfants","elles ont deux enfants"],reveal:"ils ont deux enfants",en:"they have two children"}
+];
+CONJ[6]=[
+ {type:"cfill",verb:"aller",tense:["present","présent"],cue:["nous + aller","nous + aller"],ans:"allons",reveal:"nous allons",en:"we go"},
+ {type:"cpick",verb:"faire",tense:["present","présent"],cue:["je + faire","je + faire"],ans:"fais",opts:["fais","fait","faisons","font"],reveal:"je fais",en:"I do / I make"},
+ {type:"cmatch",verb:"parler",tense:["present","présent"],cue:["parlez","parlez"],ans:"vous",opts:["tu","elle","vous","ils"],reveal:"vous parlez",en:"you speak"},
+ {type:"cwrite",verb:"aimer",tense:["present","présent"],cue:["Translate: We like to travel.","Traduis : We like to travel."],ans:"nous aimons voyager",reveal:"nous aimons voyager",en:"we like to travel"}
+];
+CONJ[7]=[
+ {type:"cfill",verb:"finir",tense:["present","présent"],cue:["tu + finir","tu + finir"],ans:"finis",reveal:"tu finis",en:"you finish"},
+ {type:"cpick",verb:"attendre",tense:["present","présent"],cue:["nous + attendre","nous + attendre"],ans:"attendons",opts:["attends","attend","attendons","attendent"],reveal:"nous attendons",en:"we wait"},
+ {type:"cmatch",verb:"répondre",tense:["present","présent"],cue:["répondez","répondez"],ans:"vous",opts:["je","tu","vous","ils"],reveal:"vous répondez",en:"you answer"},
+ {type:"cwrite",verb:"finir",tense:["present","présent"],cue:["Translate: They finish the lesson.","Traduis : They finish the lesson."],ans:"ils finissent la leçon",accept:["ils finissent la leçon","elles finissent la leçon"],reveal:"ils finissent la leçon",en:"they finish the lesson"}
+];
+CONJ[8]=[
+ {type:"cfill",verb:"pouvoir",tense:["present","présent"],cue:["je + pouvoir","je + pouvoir"],ans:"peux",reveal:"je peux",en:"I can"},
+ {type:"cpick",verb:"vouloir",tense:["present","présent"],cue:["nous + vouloir","nous + vouloir"],ans:"voulons",opts:["veux","veut","voulons","veulent"],reveal:"nous voulons",en:"we want"},
+ {type:"cmatch",verb:"venir",tense:["present","présent"],cue:["viennent","viennent"],ans:"ils",opts:["je","tu","vous","ils"],reveal:"ils viennent",en:"they come"},
+ {type:"cwrite",verb:"pouvoir",tense:["present","présent"],cue:["Translate: She can come tonight.","Traduis : She can come tonight."],ans:"elle peut venir ce soir",reveal:"elle peut venir ce soir",en:"she can come tonight"}
+];
+CONJ[9]=[
+ {type:"cfill",verb:"prendre",tense:["present","présent"],cue:["elle + prendre","elle + prendre"],ans:"prend",reveal:"elle prend",en:"she takes"},
+ {type:"cpick",verb:"savoir",tense:["present","présent"],cue:["vous + savoir","vous + savoir"],ans:"savez",opts:["sais","sait","savons","savez"],reveal:"vous savez",en:"you know"},
+ {type:"cmatch",verb:"prendre",tense:["present","présent"],cue:["prenez","prenez"],ans:"vous",opts:["je","elle","nous","vous"],reveal:"vous prenez",en:"you take"},
+ {type:"cwrite",verb:"savoir",tense:["present","présent"],cue:["Translate: I know how to swim.","Traduis : I know how to swim."],ans:"je sais nager",reveal:"je sais nager",en:"I know how to swim"}
+];
+CONJ[10]=[
+ {type:"cfill",verb:"manger",tense:["passé composé with avoir","passé composé avec avoir"],cue:["je + manger","je + manger"],ans:"ai mangé",reveal:"j'ai mangé",en:"I ate"},
+ {type:"cpick",verb:"finir",tense:["passé composé with avoir","passé composé avec avoir"],cue:["tu + finir","tu + finir"],ans:"as fini",opts:["ai fini","as fini","a fini","avons fini"],reveal:"tu as fini",en:"you finished"},
+ {type:"cmatch",verb:"parler",tense:["passé composé with avoir","passé composé avec avoir"],cue:["avons parlé","avons parlé"],ans:"nous",opts:["je","tu","nous","ils"],reveal:"nous avons parlé",en:"we spoke"},
+ {type:"cwrite",verb:"répondre",tense:["passé composé with avoir","passé composé avec avoir"],cue:["Translate: She answered.","Traduis : She answered."],ans:"elle a répondu",reveal:"elle a répondu",en:"she answered"}
+];
+CONJ[11]=[
+ {type:"cfill",verb:"faire",tense:["passé composé with avoir","passé composé avec avoir"],cue:["nous + faire","nous + faire"],ans:"avons fait",reveal:"nous avons fait",en:"we did"},
+ {type:"cpick",verb:"voir",tense:["passé composé with avoir","passé composé avec avoir"],cue:["elle + voir","elle + voir"],ans:"a vu",opts:["a vu","a voir","est vue","as vu"],reveal:"elle a vu",en:"she saw"},
+ {type:"cmatch",verb:"prendre",tense:["passé composé with avoir","passé composé avec avoir"],cue:["avez pris","avez pris"],ans:"vous",opts:["je","tu","nous","vous"],reveal:"vous avez pris",en:"you took"},
+ {type:"cwrite",verb:"lire",tense:["passé composé with avoir","passé composé avec avoir"],cue:["Translate: I read this book.","Traduis : I read this book."],ans:"j'ai lu ce livre",reveal:"j'ai lu ce livre",en:"I read this book"}
+];
+CONJ[12]=[
+ {type:"cfill",verb:"aller",tense:["passé composé with être","passé composé avec être"],cue:["elle + aller","elle + aller"],ans:"est allée",reveal:"elle est allée",en:"she went"},
+ {type:"cpick",verb:"naître",tense:["passé composé with être","passé composé avec être"],cue:["je (Carolina) + naître","je (Carolina) + naître"],ans:"suis née",opts:["suis né","suis née","est née","ai née"],reveal:"je suis née",en:"I was born"},
+ {type:"cmatch",verb:"arriver",tense:["passé composé with être","passé composé avec être"],cue:["sont arrivés","sont arrivés"],ans:"ils",opts:["elle","elles","ils","nous"],reveal:"ils sont arrivés",en:"they arrived"},
+ {type:"cwrite",verb:"aller",tense:["passé composé with être","passé composé avec être"],cue:["Translate: She went to Quebec City.","Traduis : She went to Quebec City."],ans:"elle est allée à Québec",reveal:"elle est allée à Québec",en:"she went to Quebec City"}
+];
+CONJ[13]=[
+ {type:"cfill",verb:"partir",tense:["passé composé with être","passé composé avec être"],cue:["elles + partir","elles + partir"],ans:"sont parties",reveal:"elles sont parties",en:"they left"},
+ {type:"cpick",verb:"rester",tense:["passé composé with être","passé composé avec être"],cue:["nous (Carolina et sa sœur) + rester","nous (Carolina et sa sœur) + rester"],ans:"sommes restées",opts:["sommes restés","sommes restées","sont restées","avons resté"],reveal:"nous sommes restées",en:"we stayed"},
+ {type:"cmatch",verb:"venir",tense:["passé composé with être","passé composé avec être"],cue:["est venue","est venue"],ans:"elle",opts:["je","elle","ils","elles"],reveal:"elle est venue",en:"she came"},
+ {type:"cwrite",verb:"rester",tense:["passé composé with être","passé composé avec être"],cue:["Translate: I stayed in Moldova.","Traduis : I stayed in Moldova."],ans:"je suis restée en Moldavie",reveal:"je suis restée en Moldavie",en:"I stayed in Moldova"}
+];
+CONJ[14]=[
+ {type:"cfill",verb:"être",tense:["imparfait","imparfait"],cue:["je + être","je + être"],ans:"étais",reveal:"j'étais",en:"I was"},
+ {type:"cpick",verb:"partir",tense:["imparfait or passé composé","imparfait ou passé composé"],cue:["Completed event: she left yesterday.","Événement fini : she left yesterday."],ans:"elle est partie",opts:["elle partait","elle est partie","elle partira","elle partirait"],reveal:"elle est partie",en:"she left"},
+ {type:"cmatch",verb:"être",tense:["imparfait","imparfait"],cue:["étions","étions"],ans:"nous",opts:["je","tu","nous","vous"],reveal:"nous étions",en:"we were"},
+ {type:"cwrite",verb:"jouer",tense:["imparfait","imparfait"],cue:["Translate: When I was little, I played outside.","Traduis : When I was little, I played outside."],ans:"quand j'étais petite, je jouais dehors",accept:["quand j'étais petite, je jouais dehors","quand j'étais petite je jouais dehors"],reveal:"quand j'étais petite, je jouais dehors",en:"when I was little, I played outside"}
+];
+CONJ[15]=[
+ {type:"cfill",verb:"lire",tense:["imparfait","imparfait"],cue:["elle + lire","elle + lire"],ans:"lisait",reveal:"elle lisait",en:"she was reading / used to read"},
+ {type:"cpick",verb:"habiter",tense:["imparfait or passé composé","imparfait ou passé composé"],cue:["A past habit: we used to live in Laval.","Une habitude : we used to live in Laval."],ans:"nous habitions à Laval",opts:["nous avons habité à Laval","nous habitions à Laval","nous habiterons à Laval","nous habiterions à Laval"],reveal:"nous habitions à Laval",en:"we used to live in Laval"},
+ {type:"cmatch",verb:"faire",tense:["imparfait","imparfait"],cue:["faisaient","faisaient"],ans:"ils",opts:["il","elle","ils","vous"],reveal:"ils faisaient",en:"they were doing / used to do"},
+ {type:"cwrite",verb:"lire",tense:["imparfait or passé composé","imparfait ou passé composé"],cue:["Translate: She was reading when I arrived.","Traduis : She was reading when I arrived."],ans:"elle lisait quand je suis arrivée",reveal:"elle lisait quand je suis arrivée",en:"she was reading when I arrived"}
+];
+CONJ[16]=[
+ {type:"cfill",verb:"regarder",tense:["near future","futur proche"],cue:["je + regarder","je + regarder"],ans:"vais regarder",reveal:"je vais regarder",en:"I am going to watch"},
+ {type:"cpick",verb:"prendre",tense:["near future","futur proche"],cue:["ils + prendre","ils + prendre"],ans:"vont prendre",opts:["vont prendre","allons prendre","prendront","prennent"],reveal:"ils vont prendre",en:"they are going to take"},
+ {type:"cmatch",verb:"venir",tense:["near future","futur proche"],cue:["allez venir","allez venir"],ans:"vous",opts:["je","tu","nous","vous"],reveal:"vous allez venir",en:"you are going to come"},
+ {type:"cwrite",verb:"voir",tense:["near future","futur proche"],cue:["Translate: We are going to see each other tomorrow.","Traduis : We are going to see each other tomorrow."],ans:"on va se voir demain",accept:["on va se voir demain","nous allons nous voir demain"],reveal:"on va se voir demain",en:"we are going to see each other tomorrow"}
+];
+CONJ[17]=[
+ {type:"cfill",verb:"être",tense:["simple future","futur simple"],cue:["tu + être","tu + être"],ans:"seras",reveal:"tu seras",en:"you will be"},
+ {type:"cpick",verb:"aller",tense:["simple future","futur simple"],cue:["nous + aller","nous + aller"],ans:"irons",opts:["allons","irons","allerons","irions"],reveal:"nous irons",en:"we will go"},
+ {type:"cmatch",verb:"faire",tense:["simple future","futur simple"],cue:["ferez","ferez"],ans:"vous",opts:["je","il","nous","vous"],reveal:"vous ferez",en:"you will do"},
+ {type:"cwrite",verb:"avoir",tense:["simple future","futur simple"],cue:["Translate: I will have time tonight.","Traduis : I will have time tonight."],ans:"j'aurai le temps ce soir",reveal:"j'aurai le temps ce soir",en:"I will have time tonight"}
+];
+CONJ[18]=[
+ {type:"cfill",verb:"vouloir",tense:["conditional","conditionnel présent"],cue:["je + vouloir","je + vouloir"],ans:"voudrais",reveal:"je voudrais",en:"I would like"},
+ {type:"cpick",verb:"pouvoir",tense:["conditional","conditionnel présent"],cue:["nous + pouvoir","nous + pouvoir"],ans:"pourrions",opts:["pouvons","pourrons","pourrions","pourraient"],reveal:"nous pourrions",en:"we could"},
+ {type:"cmatch",verb:"être",tense:["conditional","conditionnel présent"],cue:["seriez","seriez"],ans:"vous",opts:["je","tu","nous","vous"],reveal:"vous seriez",en:"you would be"},
+ {type:"cwrite",verb:"aimer",tense:["conditional","conditionnel présent"],cue:["Translate: I would like to travel.","Traduis : I would like to travel."],ans:"j'aimerais voyager",reveal:"j'aimerais voyager",en:"I would like to travel"}
+];
+CONJ[19]=[
+ {type:"cfill",verb:"parler",tense:["imperative","impératif"],cue:["tu (no pronoun) + parler","tu (sans pronom) + parler"],ans:"parle",reveal:"parle",en:"speak"},
+ {type:"cpick",verb:"faire",tense:["imperative","impératif"],cue:["vous + faire","vous + faire"],ans:"faites",opts:["faites","fais","faisons","fairez"],reveal:"faites",en:"do"},
+ {type:"cmatch",verb:"être",tense:["imperative","impératif"],cue:["sois","sois"],ans:"tu",opts:["tu","nous","vous","ils"],reveal:"sois",say:"sois",en:"be"},
+ {type:"cwrite",verb:"aller",tense:["imperative","impératif"],cue:["Translate: Let's go! (nous)","Traduis : Let's go! (nous)"],ans:"allons-y",accept:["allons-y","allons"],reveal:"allons-y",en:"let's go"}
+];
+CONJ[20]=[
+ {type:"cfill",verb:"se lever",tense:["reflexive present","présent pronominal"],cue:["je + se lever","je + se lever"],ans:"me lève",reveal:"je me lève",en:"I get up"},
+ {type:"cpick",verb:"se lever",tense:["reflexive passé composé","passé composé pronominal"],cue:["elle + se lever","elle + se lever"],ans:"s'est levée",opts:["s'est levé","s'est levée","s'est levés","a levée"],reveal:"elle s'est levée",en:"she got up"},
+ {type:"cmatch",verb:"se lever",tense:["reflexive present","présent pronominal"],cue:["se lèvent","se lèvent"],ans:"ils",opts:["je","tu","vous","ils"],reveal:"ils se lèvent",en:"they get up"},
+ {type:"cwrite",verb:"se lever",tense:["reflexive passé composé","passé composé pronominal"],cue:["Translate: I got up late.","Traduis : I got up late."],ans:"je me suis levée tard",reveal:"je me suis levée tard",en:"I got up late"}
+];
+CONJ[21]=[
+ {type:"cfill",verb:"partir",tense:["present subjunctive","subjonctif présent"],cue:["il faut que tu + partir","il faut que tu + partir"],ans:"partes",accept:["partes","tu partes","il faut que tu partes"],reveal:"il faut que tu partes",en:"you have to leave"},
+ {type:"cpick",verb:"être",tense:["present subjunctive","subjonctif présent"],cue:["bien qu'il _____ (être)","bien qu'il _____ (être)"],ans:"soit",opts:["est","soit","sera","était"],reveal:"bien qu'il soit",en:"although he is"},
+ {type:"cmatch",verb:"pouvoir",tense:["present subjunctive","subjonctif présent"],cue:["puissions","puissions"],ans:"nous",opts:["je","tu","nous","ils"],reveal:"que nous puissions",en:"that we can"},
+ {type:"cwrite",verb:"venir",tense:["present subjunctive","subjonctif présent"],cue:["Translate: I want you to come.","Traduis : I want you to come."],ans:"je veux que tu viennes",reveal:"je veux que tu viennes",en:"I want you to come"}
+];
+function mkConj(lv,i,it){const accept=[...new Set([it.ans,it.reveal,...(it.accept||[])].filter(Boolean))];return{id:"conj:"+lv+":"+i,type:it.type,lv,grammar:true,it:[it.say||it.reveal,it.en],ans:it.ans,accept,reveal:it.reveal,verb:it.verb,tense:it.tense,cue:it.cue,opts:it.opts?shuffle(it.opts):null}}
+function conjMeta(q){return q.verb+" · "+tr(q.tense[0],q.tense[1])}
+function conjCue(q){return tr(q.cue[0],q.cue[1])}
+function levelSet(lv){const base=LEVELS[lv].items.map((_,i)=>mkEx(lv,i,TYPES[i%TYPES.length]));const extra=(CONJ[lv]||[]).map((it,i)=>mkConj(lv,i,it));if(!extra.length)return base;const out=[];let c=0;base.forEach((q,i)=>{out.push(q);if((i+1)%4===0&&extra[c])out.push(extra[c++])});while(extra[c])out.push(extra[c++]);return out}
+function conjPool(maxLv){const pool=[];for(let l=5;l<=maxLv;l++)(CONJ[l]||[]).forEach((it,i)=>pool.push(mkConj(l,i,it)));return pool}
 function qcSet(lv){const items=QC[lv]||[];const pool=QC.flat().map(x=>x[1]);return items.map((it,i)=>{const dis=shuffle(pool.filter(x=>x!==it[1])).slice(0,3);return{id:"qc:"+lv+":"+i,type:"mc",lv,it:[it[0],it[1]],opts:shuffle([it[1],...dis]),ans:it[1],qc:true,note:it[2]}})}
 function markSaved(){let el=$("#saved");if(!el){el=document.createElement("div");el.id="saved";document.body.appendChild(el)}el.textContent=tr("Saved","Enregistré");el.classList.remove("on");void el.offsetWidth;el.classList.add("on");clearTimeout(markSaved._t);markSaved._t=setTimeout(()=>el.classList.remove("on"),1100)}
 const CATS=[
@@ -397,7 +507,7 @@ const CATS=[
  {id:"qc",e:"🍁",en:"Quebec expressions",fr:"Expressions québécoises"}
 ];
 const GRAMMAR_LV={2:1,4:1,5:1,6:1,7:1,8:1,9:1,12:1,13:1,14:1,15:1,19:1,20:1};
-function qCategory(q){if(!q)return"vocab";if(q.qc)return"qc";if(q.type==="listen")return"listen";if(q.type==="speak")return"speak";if(q.type==="fr2en"||q.type==="en2fr"||q.type==="fill")return"write";return GRAMMAR_LV[q.lv]?"grammar":"vocab"}
+function qCategory(q){if(!q)return"vocab";if(q.qc)return"qc";if(q.grammar)return"grammar";if(q.type==="listen")return"listen";if(q.type==="speak")return"speak";if(q.type==="fr2en"||q.type==="en2fr"||q.type==="fill")return"write";return GRAMMAR_LV[q.lv]?"grammar":"vocab"}
 function catRows(id){return(S.log||[]).filter(r=>r&&r.c===id)}
 function weighted(rows){if(!rows||!rows.length)return null;let wsum=0,okw=0;const n=rows.length;rows.forEach((r,i)=>{const w=Math.pow(.85,n-1-i);wsum+=w;okw+=w*(r.ok?1:0)});return Math.round(100*okw/Math.max(wsum,1e-9))}
 function catScore(id){return weighted(catRows(id))}
@@ -483,13 +593,14 @@ function sugLine(c,n){
 function canFocus(cat){
  const maxLv=Math.min(S.unlocked,LAST);
  if(cat==="qc")return QC.slice(0,maxLv+1).some(a=>a&&a.length);
- if(cat==="grammar")return Object.keys(GRAMMAR_LV).some(l=>+l<=maxLv);
+ if(cat==="grammar")return Object.keys(GRAMMAR_LV).some(l=>+l<=maxLv)||conjPool(maxLv).length>0;
  if(cat==="vocab")return LEVELS.some((_,l)=>l<=maxLv&&!GRAMMAR_LV[l]);
  return maxLv>=0;
 }
 function nextFocus(cat){
  const maxLv=Math.min(S.unlocked,LAST);
  if(cat==="qc"){const pool=[];for(let l=0;l<=maxLv;l++)pool.push(...qcSet(l));return pool.length?pick(pool):null}
+ if(cat==="grammar"&&Math.random()<0.5){const pool=conjPool(maxLv);if(pool.length)return pick(pool)}
  const types=cat==="listen"?["listen"]:cat==="speak"?["speak"]:cat==="write"?["fr2en","en2fr","fill"]:["mc"];
  for(let n=0;n<40;n++){
   let ls;
@@ -500,6 +611,7 @@ function nextFocus(cat){
   const l=pick(ls),i=Math.random()*LEVELS[l].items.length|0,q=mkEx(l,i,pick(types));
   if(qCategory(q)===cat)return q;
  }
+ if(cat==="grammar"){const pool=conjPool(maxLv);if(pool.length)return pick(pool)}
  return null;
 }
 function runFocus(cat){if(location.hash)history.pushState(null,"",location.pathname+location.search);combo=0;let count=0;noteAnswer=()=>{};runStream(()=>{const q=nextFocus(cat);if(!q)return null;count++;return q},()=>count,true)}
@@ -605,8 +717,9 @@ function openStop(i,quiet){selStop=i;document.querySelectorAll(".node").forEach(
 let combo=0;
 function lesson(lv){const l=LEVELS[lv];const rs=levelMid(lv)?S.resume:null;
  const talkNote=TALK[lv]?`<p class="mut">🗣️ ${tr("Live challenge with Nestor at the end.","Défi en personne avec Nestor à la fin.")}</p>`:"";
+ const conjNote=CONJ[lv]?`<p class="mut">✏️ ${tr("Conjugation is tucked into the questions.","La conjugaison est glissée dans les questions.")}</p>`:"";
  const talkReady=TALK[lv]&&S.passed[lv]&&!(S.talk&&S.talk[lv]);
- app.innerHTML=`<div class="card">${mascotBlock([`Leçon ${lv} : ${STOPS[lv].n} !`,`Lesson ${lv}: off to ${STOPS[lv].n}!`])}<span class="tag">${L("lesson")} ${lv}</span><h2 class="title">${esc(l.t[S.ui==="en"?0:1])}</h2><p style="line-height:1.55">${l.intro}</p>${talkNote}<p class="mut">🍁 ${tr("Two Québec questions at the end. They give bonus points and do not change your score.","Deux questions québécoises à la fin. Elles donnent des points bonus et ne changent pas ta note.")}</p><div class="row"><button id="go">${rs&&rs.key==="lv:"+lv+":talk"?tr("Talk with Nestor","Parle avec Nestor"):rs?tr("Continue","Continuer")+" · "+Math.min(rs.k,rs.n)+"/"+rs.n:L("start")}</button>${talkReady?`<button class="sec" id="talk">🗣️ ${tr("Talk with Nestor","Parle avec Nestor")}</button>`:""}<button class="sec" id="bk">${L("back")}</button></div></div>`;$("#go").onclick=()=>startLevel(lv);if($("#talk"))$("#talk").onclick=()=>talkCard(lv,null,{stay:true});$("#bk").onclick=home;scrollTo(0,0)}
+ app.innerHTML=`<div class="card">${mascotBlock([`Leçon ${lv} : ${STOPS[lv].n} !`,`Lesson ${lv}: off to ${STOPS[lv].n}!`])}<span class="tag">${L("lesson")} ${lv}</span><h2 class="title">${esc(l.t[S.ui==="en"?0:1])}</h2><p style="line-height:1.55">${l.intro}</p>${talkNote}${conjNote}<p class="mut">🍁 ${tr("Two Québec questions at the end. They give bonus points and do not change your score.","Deux questions québécoises à la fin. Elles donnent des points bonus et ne changent pas ta note.")}</p><div class="row"><button id="go">${rs&&rs.key==="lv:"+lv+":talk"?tr("Talk with Nestor","Parle avec Nestor"):rs?tr("Continue","Continuer")+" · "+Math.min(rs.k,rs.n)+"/"+rs.n:L("start")}</button>${talkReady?`<button class="sec" id="talk">🗣️ ${tr("Talk with Nestor","Parle avec Nestor")}</button>`:""}<button class="sec" id="bk">${L("back")}</button></div></div>`;$("#go").onclick=()=>startLevel(lv);if($("#talk"))$("#talk").onclick=()=>talkCard(lv,null,{stay:true});$("#bk").onclick=home;scrollTo(0,0)}
 function startLevel(lv){const coreKey="lv:"+lv,qcKey=coreKey+":qc",talkKey=coreKey+":talk";
  if(S.resume&&S.resume.key===talkKey)return talkCard(lv,{ok:S.resume.coreOk,n:S.resume.coreN});
  if(S.resume&&S.resume.key===coreKey&&S.resume.done)return runQc(lv,{ok:S.resume.ok,n:S.resume.n});
@@ -626,9 +739,9 @@ function testOut(lv){const qs=shuffle([...levelSet(lv),...(lv>0?levelSet(lv-1):[
 function finishLevel(lv,r){const p=Math.round(100*r.ok/Math.max(1,r.n));S.best[lv]=Math.max(S.best[lv]||0,p);if(S.resume&&String(S.resume.key||"").startsWith("lv:"+lv))S.resume=null;save();if(p>=80)pass(lv,p);else failScreen(lv,p)}
 function failScreen(lv,p,test){hdr();setGlow(0);app.innerHTML=`<div class="card center">${mascotBlock(["Tu y es presque, {n} !","So close, {n}! Every try makes you stronger."],"sad")}<p class="q">${L("score")}: ${p}%</p><p>${L("need")}</p><div class="row"><button id="re">${tr("Try again","Réessayer")}</button><button class="sec" id="pr">∞ ${L("practice")}</button><button class="sec" id="bk">📍 ${tr("Path","Parcours")}</button></div></div>`;
  $("#re").onclick=()=>{if(S.resume&&String(S.resume.key).startsWith(test?"test:"+lv:"lv:"+lv))S.resume=null;save();test?testOut(lv):startLevel(lv)};$("#pr").onclick=runPractice;$("#bk").onclick=home}
-function runPractice(){combo=0;const maxLv=Math.min(S.unlocked,LAST);let count=0;noteAnswer=()=>{};runStream(()=>{count++;if(Math.random()<0.25){const pool=[];for(let l=0;l<=maxLv;l++)pool.push(...qcSet(l));if(pool.length)return pick(pool)}const[l,i]=srsPick(maxLv);return mkEx(l,i,TYPES[Math.random()*TYPES.length|0])},()=>count,true)}
+function runPractice(){combo=0;const maxLv=Math.min(S.unlocked,LAST);let count=0;noteAnswer=()=>{};runStream(()=>{count++;if(maxLv>=5&&Math.random()<0.22){const pool=conjPool(maxLv);if(pool.length)return pick(pool)}if(Math.random()<0.25){const pool=[];for(let l=0;l<=maxLv;l++)pool.push(...qcSet(l));if(pool.length)return pick(pool)}const[l,i]=srsPick(maxLv);return mkEx(l,i,TYPES[Math.random()*TYPES.length|0])},()=>count,true)}
 function runSet(qs,done,opt={}){combo=0;const key=opt.key||"";let k=0,r={ok:0,n:qs.length};
- if(key&&S.resume&&S.resume.key===key&&!S.resume.done){k=Math.min(Math.max(0,S.resume.k|0),qs.length);r.ok=Math.min(S.resume.ok|0,k);if(S.resume.n)r.n=S.resume.n}
+ if(key&&S.resume&&S.resume.key===key&&!S.resume.done){k=Math.min(Math.max(0,S.resume.k|0),qs.length);r.ok=Math.min(S.resume.ok|0,k);if((S.resume.n|0)===qs.length)r.n=S.resume.n}
  noteAnswer=ok=>{if(ok)r.ok++;else if(ok===null)r.n=Math.max(0,r.n-1);if(key)S.resume={key,k,ok:r.ok,n:r.n,coreOk:opt.coreOk??null,coreN:opt.coreN??null,done:k>=qs.length}};
  runStream(()=>k<qs.length?qs[k++]:null,()=>k+"/"+qs.length,false,()=>{if(key&&S.resume&&S.resume.key===key)S.resume=null;save();done(r)})}
 function runStream(next,prog,endless,onDone=home){const q=next();if(!q)return onDone();show(q,prog(),endless,()=>runStream(next,prog,endless,onDone))}
@@ -639,11 +752,12 @@ function show(q,prog,endless,cb){window.__q=q;const fr=q.it[0],en=q.it[1];let bo
  else if(q.type==="fr2en"){kind=L("translate");body=`<p class="q">${esc(fr)} <button ${sb} id="pl">🔊</button></p><input type="text" id="in" placeholder="${L("typeEn")}" autocapitalize="off" autocomplete="off" autocorrect="off" spellcheck="false">`}
  else if(q.type==="en2fr"){kind=L("translate");body=`<p class="q">${esc(en)}</p><input type="text" id="in" placeholder="${L("typeFr")}" lang="fr" autocapitalize="off" autocomplete="off" autocorrect="off" spellcheck="false">`}
  else if(q.type==="listen"){kind=L("listen");body=`<div class="row" style="margin:10px 0"><button id="pl">${L("play")}</button><button class="sec" id="sl">${L("slow")}</button></div><input type="text" id="in" placeholder="${L("typeFr")}" lang="fr" autocapitalize="off" autocomplete="off" autocorrect="off" spellcheck="false">`}
+ else if(q.grammar){const labels={cfill:["Conjugate","Conjugue"],cpick:["Which form","Quelle forme"],cmatch:["Which pronoun","Quel pronom"],cwrite:["Short sentence","Petite phrase"]};const pair=labels[q.type]||["Conjugate","Conjugue"];kind=tr(pair[0],pair[1]);const head=`<p class="mut">${esc(conjMeta(q))}</p><p class="q">${esc(conjCue(q))}</p>`;body=q.opts?head+q.opts.map((o,j)=>`<button class="opt" data-o="${j}">${esc(o)}</button>`).join(""):head+`<input type="text" id="in" placeholder="${L("typeFr")}" lang="fr" autocapitalize="off" autocomplete="off" autocorrect="off" spellcheck="false">`}
  else{kind=L("speak");const live=!!speechCtor();body=`<p class="q">${esc(fr)}</p><p class="mut">${esc(en)}</p><div class="row"><button class="sec" id="pl">🔊</button>${live?`<button id="mic">${L("mic")}</button>`:""}<button id="said">🗣️ ${tr("I said it","Je l'ai dit")}</button><button class="sec" id="typ">⌨️ ${tr("Type it instead","Je l'écris")}</button></div><p id="heard" class="mut"></p><div id="tbox"></div>${live?"":`<div class="fb bad">${L("nosr")}</div>`}`}
  const qpct=(!endless&&String(prog).includes("/"))?(()=>{const[a,b]=String(prog).split("/").map(Number);return Math.max(0,Math.min(100,Math.round(100*(a-1)/Math.max(1,b))))})():0;
  app.innerHTML=`<div class="card" id="qc"><div class="row" style="justify-content:space-between"><span class="mut">${endless?"∞ #"+prog:prog} · ${tr("Level","Niveau")} ${q.lv}</span><span class="combo" id="combo">${combo>=2?"🔥 x"+combo:""}</span><button ${sb} id="quit">✕</button></div>
  ${endless?"":`<div class="bar thick qbar"><i style="--p:${(qpct/100).toFixed(4)}"></i></div>`}
- ${mascotBlock(pick(IDLE),"idle","sm")}<span class="tag${q.qc?" qc":""}">${kind}</span>${body}<div id="fb"></div><div class="row" style="margin-top:12px" id="act">${["fr2en","en2fr","listen"].includes(q.type)?`<button id="ck">${L("check")}</button>`:""}<button class="sec" id="sk">${L("skip")}</button></div></div>`;
+ ${mascotBlock(pick(IDLE),"idle","sm")}<span class="tag${q.qc?" qc":""}">${kind}</span>${body}<div id="fb"></div><div class="row" style="margin-top:12px" id="act">${["fr2en","en2fr","listen","cfill","cwrite"].includes(q.type)?`<button id="ck">${L("check")}</button>`:""}<button class="sec" id="sk">${L("skip")}</button></div></div>`;
  qT0=Date.now();
  $("#quit").onclick=()=>{stopRec();bankTime();save();home()};
  let answered=false,src=null;
@@ -654,12 +768,14 @@ function show(q,prog,endless,cb){window.__q=q;const fr=q.it[0],en=q.it[1];let bo
   noteAnswer(ok);award(q,ok);
   const bonus=ok&&q.qc?`<div><b>+${QC_BONUS} ${tr("Québec bonus","bonus Québec")}</b></div>`:"";
   const note=q.qc&&q.note?`<div class="mut">${esc(tr(q.note[0],q.note[1]))}</div>`:"";
-  $("#fb").innerHTML=`<div class="fb ${ok?"ok":"bad"}">${ok?N(pick([L("correct"),L("correct")+" "+CONFIG.name+" 💕"])):L("wrong")+" <b>"+esc(q.ans)+"</b>"}${bonus}${note}${extra}${q.qc||q.type==="fr2en"||q.type==="mc"?`<div class="mut">${esc(fr)} = ${esc(en)}</div>`:""}</div>`;
+  const shown=q.type==="cmatch"?q.ans:(q.reveal||q.ans);
+  const gloss=q.grammar&&q.reveal?`<div class="mut">${esc(q.reveal)}${en?" = "+esc(en):""}</div>`:"";
+  $("#fb").innerHTML=`<div class="fb ${ok?"ok":"bad"}">${ok?N(pick([L("correct"),L("correct")+" "+CONFIG.name+" 💕"])):L("wrong")+" <b>"+esc(shown)+"</b>"}${bonus}${note}${extra}${gloss||(q.qc||q.type==="fr2en"||q.type==="mc"?`<div class="mut">${esc(fr)} = ${esc(en)}</div>`:"")}</div>`;
   if(q.type!=="listen")speak(fr);$("#act").innerHTML=`<button id="nx">${L("next")} →</button>`;$("#nx").onclick=()=>cb(ok);$("#nx").focus({preventScroll:true})};
  if($("#pl"))$("#pl").onclick=()=>speak(fr);if($("#sl"))$("#sl").onclick=()=>speak(fr,.6);
  if(q.type==="listen")setTimeout(()=>speak(fr),300);
  app.querySelectorAll("[data-o]").forEach(b=>b.onclick=()=>{if(answered)return;const ok=q.opts[+b.dataset.o]===q.ans;b.style.background=ok?"#c9efd8":"#f8d0d8";src=b;if(!ok)app.querySelectorAll("[data-o]").forEach(x=>{if(q.opts[+x.dataset.o]===q.ans)x.style.background="#c9efd8"});fin(ok)});
- const inp=$("#in");if(inp){inp.focus({preventScroll:true});const check=()=>{if(!inp.value.trim())return;src=inp;fin(typedOk(inp.value,q.ans,S.strict))};$("#ck").onclick=check;inp.onkeydown=e=>{if(e.key==="Enter"){e.preventDefault();answered?$("#nx").click():check()}}}
+ const inp=$("#in");if(inp){inp.focus({preventScroll:true});const check=()=>{if(!inp.value.trim())return;src=inp;fin(q.accept?conjOk(inp.value,q.accept):typedOk(inp.value,q.ans,S.strict))};$("#ck").onclick=check;inp.onkeydown=e=>{if(e.key==="Enter"){e.preventDefault();answered?$("#nx").click():check()}}}
  $("#sk").onclick=()=>{stopRec();bankTime();if(q.type==="speak"){noteAnswer(null);award(q,null);return cb(null)}combo=0;setGlow(0);noteAnswer(false);award(q,false);cb(false)};
  if(q.type==="speak"){
   const typeIt=()=>{stopRec();$("#tbox").innerHTML=`<input type="text" id="in2" style="margin-top:10px" placeholder="${L("typeFr")}" lang="fr" autocapitalize="off" autocomplete="off" autocorrect="off" spellcheck="false">`;$("#act").innerHTML=`<button id="ck2">${L("check")}</button><button class="sec" id="sk">${L("skip")}</button>`;$("#sk").onclick=()=>{stopRec();bankTime();noteAnswer(null);award(q,null);cb(null)};const i2=$("#in2");i2.focus({preventScroll:true});const ck=()=>{if(!i2.value.trim()||answered)return;src=i2;fin(typedOk(i2.value,fr,S.strict))};$("#ck2").onclick=ck;i2.onkeydown=e=>{if(e.key==="Enter"){e.preventDefault();answered?$("#nx").click():ck()}};$("#typ")&&($("#typ").disabled=true)};
